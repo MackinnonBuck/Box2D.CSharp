@@ -19,6 +19,18 @@ void b2World_DestroyBody(b2World* obj, b2Body* body)
     obj->DestroyBody(body);
 }
 
+void b2World_Step(b2World* obj, float timeStep, int32 velocityIterations, int32 positionIterations)
+{
+    VERIFY_INSTANCE;
+    obj->Step(timeStep, velocityIterations, positionIterations);
+}
+
+void b2World_ClearForces(b2World* obj)
+{
+    VERIFY_INSTANCE;
+    obj->ClearForces();
+}
+
 b2Body* b2World_GetBodyList(b2World* obj)
 {
     VERIFY_INSTANCE;

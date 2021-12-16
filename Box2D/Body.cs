@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Box2D.Math;
+using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace Box2D;
 
-using static NativeMethods;
+using static Interop.NativeMethods;
 
 public enum BodyType
 {
@@ -13,22 +14,22 @@ public enum BodyType
     Dyanmic,
 }
 
-public struct BodyDef
+public readonly struct BodyDef
 {
-    public BodyType Type { get; set; } = BodyType.Static;
-    public Vec2 Position { get; set; } = Vec2.Zero;
-    public float Angle { get; set; } = 0f;
-    public Vec2 LinearVelocity { get; set; } = Vec2.Zero;
-    public float AngularVelocity { get; set; } = 0f;
-    public float LinearDamping { get; set; } = 0f;
-    public float AngularDamping { get; set; } = 0f;
-    public bool AllowSleep { get; set; } = true;
-    public bool Awake { get; set; } = true;
-    public bool FixedRotation { get; set; } = false;
-    public bool Bullet { get; set; } = false;
-    public bool Enabled { get; set; } = true;
-    public object? UserData { get; set; } = default;
-    public float GravityScale { get; set; } = 1f;
+    public BodyType Type { get; init; } = BodyType.Static;
+    public Vec2 Position { get; init; } = Vec2.Zero;
+    public float Angle { get; init; } = 0f;
+    public Vec2 LinearVelocity { get; init; } = Vec2.Zero;
+    public float AngularVelocity { get; init; } = 0f;
+    public float LinearDamping { get; init; } = 0f;
+    public float AngularDamping { get; init; } = 0f;
+    public bool AllowSleep { get; init; } = true;
+    public bool Awake { get; init; } = true;
+    public bool FixedRotation { get; init; } = false;
+    public bool Bullet { get; init; } = false;
+    public bool Enabled { get; init; } = true;
+    public object? UserData { get; init; } = default;
+    public float GravityScale { get; init; } = 1f;
 }
 
 [StructLayout(LayoutKind.Sequential)]
@@ -92,7 +93,7 @@ public sealed class Body : Box2DObject
         return body;
     }
 
-    internal Body(IntPtr worldNative, ref BodyDef def)
+    internal Body(IntPtr worldNative, in BodyDef def)
     {
         Handle = GCHandle.ToIntPtr(GCHandle.Alloc(this, GCHandleType.Weak));
         var defInternal = def.ToInternalFormat(Handle);
@@ -113,7 +114,7 @@ public sealed class Body : Box2DObject
 
 public static class BodyDefExtensions
 {
-    internal static BodyDefInternal ToInternalFormat(this ref BodyDef def, IntPtr userData)
+    internal static BodyDefInternal ToInternalFormat(this in BodyDef def, IntPtr userData)
         => new()
         {
             type = def.Type,

@@ -30,6 +30,8 @@ public abstract class Box2DDisposableObject : Box2DObject, IDisposable
         {
             Dispose(true);
 
+            Invalidate();
+
             IsDisposed = true;
 
             GC.SuppressFinalize(this);
@@ -43,6 +45,8 @@ public abstract class Box2DDisposableObject : Box2DObject, IDisposable
         if (!IsDisposed)
         {
             Dispose(false);
+
+            Invalidate();
 
             IsDisposed = true;
         }
