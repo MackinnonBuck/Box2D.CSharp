@@ -1,4 +1,5 @@
 ﻿using Box2D.Math;
+using System;
 
 namespace Box2D;
 
@@ -10,9 +11,14 @@ public class PolygonShape : Shape
 
     public override int ChildCount => b2PolygonShape_GetChildCount(Native);
 
-    public PolygonShape()
+    public PolygonShape() : base(isUserOwned: true)
     {
         var native = b2PolygonShape_new();
+        Initialize(native);
+    }
+
+    internal PolygonShape(IntPtr native) : base(isUserOwned: false)
+    {
         Initialize(native);
     }
 
@@ -35,5 +41,10 @@ public class PolygonShape : Shape
         => b2PolygonShape_TestPoint(Native, transform, p);
 
     private protected override void Dispose(bool disposing)
-        => b2PolygonShape_delete(Native);
+    {
+        if (IsUserOwned)
+        {
+            b2PolygonShape_delete(Native);
+        }
+    } 
 }

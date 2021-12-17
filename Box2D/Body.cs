@@ -58,6 +58,8 @@ internal struct BodyDefInternal
 
 public sealed class Body : Box2DObject
 {
+    public object? UserData { get; set; }
+
     public Vec2 Position
     {
         get
@@ -66,6 +68,10 @@ public sealed class Body : Box2DObject
             return value;
         }
     }
+
+    public float Angle => b2Body_GetAngle(Native);
+
+    public Fixture? FixtureList => Fixture.FromIntPtr(b2Body_GetFixtureList(Native));
 
     public Body? Next => FromIntPtr(b2Body_GetNext(Native));
 
@@ -95,6 +101,7 @@ public sealed class Body : Box2DObject
 
     internal Body(IntPtr worldNative, in BodyDef def)
     {
+        UserData = def.UserData;
         Handle = GCHandle.ToIntPtr(GCHandle.Alloc(this, GCHandleType.Weak));
         var defInternal = def.ToInternalFormat(Handle);
         var native = b2World_CreateBody(worldNative, ref defInternal);
@@ -102,8 +109,23 @@ public sealed class Body : Box2DObject
         Initialize(native);
     }
 
+    public Fixture CreateFixture(in FixtureDef def)
+        => new(Native, in def);
+
+    public Fixture CreateFixture(Shape shape, float density)
+        => new(Native, shape, density);
+
     internal void InvalidateInstance()
     {
+        var fixture = FixtureList;
+
+        while (fixture is not null)
+        {
+            var next = fixture.Next;
+            fixture.InvalidateInstance();
+            fixture = next;
+        }
+
         Invalidate();
 
         Debug.Assert(Handle != IntPtr.Zero);

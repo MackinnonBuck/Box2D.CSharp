@@ -33,11 +33,33 @@ internal static class NativeMethods
      * b2Body
      */
     [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2Body_CreateFixture(IntPtr obj, ref FixtureDefInternal def);
+    [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Body_GetPosition(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2Body_GetAngle(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2Body_GetFixtureList(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Body_GetNext(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Body_GetUserData(IntPtr obj);
+
+    /*
+     * b2Fixture
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2Fixture_GetShape(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2Fixture_GetNext(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2Fixture_GetUserData(IntPtr obj);
+
+    /*
+     * b2Shape
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2Shape_GetRadius(IntPtr obj);
 
     /*
      * b2PolygonShape
