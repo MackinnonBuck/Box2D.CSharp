@@ -7,6 +7,11 @@ namespace Tests;
 
 public class UnitTests
 {
+    // TODO: Add joint test and associated functionality.
+    // After you have a concept for each core piece of the physics engine (body, shape, joint, fixture, world, etc.),
+    // then do another refactoring pass around how memory is managed. Box2D generally follows similar memory management
+    // patterns among its various entities, so it would be good to abstract some of it away when we deem it safe to do so.
+
     [Fact]
     public void HelloWorld_Works()
     {
@@ -121,5 +126,54 @@ public class UnitTests
         Assert.True(MathF.Abs(massData2.Center.Y - center.Y) < absTol + relTol * MathF.Abs(center.Y));
         Assert.True(MathF.Abs(massData2.Mass - mass) < 20f * (absTol + relTol * mass));
         Assert.True(MathF.Abs(massData2.I - inertia) < 40f * (absTol + relTol * inertia));
+    }
+
+    [Fact]
+    public void JointTest_Works()
+    {
+        var gravity = new Vec2(0f, -10f);
+        using var world = new World(gravity);
+
+        var bodyDef = new BodyDef
+        {
+            Type = BodyType.Dyanmic,
+            Position = new(-2f, 3f),
+        };
+        var ground = world.CreateBody(bodyDef);
+
+        var circle = new CircleShape
+        {
+            Radius = 1f,
+        };
+
+        var fixtureDef = new FixtureDef
+        {
+            Filter = new()
+            {
+                MaskBits = 0,
+            },
+            Density = 1f,
+            Shape = circle,
+        };
+
+        var bodyA = world.CreateBody(bodyDef);
+        var bodyB = world.CreateBody(bodyDef);
+        var bodyC = world.CreateBody(bodyDef);
+
+        circle.ComputeMass(out var massData, fixtureDef.Density);
+        var mg = massData.Mass * gravity.Y;
+
+        bodyA.CreateFixture(fixtureDef);
+        bodyB.CreateFixture(fixtureDef);
+        bodyC.CreateFixture(fixtureDef);
+
+        var distanceJointDef = new DistanceJointDef();
+        distanceJointDef.Initialize(ground, bodyA, bodyDef.Position + new Vec2(0f, 4f), bodyDef.Position);
+        distanceJointDef.MinLength = distanceJointDef.Length;
+        distanceJointDef.MaxLength = distanceJointDef.Length;
+
+        var distanceJoint = (DistanceJoint)world.CreateJoint(distanceJointDef);
+
+        // TODO: Finish this test.
     }
 }

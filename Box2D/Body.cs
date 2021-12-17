@@ -73,6 +73,8 @@ public sealed class Body : Box2DObject
 
     public Fixture? FixtureList => Fixture.FromIntPtr(b2Body_GetFixtureList(Native));
 
+    public JointEdge? JointList => JointEdge.FromIntPtr(b2Body_GetJointList(Native));
+
     public Body? Next => FromIntPtr(b2Body_GetNext(Native));
 
     internal IntPtr Handle { get; private set; }
@@ -117,15 +119,6 @@ public sealed class Body : Box2DObject
 
     internal void InvalidateInstance()
     {
-        var fixture = FixtureList;
-
-        while (fixture is not null)
-        {
-            var next = fixture.Next;
-            fixture.InvalidateInstance();
-            fixture = next;
-        }
-
         Invalidate();
 
         Debug.Assert(Handle != IntPtr.Zero);

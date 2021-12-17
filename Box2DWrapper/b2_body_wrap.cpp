@@ -32,6 +32,12 @@ b2Fixture* b2Body_GetFixtureList(b2Body* obj)
     return obj->GetFixtureList();
 }
 
+b2JointEdge* b2Body_GetJointList(b2Body* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->GetJointList();
+}
+
 b2Body* b2Body_GetNext(b2Body* obj)
 {
     VERIFY_INSTANCE;

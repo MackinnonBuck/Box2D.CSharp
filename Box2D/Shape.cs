@@ -25,26 +25,20 @@ public struct MassData
 
 public abstract class Shape : Box2DDisposableObject
 {
-    public float Radius => b2Shape_GetRadius(Native);
-
     public abstract ShapeType Type { get; }
 
-    public abstract int ChildCount { get; }
-
-    public Shape(bool isUserOwned) : base(isUserOwned)
+    public float Radius
     {
+        get => b2Shape_GetRadius(Native);
+        set => b2Shape_SetRadius(Native, value);
     }
 
-    public abstract bool TestPoint(Transform xf, Vec2 p);
-
-    public abstract bool RayCast(out RayCastOutput output, in RayCastInput input, Transform transform, int childIndex);
-
-    public abstract void ComputeAABB(out AABB aabb, Transform xf, int childIndex);
-
-    public abstract void ComputeMass(out MassData massData, float density);
+    public int ChildCount => b2Shape_GetChildCount(Native);
 
     internal static Shape? FromIntPtr(IntPtr obj, ShapeType type)
     {
+        // TODO: Shape instance deduplication?
+
         if (obj == IntPtr.Zero)
         {
             return null;
@@ -52,11 +46,35 @@ public abstract class Shape : Box2DDisposableObject
 
         return type switch
         {
-            ShapeType.Circle => throw new NotImplementedException(),
+            ShapeType.Circle => new CircleShape(obj),
             ShapeType.Edge => throw new NotImplementedException(),
             ShapeType.Chain => throw new NotImplementedException(),
             ShapeType.Polygon => new PolygonShape(obj),
             var x => throw new ArgumentException($"Invalid shape type '{x}'.", nameof(type)),
         };
+    }
+
+    public Shape(bool isUserOwned) : base(isUserOwned)
+    {
+    }
+
+    public void ComputeAABB(out AABB aabb, Transform transform, int childIndex)
+        => b2Shape_ComputeAABB(Native, out aabb, transform, childIndex);
+
+    public void ComputeMass(out MassData massData, float density)
+        => b2Shape_ComputeMass(Native, out massData, density);
+
+    public bool RayCast(out RayCastOutput output, in RayCastInput input, Transform transform, int childIndex)
+        => b2Shape_RayCast(Native, out output, in input, transform, childIndex);
+
+    public bool TestPoint(Transform transform, Vec2 p)
+        => b2Shape_TestPoint(Native, transform, p);
+
+    sealed private protected override void Dispose(bool disposing)
+    {
+        if (IsUserOwned)
+        {
+            b2Shape_delete(Native);
+        }
     }
 }
