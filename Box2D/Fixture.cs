@@ -113,7 +113,12 @@ public class Fixture : Box2DObject
         Initialize(native);
     }
 
-    internal Fixture(IntPtr bodyNative, Shape shape, float density) : this(bodyNative, new() { Shape = shape, Density = density })
+    internal Fixture(IntPtr bodyNative, Shape shape, float density)
+        : this(bodyNative, new()
+        {
+            Shape = shape,
+            Density = density
+        })
     {
     }
 

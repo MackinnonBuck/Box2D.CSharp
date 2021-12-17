@@ -1,5 +1,6 @@
 ﻿using Box2D.Math;
 using System;
+using System.Runtime.InteropServices;
 
 namespace Box2D;
 
@@ -11,6 +12,15 @@ public class PolygonShape : Shape
 
     public override int ChildCount => b2PolygonShape_GetChildCount(Native);
 
+    public Vec2 Centroid
+    {
+        get
+        {
+            b2PolygonShape_GetCentroid(Native, out var value);
+            return value;
+        }
+    }
+
     public PolygonShape() : base(isUserOwned: true)
     {
         var native = b2PolygonShape_new();
@@ -21,6 +31,9 @@ public class PolygonShape : Shape
     {
         Initialize(native);
     }
+
+    public void Set(Span<Vec2> points)
+        => b2PolygonShape_Set(Native, ref MemoryMarshal.GetReference(points), points.Length);
 
     public void SetAsBox(float hx, float hy)
         => b2PolygonShape_SetAsBox(Native, hx, hy);

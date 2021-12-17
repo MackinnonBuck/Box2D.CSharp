@@ -1,5 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-using Box2D;
+﻿using Box2D;
 using Box2D.Math;
 
 // Define the gravity vector.

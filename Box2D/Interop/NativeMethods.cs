@@ -17,7 +17,7 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2World_new([In] ref Vec2 gravity);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern IntPtr b2World_CreateBody(IntPtr obj, ref BodyDefInternal def);
+    public static extern IntPtr b2World_CreateBody(IntPtr obj, [In] ref BodyDefInternal def);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_DestroyBody(IntPtr obj, IntPtr body);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -33,7 +33,7 @@ internal static class NativeMethods
      * b2Body
      */
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern IntPtr b2Body_CreateFixture(IntPtr obj, ref FixtureDefInternal def);
+    public static extern IntPtr b2Body_CreateFixture(IntPtr obj, [In] ref FixtureDefInternal def);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Body_GetPosition(IntPtr obj, out Vec2 value);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -68,6 +68,10 @@ internal static class NativeMethods
     public static extern IntPtr b2PolygonShape_new();
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern int b2PolygonShape_GetChildCount(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PolygonShape_GetCentroid(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern int b2PolygonShape_Set(IntPtr obj, [In] ref Vec2 points, int count);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern int b2PolygonShape_SetAsBox(IntPtr obj, float hx, float hy);
     [DllImport(Dll, CallingConvention = Conv)]

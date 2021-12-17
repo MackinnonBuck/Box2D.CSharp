@@ -13,6 +13,18 @@ int32 b2PolygonShape_GetChildCount(b2PolygonShape* obj)
     return obj->GetChildCount();
 }
 
+void b2PolygonShape_GetCentroid(b2PolygonShape* obj, b2Vec2* value)
+{
+    VERIFY_INSTANCE;
+    *value = obj->m_centroid;
+}
+
+void b2PolygonShape_Set(b2PolygonShape* obj, b2Vec2* points, int32 count)
+{
+    VERIFY_INSTANCE;
+    obj->Set(points, count);
+}
+
 void b2PolygonShape_SetAsBox(b2PolygonShape* obj, float hx, float hy)
 {
     VERIFY_INSTANCE;

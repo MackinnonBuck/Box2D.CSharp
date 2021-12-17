@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace Box2D.Math;
 
 [Serializable]
-[StructLayout(LayoutKind.Sequential, Pack = 4)]
+[StructLayout(LayoutKind.Sequential)]
 public struct Vec2 : IEquatable<Vec2>
 {
     public static Vec2 Zero { get; } = new(0f, 0f);
@@ -79,6 +79,9 @@ public struct Vec2 : IEquatable<Vec2>
         return length;
     }
 
+    public float Dot(Vec2 other)
+        => X * other.X + Y * other.Y;
+
     public static Vec2 operator +(Vec2 v)
         => v;
 
@@ -102,6 +105,9 @@ public struct Vec2 : IEquatable<Vec2>
 
     public static Vec2 Max(Vec2 a, Vec2 b)
         => new(MathF.Max(a.X, b.X), MathF.Max(a.Y, b.Y));
+
+    public static float Dot(Vec2 a, Vec2 b)
+        => a.Dot(b);
 
     private static IndexOutOfRangeException ComponentIndexOutOfRange(int i)
         => new($"The component index '{i}' is out of range for {nameof(Vec2)} instances.");
