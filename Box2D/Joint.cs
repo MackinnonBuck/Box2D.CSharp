@@ -37,19 +37,21 @@ public readonly struct JointEdge
 
     private readonly IntPtr _next;
 
+    public bool IsValid { get; }
+
     public Body? Other { get; }
 
     public Joint? Joint { get; }
 
-    public JointEdge? Prev => FromIntPtr(_prev);
+    public JointEdge Prev => FromIntPtr(_prev);
 
-    public JointEdge? Next => FromIntPtr(_next);
+    public JointEdge Next => FromIntPtr(_next);
 
-    internal static JointEdge? FromIntPtr(IntPtr obj)
+    internal static JointEdge FromIntPtr(IntPtr obj)
     {
         if (obj == IntPtr.Zero)
         {
-            return null;
+            return default;
         }
 
         var source = Marshal.PtrToStructure<JointEdgeInternal>(obj);
@@ -61,8 +63,37 @@ public readonly struct JointEdge
         _prev = source.prev;
         _next = source.next;
 
+        IsValid = true;
         Other = Body.FromIntPtr(source.other);
         Joint = Joint.FromIntPtr(source.joint);
+    }
+
+    public Enumerator GetEnumerator()
+        => new(in this);
+
+    public struct Enumerator
+    {
+        private JointEdge _currentEdge;
+
+        public Joint Current { get; private set; } = default!;
+
+        public Enumerator(in JointEdge edge)
+        {
+            _currentEdge = edge;
+        }
+
+        public bool MoveNext()
+        {
+            if (!_currentEdge.IsValid)
+            {
+                return false;
+            }
+
+            Current = _currentEdge.Joint!;
+            _currentEdge = _currentEdge.Next;
+
+            return true;
+        }
     }
 }
 
@@ -105,7 +136,7 @@ public abstract class JointDef : Box2DDisposableObject
     }
 }
 
-public abstract class Joint : Box2DObject
+public abstract class Joint : Box2DObject, IBox2DList<Joint>
 {
     public object? UserData { get; set; }
 

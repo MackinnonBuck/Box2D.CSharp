@@ -24,23 +24,14 @@ public class World : Box2DDisposableObject
     {
         // TODO: Would be really nice if we had a way to automatically track ownership
         // and take care of things like this through some layer of abstraction.
-        var jointEdge = body.JointList;
-
-        while (jointEdge.HasValue)
+        foreach (var joint in body.JointList)
         {
-            var value = jointEdge.Value;
-            var next = value.Next;
-            value.Joint?.InvalidateInstance();
-            jointEdge = next;
+            joint.InvalidateInstance();
         }
 
-        var fixture = body.FixtureList;
-
-        while (fixture is not null)
+        foreach (var fixture in body.FixtureList)
         {
-            var next = fixture.Next;
             fixture.InvalidateInstance();
-            fixture = next;
         }
 
         b2World_DestroyBody(Native, body.Native);
@@ -62,22 +53,19 @@ public class World : Box2DDisposableObject
 
     private protected override void Dispose(bool disposing)
     {
-        var body = BodyList;
-
-        while (body is not null)
+        foreach (var body in BodyList)
         {
-            var next = body.Next;
+            foreach (var fixture in body.FixtureList)
+            {
+                fixture.InvalidateInstance();
+            }
+
             body.InvalidateInstance();
-            body = next;
         }
 
-        var joint = JointList;
-
-        while (joint is not null)
+        foreach (var joint in JointList)
         {
-            var next = joint.Next;
             joint.InvalidateInstance();
-            joint = next;
         }
 
         // TODO: See if there's anything else to do here (do we care about the disposing parameter?).

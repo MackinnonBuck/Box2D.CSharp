@@ -49,7 +49,7 @@ internal struct FixtureDefInternal
     public Filter filter;
 }
 
-public class Fixture : Box2DObject
+public class Fixture : Box2DObject, IBox2DList<Fixture>
 {
     private Shape? _shape;
 

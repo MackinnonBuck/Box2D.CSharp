@@ -56,7 +56,7 @@ internal struct BodyDefInternal
     public float gravityScale;
 }
 
-public sealed class Body : Box2DObject
+public sealed class Body : Box2DObject, IBox2DList<Body>
 {
     public object? UserData { get; set; }
 
@@ -73,7 +73,7 @@ public sealed class Body : Box2DObject
 
     public Fixture? FixtureList => Fixture.FromIntPtr(b2Body_GetFixtureList(Native));
 
-    public JointEdge? JointList => JointEdge.FromIntPtr(b2Body_GetJointList(Native));
+    public JointEdge JointList => JointEdge.FromIntPtr(b2Body_GetJointList(Native));
 
     public Body? Next => FromIntPtr(b2Body_GetNext(Native));
 
