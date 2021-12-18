@@ -1,6 +1,6 @@
-﻿using Box2D.Math;
+﻿using Box2D.Core;
+using Box2D.Math;
 using System;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace Box2D;
@@ -56,8 +56,16 @@ internal struct BodyDefInternal
     public float gravityScale;
 }
 
-public sealed class Body : Box2DObject, IBox2DList<Body>
+public sealed class Body : Box2DSubObject, IBox2DList<Body>
 {
+    internal static BodyFromIntPtr FromIntPtr { get; } = new();
+
+    internal struct BodyFromIntPtr : IGetFromIntPtr<Body>
+    {
+        public IntPtr GetManagedHandle(IntPtr obj)
+            => b2Body_GetUserData(obj);
+    }
+
     public object? UserData { get; set; }
 
     public Vec2 Position
@@ -71,40 +79,15 @@ public sealed class Body : Box2DObject, IBox2DList<Body>
 
     public float Angle => b2Body_GetAngle(Native);
 
-    public Fixture? FixtureList => Fixture.FromIntPtr(b2Body_GetFixtureList(Native));
+    public Fixture? FixtureList => Fixture.FromIntPtr.Get(b2Body_GetFixtureList(Native));
 
-    public JointEdge JointList => JointEdge.FromIntPtr(b2Body_GetJointList(Native));
+    public JointEdge JointList => JointEdge.GetFromIntPtr(b2Body_GetJointList(Native));
 
-    public Body? Next => FromIntPtr(b2Body_GetNext(Native));
-
-    internal IntPtr Handle { get; private set; }
-
-    internal static Body? FromIntPtr(IntPtr obj)
-    {
-        if (obj == IntPtr.Zero)
-        {
-            return null;
-        }
-
-        var userData = b2Body_GetUserData(obj);
-       
-        if (userData == IntPtr.Zero)
-        {
-            throw new InvalidOperationException("The Box2D body does not have an associated managed object.");
-        }
-
-        if (GCHandle.FromIntPtr(userData).Target is not Body body)
-        {
-            throw new InvalidOperationException($"The managed {nameof(Body)} object could not be revived.");
-        }
-
-        return body;
-    }
+    public Body? Next => FromIntPtr.Get(b2Body_GetNext(Native));
 
     internal Body(IntPtr worldNative, in BodyDef def)
     {
         UserData = def.UserData;
-        Handle = GCHandle.ToIntPtr(GCHandle.Alloc(this, GCHandleType.Weak));
         var defInternal = def.ToInternalFormat(Handle);
         var native = b2World_CreateBody(worldNative, ref defInternal);
 
@@ -116,15 +99,6 @@ public sealed class Body : Box2DObject, IBox2DList<Body>
 
     public Fixture CreateFixture(Shape shape, float density)
         => new(Native, shape, density);
-
-    internal void InvalidateInstance()
-    {
-        Invalidate();
-
-        Debug.Assert(Handle != IntPtr.Zero);
-        GCHandle.FromIntPtr(Handle).Free();
-        Handle = IntPtr.Zero;
-    }
 }
 
 public static class BodyDefExtensions

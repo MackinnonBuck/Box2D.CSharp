@@ -1,4 +1,5 @@
-﻿using Box2D.Math;
+﻿using Box2D.Core;
+using Box2D.Math;
 using System;
 
 namespace Box2D;
@@ -23,8 +24,30 @@ public struct MassData
     public float I { get; set; }
 }
 
-public abstract class Shape : Box2DDisposableObject
+public abstract class Shape : Box2DRootObject
 {
+    internal static ShapeFromIntPtr FromIntPtr { get; } = new();
+
+    internal struct ShapeFromIntPtr
+    {
+        public Shape? Create(IntPtr obj, ShapeType type)
+        {
+            if (obj == IntPtr.Zero)
+            {
+                return null;
+            }
+
+            return type switch
+            {
+                ShapeType.Circle => new CircleShape(obj),
+                ShapeType.Edge => throw new NotImplementedException(),
+                ShapeType.Chain => throw new NotImplementedException(),
+                ShapeType.Polygon => new PolygonShape(obj),
+                var x => throw new ArgumentException($"Invalid shape type '{x}'.", nameof(type)),
+            };
+        }
+    }
+
     public abstract ShapeType Type { get; }
 
     public float Radius
@@ -34,25 +57,6 @@ public abstract class Shape : Box2DDisposableObject
     }
 
     public int ChildCount => b2Shape_GetChildCount(Native);
-
-    internal static Shape? FromIntPtr(IntPtr obj, ShapeType type)
-    {
-        // TODO: Shape instance deduplication?
-
-        if (obj == IntPtr.Zero)
-        {
-            return null;
-        }
-
-        return type switch
-        {
-            ShapeType.Circle => new CircleShape(obj),
-            ShapeType.Edge => throw new NotImplementedException(),
-            ShapeType.Chain => throw new NotImplementedException(),
-            ShapeType.Polygon => new PolygonShape(obj),
-            var x => throw new ArgumentException($"Invalid shape type '{x}'.", nameof(type)),
-        };
-    }
 
     public Shape(bool isUserOwned) : base(isUserOwned)
     {

@@ -1,5 +1,5 @@
-﻿using System;
-using System.Diagnostics;
+﻿using Box2D.Core;
+using System;
 using System.Runtime.InteropServices;
 
 namespace Box2D;
@@ -43,11 +43,11 @@ public readonly struct JointEdge
 
     public Joint? Joint { get; }
 
-    public JointEdge Prev => FromIntPtr(_prev);
+    public JointEdge Prev => GetFromIntPtr(_prev);
 
-    public JointEdge Next => FromIntPtr(_next);
+    public JointEdge Next => GetFromIntPtr(_next);
 
-    internal static JointEdge FromIntPtr(IntPtr obj)
+    internal static JointEdge GetFromIntPtr(IntPtr obj)
     {
         if (obj == IntPtr.Zero)
         {
@@ -64,8 +64,8 @@ public readonly struct JointEdge
         _next = source.next;
 
         IsValid = true;
-        Other = Body.FromIntPtr(source.other);
-        Joint = Joint.FromIntPtr(source.joint);
+        Other = Body.FromIntPtr.Get(source.other);
+        Joint = Joint.FromIntPtr.Get(source.joint);
     }
 
     public Enumerator GetEnumerator()
@@ -97,7 +97,7 @@ public readonly struct JointEdge
     }
 }
 
-public abstract class JointDef : Box2DDisposableObject
+public abstract class JointDef : Box2DRootObject
 {
     public object? UserData { get; set; }
 
@@ -109,13 +109,13 @@ public abstract class JointDef : Box2DDisposableObject
 
     public Body? BodyA
     {
-        get => Body.FromIntPtr(b2JointDef_get_bodyA(Native));
+        get => Body.FromIntPtr.Get(b2JointDef_get_bodyA(Native));
         set => b2JointDef_set_bodyA(Native, value?.Native ?? IntPtr.Zero);
     }
 
     public Body? BodyB
     {
-        get => Body.FromIntPtr(b2JointDef_get_bodyB(Native));
+        get => Body.FromIntPtr.Get(b2JointDef_get_bodyB(Native));
         set => b2JointDef_set_bodyB(Native, value?.Native ?? IntPtr.Zero);
     }
 
@@ -136,35 +136,19 @@ public abstract class JointDef : Box2DDisposableObject
     }
 }
 
-public abstract class Joint : Box2DObject, IBox2DList<Joint>
+public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
 {
+    internal static JointFromIntPtr FromIntPtr { get; } = new();
+
+    internal struct JointFromIntPtr : IGetFromIntPtr<Joint>
+    {
+        public IntPtr GetManagedHandle(IntPtr obj)
+            => b2Joint_GetUserData(obj);
+    }
+
     public object? UserData { get; set; }
 
-    public Joint? Next => FromIntPtr(b2Joint_GetNext(Native));
-
-    internal IntPtr Handle { get; private set; }
-
-    internal static Joint? FromIntPtr(IntPtr obj)
-    {
-        if (obj == IntPtr.Zero)
-        {
-            return null;
-        }
-
-        var userData = b2Joint_GetUserData(obj);
-
-        if (userData == IntPtr.Zero)
-        {
-            throw new InvalidOperationException("The Box2D joint does not have an associated managed object.");
-        }
-
-        if (GCHandle.FromIntPtr(userData).Target is not Joint joint)
-        {
-            throw new InvalidOperationException($"The managed {nameof(Joint)} object could not be revived.");
-        }
-
-        return joint;
-    }
+    public Joint? Next => FromIntPtr.Get(b2Joint_GetNext(Native));
 
     internal static Joint Create(IntPtr worldNative, JointDef def)
     {
@@ -196,15 +180,5 @@ public abstract class Joint : Box2DObject, IBox2DList<Joint>
     internal Joint(object? userData)
     {
         UserData = userData;
-        Handle = GCHandle.ToIntPtr(GCHandle.Alloc(this, GCHandleType.Weak));
-    }
-
-    internal void InvalidateInstance()
-    {
-        Invalidate();
-
-        Debug.Assert(Handle != IntPtr.Zero);
-        GCHandle.FromIntPtr(Handle).Free();
-        Handle = IntPtr.Zero;
     }
 }

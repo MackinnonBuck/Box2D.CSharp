@@ -1,14 +1,15 @@
-﻿using Box2D.Math;
+﻿using Box2D.Core;
+using Box2D.Math;
 
 namespace Box2D;
 
 using static Interop.NativeMethods;
 
-public class World : Box2DDisposableObject
+public class World : Box2DRootObject
 {
-    public Body? BodyList => Body.FromIntPtr(b2World_GetBodyList(Native));
+    public Body? BodyList => Body.FromIntPtr.Get(b2World_GetBodyList(Native));
 
-    public Joint? JointList => Joint.FromIntPtr(b2World_GetJointList(Native));
+    public Joint? JointList => Joint.FromIntPtr.Get(b2World_GetJointList(Native));
 
     public World(Vec2 gravity) : base(isUserOwned: true)
     {
@@ -22,20 +23,18 @@ public class World : Box2DDisposableObject
 
     public void DestroyBody(Body body)
     {
-        // TODO: Would be really nice if we had a way to automatically track ownership
-        // and take care of things like this through some layer of abstraction.
         foreach (var joint in body.JointList)
         {
-            joint.InvalidateInstance();
+            joint.Dispose();
         }
 
         foreach (var fixture in body.FixtureList)
         {
-            fixture.InvalidateInstance();
+            fixture.Dispose();
         }
 
         b2World_DestroyBody(Native, body.Native);
-        body.InvalidateInstance();
+        body.Dispose();
     }
 
     public Joint CreateJoint(JointDef def)
@@ -57,15 +56,15 @@ public class World : Box2DDisposableObject
         {
             foreach (var fixture in body.FixtureList)
             {
-                fixture.InvalidateInstance();
+                fixture.Dispose();
             }
 
-            body.InvalidateInstance();
+            body.Dispose();
         }
 
         foreach (var joint in JointList)
         {
-            joint.InvalidateInstance();
+            joint.Dispose();
         }
 
         // TODO: See if there's anything else to do here (do we care about the disposing parameter?).

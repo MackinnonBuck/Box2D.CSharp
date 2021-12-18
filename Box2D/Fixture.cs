@@ -1,5 +1,5 @@
-﻿using System;
-using System.Diagnostics;
+﻿using Box2D.Core;
+using System;
 using System.Runtime.InteropServices;
 
 namespace Box2D;
@@ -49,8 +49,16 @@ internal struct FixtureDefInternal
     public Filter filter;
 }
 
-public class Fixture : Box2DObject, IBox2DList<Fixture>
+public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
 {
+    internal static FixtureFromIntPtr FromIntPtr { get; } = new();
+
+    internal struct FixtureFromIntPtr : IGetFromIntPtr<Fixture>
+    {
+        public IntPtr GetManagedHandle(IntPtr obj)
+            => b2Fixture_GetUserData(obj);
+    }
+
     private Shape? _shape;
 
     public ShapeType Type { get; }
@@ -64,38 +72,14 @@ public class Fixture : Box2DObject, IBox2DList<Fixture>
             if (_shape is null)
             {
                 var shapeNative = b2Fixture_GetShape(Native);
-                _shape = Shape.FromIntPtr(shapeNative, Type)!;
+                _shape = Shape.FromIntPtr.Create(shapeNative, Type)!;
             }
 
             return _shape;
         }
     }
 
-    public Fixture? Next => FromIntPtr(b2Fixture_GetNext(Native));
-
-    internal IntPtr Handle { get; private set; }
-
-    internal static Fixture? FromIntPtr(IntPtr obj)
-    {
-        if (obj == IntPtr.Zero)
-        {
-            return null;
-        }
-
-        var userData = b2Fixture_GetUserData(obj);
-       
-        if (userData == IntPtr.Zero)
-        {
-            throw new InvalidOperationException("The Box2D body does not have an associated managed object.");
-        }
-
-        if (GCHandle.FromIntPtr(userData).Target is not Fixture fixture)
-        {
-            throw new InvalidOperationException($"The managed {nameof(Fixture)} object could not be revived.");
-        }
-
-        return fixture;
-    }
+    public Fixture? Next => FromIntPtr.Get(b2Fixture_GetNext(Native));
 
     internal Fixture(IntPtr bodyNative, in FixtureDef def)
     {
@@ -106,7 +90,6 @@ public class Fixture : Box2DObject, IBox2DList<Fixture>
 
         Type = def.Shape.Type;
         UserData = def.UserData;
-        Handle = GCHandle.ToIntPtr(GCHandle.Alloc(this, GCHandleType.Weak));
         var defInternal = def.ToInternalFormat(Handle);
         var native = b2Body_CreateFixture(bodyNative, ref defInternal);
 
@@ -122,13 +105,12 @@ public class Fixture : Box2DObject, IBox2DList<Fixture>
     {
     }
 
-    internal void InvalidateInstance()
+    private protected override void Dispose(bool disposing)
     {
-        Invalidate();
+        // This shape is not user-owned, so disposing it is safe.
+        _shape?.Dispose();
 
-        Debug.Assert(Handle != IntPtr.Zero);
-        GCHandle.FromIntPtr(Handle).Free();
-        Handle = IntPtr.Zero;
+        base.Dispose(disposing);
     }
 }
 

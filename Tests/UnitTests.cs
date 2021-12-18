@@ -1,4 +1,5 @@
 using Box2D;
+using Box2D.Core;
 using Box2D.Math;
 using System;
 using Xunit;
@@ -19,7 +20,7 @@ public class UnitTests
         var gravity = new Vec2(0f, -10f);
 
         // Construct a world object, which will hold and simulate the rigid bodies.
-        using var world = new World(gravity);
+        var world = new World(gravity);
 
         // Define the ground body.
         var groundBodyDef = new BodyDef
@@ -73,9 +74,20 @@ public class UnitTests
             world.Step(timeStep, velocityIterations, positionIterations);
         }
 
+        // Assert that the simulation result matches what we expect.
         Assert.True(body.Position.X < 0.01f);
         Assert.True(body.Position.Y - 1.01f < 0.01f);
         Assert.True(body.Angle < 0.01f);
+
+        // Dispose user-owned objects.
+        world.Dispose();
+        groundBox.Dispose();
+        dynamicBox.Dispose();
+
+        // Assert that all Box2D objects were disposed.
+        var objectTracker = Box2DObjectTracker.Instance;
+        Assert.NotNull(objectTracker);
+        Assert.Equal(0, objectTracker!.Objects.Count);
     }
 
     [Fact]
@@ -86,7 +98,7 @@ public class UnitTests
         var hy = 1.5f;
         var angle1 = 0.25f;
 
-        var polygon1 = new PolygonShape();
+        using var polygon1 = new PolygonShape();
         polygon1.SetAsBox(hx, hy, center, angle1);
 
         var epsilon = 1.192092896e-07f;
@@ -104,7 +116,7 @@ public class UnitTests
             new Vec2(center.X + hx, center.Y + hy),
         };
 
-        var polygon2 = new PolygonShape();
+        using var polygon2 = new PolygonShape();
         polygon2.Set(vertices);
 
         Assert.True(MathF.Abs(polygon2.Centroid.X - center.X) < absTol + relTol * MathF.Abs(center.X));
@@ -141,7 +153,7 @@ public class UnitTests
         };
         var ground = world.CreateBody(bodyDef);
 
-        var circle = new CircleShape
+        using var circle = new CircleShape
         {
             Radius = 1f,
         };

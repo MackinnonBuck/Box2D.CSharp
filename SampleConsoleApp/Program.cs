@@ -5,7 +5,7 @@ using Box2D.Math;
 var gravity = new Vec2(0f, -10f);
 
 // Construct a world object, which will hold and simulate the rigid bodies.
-using var world = new World(gravity);
+var world = new World(gravity);
 
 // Define the ground body.
 var groundBodyDef = new BodyDef
@@ -60,5 +60,7 @@ for (var i = 0; i < 60; i++)
 
     Console.WriteLine($"{body.Position.X} {body.Position.Y} {body.Angle}");
 }
+
+world.Dispose();
 
 Console.WriteLine("Done!");

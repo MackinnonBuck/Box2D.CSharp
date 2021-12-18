@@ -6,4 +6,8 @@
     <LangVersion>10.0</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DefineConstants>BOX2D_OBJECT_TRACKING</DefineConstants>
+  </PropertyGroup>
+
 </Project>
