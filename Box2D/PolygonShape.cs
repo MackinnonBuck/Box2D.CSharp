@@ -14,7 +14,7 @@ public class PolygonShape : Shape
     {
         get
         {
-            b2PolygonShape_GetCentroid(Native, out var value);
+            b2PolygonShape_get_m_centroid(Native, out var value);
             return value;
         }
     }
@@ -37,5 +37,5 @@ public class PolygonShape : Shape
         => b2PolygonShape_SetAsBox(Native, hx, hy);
 
     public void SetAsBox(float hx, float hy, Vec2 center, float angle)
-        => b2PolygonShape_SetAsBox2(Native, hx, hy, center, angle);
+        => b2PolygonShape_SetAsBox2(Native, hx, hy, ref center, angle);
 }

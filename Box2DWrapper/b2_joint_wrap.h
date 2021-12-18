@@ -9,16 +9,16 @@ extern "C"
     /*
      * b2JointDef
      */
-    BOX2D_API b2JointType b2JointDef_GetType(b2JointDef* obj);
-    BOX2D_API void b2JointDef_SetType(b2JointDef* obj, b2JointType value);
-    BOX2D_API uintptr_t b2JointDef_GetUserData(b2JointDef* obj);
-    BOX2D_API void b2JointDef_SetUserData(b2JointDef* obj, uintptr_t value);
-    BOX2D_API b2Body* b2JointDef_GetBodyA(b2JointDef* obj);
-    BOX2D_API void b2JointDef_SetBodyA(b2JointDef* obj, b2Body* value);
-    BOX2D_API b2Body* b2JointDef_GetBodyB(b2JointDef* obj);
-    BOX2D_API void b2JointDef_SetBodyB(b2JointDef* obj, b2Body* value);
-    BOX2D_API bool b2JointDef_GetCollideConnected(b2JointDef* obj);
-    BOX2D_API void b2JointDef_SetCollideConnected(b2JointDef* obj, bool value);
+    BOX2D_API b2JointType b2JointDef_get_type(b2JointDef* obj);
+    BOX2D_API void b2JointDef_set_type(b2JointDef* obj, b2JointType value);
+    BOX2D_API uintptr_t b2JointDef_get_userData(b2JointDef* obj);
+    BOX2D_API void b2JointDef_set_userData(b2JointDef* obj, uintptr_t value);
+    BOX2D_API b2Body* b2JointDef_get_bodyA(b2JointDef* obj);
+    BOX2D_API void b2JointDef_set_bodyA(b2JointDef* obj, b2Body* value);
+    BOX2D_API b2Body* b2JointDef_get_bodyB(b2JointDef* obj);
+    BOX2D_API void b2JointDef_set_bodyB(b2JointDef* obj, b2Body* value);
+    BOX2D_API bool b2JointDef_get_collideConnected(b2JointDef* obj);
+    BOX2D_API void b2JointDef_set_collideConnected(b2JointDef* obj, bool value);
 
     /*
      * b2Joint
@@ -33,5 +33,5 @@ extern "C"
     BOX2D_API uintptr_t b2Joint_GetUserData(b2Joint* obj);
     BOX2D_API bool b2Joint_IsEnabled(b2Joint* obj);
     BOX2D_API bool b2Joint_GetCollideConnected(b2Joint* obj);
-    BOX2D_API void b2Joint_ShiftOrigin(b2Joint* obj, b2Vec2 newOrigin);
+    BOX2D_API void b2Joint_ShiftOrigin(b2Joint* obj, b2Vec2* newOrigin);
 }

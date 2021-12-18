@@ -3,7 +3,6 @@ using System.Runtime.InteropServices;
 
 namespace Box2D.Math;
 
-[Serializable]
 [StructLayout(LayoutKind.Sequential)]
 public struct Vec2 : IEquatable<Vec2>
 {

@@ -17,73 +17,85 @@ void b2DistanceJointDef_Initialize(b2DistanceJointDef* obj, b2Body* bodyA, b2Bod
     obj->Initialize(bodyA, bodyB, anchorA, anchorB);
 }
 
-void b2DistanceJointDef_GetLocalAnchorA(b2DistanceJointDef* obj, b2Vec2* value)
+void b2DistanceJointDef_get_localAnchorA(b2DistanceJointDef* obj, b2Vec2* value)
 {
     VERIFY_INSTANCE;
     *value = obj->localAnchorA;
 }
 
-void b2DistanceJointDef_GetLocalAnchorB(b2DistanceJointDef* obj, b2Vec2* value)
+void b2DistanceJointDef_set_localAnchorA(b2DistanceJointDef* obj, b2Vec2* value)
+{
+    VERIFY_INSTANCE;
+    obj->localAnchorA = *value;
+}
+
+void b2DistanceJointDef_get_localAnchorB(b2DistanceJointDef* obj, b2Vec2* value)
 {
     VERIFY_INSTANCE;
     *value = obj->localAnchorB;
 }
 
-float b2DistanceJointDef_GetLength(b2DistanceJointDef* obj)
+void b2DistanceJointDef_set_localAnchorB(b2DistanceJointDef* obj, b2Vec2* value)
+{
+    VERIFY_INSTANCE;
+    obj->localAnchorB = *value;
+}
+
+float b2DistanceJointDef_get_length(b2DistanceJointDef* obj)
 {
     VERIFY_INSTANCE;
     return obj->length;
 }
 
-void b2DistanceJointDef_SetLength(b2DistanceJointDef* obj, float value)
+void b2DistanceJointDef_set_length(b2DistanceJointDef* obj, float value)
 {
     VERIFY_INSTANCE;
     obj->length = value;
 }
 
-float b2DistanceJointDef_GetMinLength(b2DistanceJointDef* obj)
+float b2DistanceJointDef_get_minLength(b2DistanceJointDef* obj)
 {
     VERIFY_INSTANCE;
     return obj->minLength;
 }
 
-void b2DistanceJointDef_SetMinLength(b2DistanceJointDef* obj, float value)
+void b2DistanceJointDef_set_minLength(b2DistanceJointDef* obj, float value)
 {
     VERIFY_INSTANCE;
     obj->minLength = value;
 }
 
-float b2DistanceJointDef_GetMaxLength(b2DistanceJointDef* obj)
+float b2DistanceJointDef_get_maxLength(b2DistanceJointDef* obj)
 {
     VERIFY_INSTANCE;
     return obj->maxLength;
 }
 
-void b2DistanceJointDef_SetMaxLength(b2DistanceJointDef* obj, float value)
+void b2DistanceJointDef_set_maxLength(b2DistanceJointDef* obj, float value)
 {
     VERIFY_INSTANCE;
     obj->maxLength = value;
 }
 
-float b2DistanceJointDef_GetStiffness(b2DistanceJointDef* obj)
+float b2DistanceJointDef_get_stiffness(b2DistanceJointDef* obj)
 {
     VERIFY_INSTANCE;
     return obj->stiffness;
 }
 
-void b2DistanceJointDef_SetStiffness(b2DistanceJointDef* obj, float value)
+void b2DistanceJointDef_set_stiffness(b2DistanceJointDef* obj, float value)
 {
     VERIFY_INSTANCE;
     obj->stiffness = value;
 }
 
-float b2DistanceJointDef_GetDamping(b2DistanceJointDef* obj)
+float b2DistanceJointDef_get_damping(b2DistanceJointDef* obj)
 {
     VERIFY_INSTANCE;
     return obj->damping;
 }
 
-void b2DistanceJointDef_SetDamping(b2DistanceJointDef* obj, float value)
+void b2DistanceJointDef_set_damping(b2DistanceJointDef* obj, float value)
 {
     VERIFY_INSTANCE;
     obj->damping = value;

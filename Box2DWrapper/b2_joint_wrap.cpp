@@ -6,61 +6,61 @@
  * b2JointDef
  */
 
-b2JointType b2JointDef_GetType(b2JointDef* obj)
+b2JointType b2JointDef_get_type(b2JointDef* obj)
 {
     VERIFY_INSTANCE;
     return obj->type;
 }
 
-void b2JointDef_SetType(b2JointDef* obj, b2JointType value)
+void b2JointDef_set_type(b2JointDef* obj, b2JointType value)
 {
     VERIFY_INSTANCE;
     obj->type = value;
 }
 
-uintptr_t b2JointDef_GetUserData(b2JointDef* obj)
+uintptr_t b2JointDef_get_userData(b2JointDef* obj)
 {
     VERIFY_INSTANCE;
     return obj->userData.pointer;
 }
 
-void b2JointDef_SetUserData(b2JointDef* obj, uintptr_t value)
+void b2JointDef_set_userData(b2JointDef* obj, uintptr_t value)
 {
     VERIFY_INSTANCE;
     obj->userData.pointer = value;
 }
 
-b2Body* b2JointDef_GetBodyA(b2JointDef* obj)
+b2Body* b2JointDef_get_bodyA(b2JointDef* obj)
 {
     VERIFY_INSTANCE;
     return obj->bodyA;
 }
 
-void b2JointDef_SetBodyA(b2JointDef* obj, b2Body* value)
+void b2JointDef_set_bodyA(b2JointDef* obj, b2Body* value)
 {
     VERIFY_INSTANCE;
     obj->bodyA = value;
 }
 
-b2Body* b2JointDef_GetBodyB(b2JointDef* obj)
+b2Body* b2JointDef_get_bodyB(b2JointDef* obj)
 {
     VERIFY_INSTANCE;
     return obj->bodyB;
 }
 
-void b2JointDef_SetBodyB(b2JointDef* obj, b2Body* value)
+void b2JointDef_set_bodyB(b2JointDef* obj, b2Body* value)
 {
     VERIFY_INSTANCE;
     obj->bodyB = value;
 }
 
-bool b2JointDef_GetCollideConnected(b2JointDef* obj)
+bool b2JointDef_get_collideConnected(b2JointDef* obj)
 {
     VERIFY_INSTANCE;
     return obj->collideConnected;
 }
 
-void b2JointDef_SetCollideConnected(b2JointDef* obj, bool value)
+void b2JointDef_set_collideConnected(b2JointDef* obj, bool value)
 {
     VERIFY_INSTANCE;
     obj->collideConnected = value;
@@ -130,8 +130,8 @@ bool b2Joint_GetCollideConnected(b2Joint* obj)
     return obj->GetCollideConnected();
 }
 
-void b2Joint_ShiftOrigin(b2Joint* obj, b2Vec2 newOrigin)
+void b2Joint_ShiftOrigin(b2Joint* obj, b2Vec2* newOrigin)
 {
     VERIFY_INSTANCE;
-    obj->ShiftOrigin(newOrigin);
+    obj->ShiftOrigin(*newOrigin);
 }

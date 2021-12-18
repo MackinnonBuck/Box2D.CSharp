@@ -11,18 +11,20 @@ extern "C"
      */
     BOX2D_API b2DistanceJointDef* b2DistanceJointDef_new();
     BOX2D_API void b2DistanceJointDef_Initialize(b2DistanceJointDef* obj, b2Body* bodyA, b2Body* bodyB, b2Vec2 anchorA, b2Vec2 anchorB);
-    BOX2D_API void b2DistanceJointDef_GetLocalAnchorA(b2DistanceJointDef* obj, b2Vec2* value);
-    BOX2D_API void b2DistanceJointDef_GetLocalAnchorB(b2DistanceJointDef* obj, b2Vec2* value);
-    BOX2D_API float b2DistanceJointDef_GetLength(b2DistanceJointDef* obj);
-    BOX2D_API void b2DistanceJointDef_SetLength(b2DistanceJointDef* obj, float value);
-    BOX2D_API float b2DistanceJointDef_GetMinLength(b2DistanceJointDef* obj);
-    BOX2D_API void b2DistanceJointDef_SetMinLength(b2DistanceJointDef* obj, float value);
-    BOX2D_API float b2DistanceJointDef_GetMaxLength(b2DistanceJointDef* obj);
-    BOX2D_API void b2DistanceJointDef_SetMaxLength(b2DistanceJointDef* obj, float value);
-    BOX2D_API float b2DistanceJointDef_GetStiffness(b2DistanceJointDef* obj);
-    BOX2D_API void b2DistanceJointDef_SetStiffness(b2DistanceJointDef* obj, float value);
-    BOX2D_API float b2DistanceJointDef_GetDamping(b2DistanceJointDef* obj);
-    BOX2D_API void b2DistanceJointDef_SetDamping(b2DistanceJointDef* obj, float value);
+    BOX2D_API void b2DistanceJointDef_get_localAnchorA(b2DistanceJointDef* obj, b2Vec2* value);
+    BOX2D_API void b2DistanceJointDef_set_localAnchorA(b2DistanceJointDef* obj, b2Vec2* value);
+    BOX2D_API void b2DistanceJointDef_get_localAnchorB(b2DistanceJointDef* obj, b2Vec2* value);
+    BOX2D_API void b2DistanceJointDef_set_localAnchorB(b2DistanceJointDef* obj, b2Vec2* value);
+    BOX2D_API float b2DistanceJointDef_get_length(b2DistanceJointDef* obj);
+    BOX2D_API void b2DistanceJointDef_set_length(b2DistanceJointDef* obj, float value);
+    BOX2D_API float b2DistanceJointDef_get_minLength(b2DistanceJointDef* obj);
+    BOX2D_API void b2DistanceJointDef_set_minLength(b2DistanceJointDef* obj, float value);
+    BOX2D_API float b2DistanceJointDef_get_maxLength(b2DistanceJointDef* obj);
+    BOX2D_API void b2DistanceJointDef_set_maxLength(b2DistanceJointDef* obj, float value);
+    BOX2D_API float b2DistanceJointDef_get_stiffness(b2DistanceJointDef* obj);
+    BOX2D_API void b2DistanceJointDef_set_stiffness(b2DistanceJointDef* obj, float value);
+    BOX2D_API float b2DistanceJointDef_get_damping(b2DistanceJointDef* obj);
+    BOX2D_API void b2DistanceJointDef_set_damping(b2DistanceJointDef* obj, float value);
     BOX2D_API void b2DistanceJointDef_delete(b2DistanceJointDef* obj);
 
     /*
