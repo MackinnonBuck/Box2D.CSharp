@@ -222,4 +222,178 @@ internal static class NativeMethods
     public static extern float b2DistanceJoint_GetDamping(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2DistanceJoint_SetDamping(IntPtr obj, float damping);
+
+    /*
+     * b2PrismaticJointDef
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2PrismaticJointDef_new();
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJointDef_Initialize(IntPtr obj, IntPtr bodyA, IntPtr bodyB, [In] ref Vec2 anchor, [In] ref Vec2 axis);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJointDef_get_localAnchorA(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJointDef_set_localAnchorA(IntPtr obj, [In] ref Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJointDef_get_localAnchorB(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJointDef_set_localAnchorB(IntPtr obj, [In] ref Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJointDef_get_localAxisA(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJointDef_set_localAxisA(IntPtr obj, [In] ref Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2PrismaticJointDef_get_referenceAngle(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJointDef_set_referenceAngle(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern bool b2PrismaticJointDef_get_enableLimit(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJointDef_set_enableLimit(IntPtr obj, bool value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2PrismaticJointDef_get_lowerTranslation(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJointDef_set_lowerTranslation(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2PrismaticJointDef_get_upperTranslation(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJointDef_set_upperTranslation(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern bool b2PrismaticJointDef_get_enableMotor(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJointDef_set_enableMotor(IntPtr obj, bool value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2PrismaticJointDef_get_maxMotorForce(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJointDef_set_maxMotorForce(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2PrismaticJointDef_get_motorSpeed(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJointDef_set_motorSpeed(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJointDef_delete(IntPtr obj);
+
+    /*
+     * b2PrismaticJoint
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJoint_GetLocalAnchorA(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJoint_GetLocalAnchorB(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJoint_GetLocalAxisA(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2PrismaticJoint_GetReferenceAngle(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2PrismaticJoint_GetJointTranslation(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2PrismaticJoint_GetJointSpeed(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern bool b2PrismaticJoint_IsLimitEnabled(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJoint_EnableLimit(IntPtr obj, bool flag);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2PrismaticJoint_GetLowerLimit(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2PrismaticJoint_GetUpperLimit(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJoint_SetLimits(IntPtr obj, float lower, float upper);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern bool b2PrismaticJoint_IsMotorEnabled(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJoint_EnableMotor(IntPtr obj, bool flag);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2PrismaticJoint_GetMotorSpeed(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJoint_SetMotorSpeed(IntPtr obj, float speed);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2PrismaticJoint_GetMaxMotorForce(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJoint_SetMaxMotorForce(IntPtr obj, float force);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2PrismaticJoint_GetMotorForce(IntPtr obj, float inv_dt);
+
+    /*
+     * b2RevoluteJointDef
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2RevoluteJointDef_new();
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2RevoluteJointDef_Initialize(IntPtr obj, IntPtr bodyA, IntPtr bodyB, [In] ref Vec2 anchor);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2RevoluteJointDef_get_localAnchorA(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2RevoluteJointDef_set_localAnchorA(IntPtr obj, [In] ref Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2RevoluteJointDef_get_localAnchorB(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2RevoluteJointDef_set_localAnchorB(IntPtr obj, [In] ref Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2RevoluteJointDef_get_referenceAngle(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2RevoluteJointDef_set_referenceAngle(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern bool b2RevoluteJointDef_get_enableLimit(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2RevoluteJointDef_set_enableLimit(IntPtr obj, bool value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2RevoluteJointDef_get_lowerAngle(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2RevoluteJointDef_set_lowerAngle(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2RevoluteJointDef_get_upperAngle(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2RevoluteJointDef_set_upperAngle(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern bool b2RevoluteJointDef_get_enableMotor(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2RevoluteJointDef_set_enableMotor(IntPtr obj, bool value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2RevoluteJointDef_get_motorSpeed(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2RevoluteJointDef_set_motorSpeed(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2RevoluteJointDef_get_maxMotorTorque(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2RevoluteJointDef_set_maxMotorTorque(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2RevoluteJointDef_delete(IntPtr obj);
+
+    /*
+     * b2RevoluteJoint
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2RevoluteJoint_GetLocalAnchorA(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2RevoluteJoint_GetLocalAnchorB(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2RevoluteJoint_GetReferenceAngle(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2RevoluteJoint_GetJointAngle(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2RevoluteJoint_GetJointSpeed(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern bool b2RevoluteJoint_IsLimitEnabled(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2RevoluteJoint_EnableLimit(IntPtr obj, bool flag);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2RevoluteJoint_GetLowerLimit(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2RevoluteJoint_GetUpperLimit(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2RevoluteJoint_SetLimits(IntPtr obj, float lower, float upper);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern bool b2RevoluteJoint_IsMotorEnabled(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2RevoluteJoint_EnableMotor(IntPtr obj, bool flag);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2RevoluteJoint_GetMotorSpeed(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2RevoluteJoint_SetMotorSpeed(IntPtr obj, float speed);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2RevoluteJoint_GetMaxMotorTorque(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2RevoluteJoint_SetMaxMotorTorque(IntPtr obj, float torque);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2RevoluteJoint_GetMotorTorque(IntPtr obj, float inv_dt);
 }

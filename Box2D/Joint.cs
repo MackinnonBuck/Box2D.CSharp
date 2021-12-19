@@ -1,4 +1,5 @@
 ﻿using Box2D.Core;
+using Box2D.Math;
 using System;
 using System.Runtime.InteropServices;
 
@@ -148,16 +149,44 @@ public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
 
     public object? UserData { get; set; }
 
+    public abstract JointType Type { get; }
+
+    public Body BodyA => Body.FromIntPtr.Get(b2Joint_GetBodyA(Native))!;
+
+    public Body BodyB => Body.FromIntPtr.Get(b2Joint_GetBodyB(Native))!;
+
+    public Vec2 AnchorA
+    {
+        get
+        {
+            b2Joint_GetAnchorA(Native, out var value);
+            return value;
+        }
+    }
+
+    public Vec2 AnchorB
+    {
+        get
+        {
+            b2Joint_GetAnchorB(Native, out var value);
+            return value;
+        }
+    }
+
     public Joint? Next => FromIntPtr.Get(b2Joint_GetNext(Native));
+
+    public bool IsEnabled => b2Joint_IsEnabled(Native);
+
+    public bool CollideConnected => b2Joint_GetCollideConnected(Native);
 
     internal static Joint Create(IntPtr worldNative, JointDef def)
     {
         var userData = def.UserData;
-        var joint = def.Type switch
+        Joint joint = def.Type switch
         {
             JointType.Unknown => throw new NotImplementedException(),
-            JointType.Revolute => throw new NotImplementedException(),
-            JointType.Prismatic => throw new NotImplementedException(),
+            JointType.Revolute => new RevoluteJoint(userData),
+            JointType.Prismatic => new PrismaticJoint(userData),
             JointType.Distance => new DistanceJoint(userData),
             JointType.Pulley => throw new NotImplementedException(),
             JointType.Mouse => throw new NotImplementedException(),
@@ -181,4 +210,16 @@ public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
     {
         UserData = userData;
     }
+
+    public Vec2 GetReactionForce(float invDt)
+    {
+        b2Joint_GetReactionForce(Native, invDt, out var value);
+        return value;
+    }
+
+    public float GetReactionTorque(float invDt)
+        => b2Joint_GetReactionTorque(Native, invDt);
+
+    public void ShiftOrigin(Vec2 newOrigin)
+        => b2Joint_ShiftOrigin(Native, ref newOrigin);
 }

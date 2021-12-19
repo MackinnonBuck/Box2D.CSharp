@@ -163,13 +163,52 @@ public class UnitTests
         bodyB.CreateFixture(fixtureDef);
         bodyC.CreateFixture(fixtureDef);
 
-        var distanceJointDef = new DistanceJointDef();
+        using var distanceJointDef = new DistanceJointDef();
         distanceJointDef.Initialize(ground, bodyA, bodyDef.Position + new Vec2(0f, 4f), bodyDef.Position);
         distanceJointDef.MinLength = distanceJointDef.Length;
         distanceJointDef.MaxLength = distanceJointDef.Length;
 
-        var distanceJoint = (DistanceJoint)world.CreateJoint(distanceJointDef);
+        using var prismaticJointDef = new PrismaticJointDef();
+        prismaticJointDef.Initialize(ground, bodyB, bodyDef.Position, new Vec2(1f, 0f));
 
-        // TODO: Finish this test.
+        using var revoluteJointDef = new RevoluteJointDef();
+        revoluteJointDef.Initialize(ground, bodyC, bodyDef.Position);
+
+        var distanceJoint = (DistanceJoint)world.CreateJoint(distanceJointDef);
+        var prismaticJoint = (PrismaticJoint)world.CreateJoint(prismaticJointDef);
+        var revoluteJoint = (RevoluteJoint)world.CreateJoint(revoluteJointDef);
+
+        var timeStep = 1f / 60f;
+        var invTimeStep = 60f;
+        var velocityIterations = 6;
+        var positionIterations = 2;
+
+        world.Step(timeStep, velocityIterations, positionIterations);
+
+        var tol = 1e-5f;
+
+        {
+            var f = distanceJoint.GetReactionForce(invTimeStep);
+            var t = distanceJoint.GetReactionTorque(invTimeStep);
+            Assert.Equal(0f, f.X);
+            Assert.True(MathF.Abs(f.Y + mg) < tol);
+            Assert.Equal(0f, t);
+        }
+
+        {
+            var f = prismaticJoint.GetReactionForce(invTimeStep);
+            var t = prismaticJoint.GetReactionTorque(invTimeStep);
+            Assert.Equal(0f, f.X);
+            Assert.True(MathF.Abs(f.Y + mg) < tol);
+            Assert.Equal(0f, t);
+        }
+
+        {
+            var f = revoluteJoint.GetReactionForce(invTimeStep);
+            var t = revoluteJoint.GetReactionTorque(invTimeStep);
+            Assert.Equal(0f, f.X);
+            Assert.True(MathF.Abs(f.Y + mg) < tol);
+            Assert.Equal(0f, t);
+        }
     }
 }

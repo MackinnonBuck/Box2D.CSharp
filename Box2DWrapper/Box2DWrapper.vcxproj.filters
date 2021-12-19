@@ -51,6 +51,12 @@
     <ClInclude Include="b2_distance_joint_wrap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="b2_prismatic_joint_wrap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="b2_revolute_joint_wrap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -81,6 +87,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="b2_distance_joint_wrap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="b2_prismatic_joint_wrap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="b2_revolute_joint_wrap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

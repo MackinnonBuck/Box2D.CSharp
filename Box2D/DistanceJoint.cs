@@ -4,7 +4,7 @@ namespace Box2D;
 
 using static Interop.NativeMethods;
 
-public class DistanceJointDef : JointDef
+public sealed class DistanceJointDef : JointDef
 {
     public Vec2 LocalAnchorA
     {
@@ -71,8 +71,10 @@ public class DistanceJointDef : JointDef
     }
 }
 
-public class DistanceJoint : Joint
+public sealed class DistanceJoint : Joint
 {
+    public override JointType Type => JointType.Distance;
+
     public Vec2 LocalAnchorA
     {
         get
