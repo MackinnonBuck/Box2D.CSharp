@@ -1,14 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Box2D.Core;
 
 public sealed class Box2DObjectTracker
 {
+    private readonly object _box2DObjectsLock = new();
     private readonly HashSet<Box2DObject> _box2DObjects = new();
 
-    public IReadOnlyCollection<Box2DObject> Objects => _box2DObjects;
+    public IList<Box2DObject> GetObjects()
+    {
+        lock (_box2DObjectsLock)
+        {
+            return _box2DObjects.ToList();
+        }
+    }
 
     private Box2DObjectTracker()
     {
@@ -30,9 +38,12 @@ public sealed class Box2DObjectTracker
             throw new ArgumentNullException(nameof(box2DObject));
         }
 
-        if (!_box2DObjects.Add(box2DObject))
+        lock (_box2DObjectsLock)
         {
-            throw new InvalidOperationException("Attempted to add a reference to an object already being tracked.");
+            if (!_box2DObjects.Add(box2DObject))
+            {
+                throw new InvalidOperationException("Attempted to add a reference to an object already being tracked.");
+            }
         }
     }
 
@@ -43,9 +54,12 @@ public sealed class Box2DObjectTracker
             throw new ArgumentNullException(nameof(box2DObject));
         }
 
-        if (!_box2DObjects.Remove(box2DObject))
+        lock (_box2DObjectsLock)
         {
-            throw new InvalidOperationException("Attempted to remove a reference to an object not being tracked.");
+            if (!_box2DObjects.Remove(box2DObject))
+            {
+                throw new InvalidOperationException("Attempted to remove a reference to an object not being tracked.");
+            }
         }
     }
 

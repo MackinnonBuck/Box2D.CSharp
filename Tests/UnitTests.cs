@@ -1,5 +1,4 @@
 using Box2D;
-using Box2D.Core;
 using Box2D.Math;
 using System;
 using Xunit;
@@ -8,11 +7,6 @@ namespace Tests;
 
 public class UnitTests
 {
-    // TODO: Add joint test and associated functionality.
-    // After you have a concept for each core piece of the physics engine (body, shape, joint, fixture, world, etc.),
-    // then do another refactoring pass around how memory is managed. Box2D generally follows similar memory management
-    // patterns among its various entities, so it would be good to abstract some of it away when we deem it safe to do so.
-
     [Fact]
     public void HelloWorld_Works()
     {
@@ -20,7 +14,7 @@ public class UnitTests
         var gravity = new Vec2(0f, -10f);
 
         // Construct a world object, which will hold and simulate the rigid bodies.
-        var world = new World(gravity);
+        using var world = new World(gravity);
 
         // Define the ground body.
         var groundBodyDef = new BodyDef
@@ -32,7 +26,7 @@ public class UnitTests
         var groundBody = world.CreateBody(groundBodyDef);
 
         // Define the ground box shape.
-        var groundBox = new PolygonShape();
+        using var groundBox = new PolygonShape();
 
         // Set the extents (half-widths) of the box.
         groundBox.SetAsBox(50f, 10f);
@@ -49,7 +43,7 @@ public class UnitTests
         var body = world.CreateBody(bodyDef);
 
         // Define another box shape for our dynamic body.
-        var dynamicBox = new PolygonShape();
+        using var dynamicBox = new PolygonShape();
         dynamicBox.SetAsBox(1f, 1f);
 
         // Define the dynamic body fixture.
@@ -78,16 +72,6 @@ public class UnitTests
         Assert.True(body.Position.X < 0.01f);
         Assert.True(body.Position.Y - 1.01f < 0.01f);
         Assert.True(body.Angle < 0.01f);
-
-        // Dispose user-owned objects.
-        world.Dispose();
-        groundBox.Dispose();
-        dynamicBox.Dispose();
-
-        // Assert that all Box2D objects were disposed.
-        var objectTracker = Box2DObjectTracker.Instance;
-        Assert.NotNull(objectTracker);
-        Assert.Equal(0, objectTracker!.Objects.Count);
     }
 
     [Fact]
