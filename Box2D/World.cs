@@ -7,6 +7,12 @@ using static Interop.NativeMethods;
 
 public class World : Box2DRootObject
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage(
+        "CodeQuality",
+        "IDE0052:Remove unread private members",
+        Justification = "Need to maintain a reference to the contact listener to keep it from getting garbage collected.")]
+    private ContactListener? _contactListener;
+
     public Body? BodyList => Body.FromIntPtr.Get(b2World_GetBodyList(Native));
 
     public Joint? JointList => Joint.FromIntPtr.Get(b2World_GetJointList(Native));
@@ -16,6 +22,12 @@ public class World : Box2DRootObject
         var native = b2World_new(ref gravity);
 
         Initialize(native);
+    }
+
+    public void SetContactListener(ContactListener listener)
+    {
+        _contactListener = listener;
+        b2World_SetContactListener(Native, listener.Native);
     }
 
     public Body CreateBody(in BodyDef def)

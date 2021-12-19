@@ -24,7 +24,7 @@ public class CircleShape : Shape
         Initialize(native);
     }
 
-    public CircleShape(IntPtr native) : base(isUserOwned: false)
+    internal CircleShape(IntPtr native) : base(isUserOwned: false)
     {
         Initialize(native);
     }

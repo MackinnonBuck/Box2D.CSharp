@@ -9,13 +9,16 @@ namespace Box2D.Interop;
 internal static class NativeMethods
 {
     private const string Dll = "libbox2d";
-    private const CallingConvention Conv = CallingConvention.Cdecl;
+
+    public const CallingConvention Conv = CallingConvention.Cdecl;
 
     /*
      * b2World
      */
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2World_new([In] ref Vec2 gravity);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2World_SetContactListener(IntPtr obj, IntPtr listener);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2World_CreateBody(IntPtr obj, [In] ref BodyDefInternal def);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -36,10 +39,22 @@ internal static class NativeMethods
     public static extern void b2World_delete(IntPtr obj);
 
     /*
+     * b2ContactListenerWrapper
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2ContactListenerWrapper_new(IntPtr beginContact, IntPtr endContact, IntPtr preSolve, IntPtr postSolve);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2ContactListenerWrapper_delete(IntPtr obj);
+
+    /*
      * b2Body
      */
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Body_CreateFixture(IntPtr obj, [In] ref FixtureDefInternal def);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_GetTransform(IntPtr obj, out Transform transform);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_SetTransform(IntPtr obj, [In] ref Vec2 position, float angle);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Body_GetPosition(IntPtr obj, out Vec2 value);
     [DllImport(Dll, CallingConvention = Conv)]

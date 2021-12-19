@@ -77,6 +77,15 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
         }
     }
 
+    public Transform Transform
+    {
+        get
+        {
+            b2Body_GetTransform(Native, out var value);
+            return value;
+        }
+    }
+
     public float Angle => b2Body_GetAngle(Native);
 
     public Fixture? FixtureList => Fixture.FromIntPtr.Get(b2Body_GetFixtureList(Native));
@@ -99,6 +108,9 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
 
     public Fixture CreateFixture(Shape shape, float density)
         => new(Native, shape, density);
+
+    public void SetTransform(Vec2 position, float angle)
+        => b2Body_SetTransform(Native, ref position, angle);
 }
 
 public static class BodyDefExtensions

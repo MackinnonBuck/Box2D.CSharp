@@ -1,7 +1,19 @@
 ﻿using Box2D.Math;
+using System;
 using System.Runtime.InteropServices;
 
 namespace Box2D;
+
+// TODO: Should this be a ref struct so we don't persist the information longer than we should?
+public readonly struct Manifold
+{
+    private readonly IntPtr _native;
+
+    internal Manifold(IntPtr native)
+    {
+        _native = native;
+    }
+}
 
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct RayCastInput

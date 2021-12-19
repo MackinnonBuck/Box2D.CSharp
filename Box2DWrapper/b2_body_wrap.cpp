@@ -8,6 +8,18 @@ b2Fixture* b2Body_CreateFixture(b2Body* obj, b2FixtureDef* def)
     return obj->CreateFixture(def);
 }
 
+void b2Body_GetTransform(b2Body* obj, b2Transform* transform)
+{
+    VERIFY_INSTANCE;
+    *transform = obj->GetTransform();
+}
+
+void b2Body_SetTransform(b2Body* obj, b2Vec2* position, float angle)
+{
+    VERIFY_INSTANCE;
+    obj->SetTransform(*position, angle);
+}
+
 void b2Body_GetPosition(b2Body* obj, b2Vec2* v)
 {
     VERIFY_INSTANCE;

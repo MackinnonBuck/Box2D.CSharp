@@ -57,6 +57,9 @@
     <ClInclude Include="b2_revolute_joint_wrap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="b2_world_callbacks_wrap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -93,6 +96,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="b2_revolute_joint_wrap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="b2_world_callbacks_wrap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

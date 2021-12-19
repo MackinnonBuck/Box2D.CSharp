@@ -7,6 +7,11 @@ namespace Tests;
 
 public class UnitTests
 {
+    // TODO: Implement "world_test".
+    // This will require:
+    // * Contact listener support
+    // * Contact list API and related structures.
+
     [Fact]
     public void HelloWorld_Works()
     {
@@ -209,6 +214,58 @@ public class UnitTests
             Assert.Equal(0f, f.X);
             Assert.True(MathF.Abs(f.Y + mg) < tol);
             Assert.Equal(0f, t);
+        }
+    }
+
+    [Fact]
+    public void WorldTest_Works()
+    {
+        using var world = new World(new Vec2(0f, -10f));
+        var listener = new MyContactListener();
+        world.SetContactListener(listener);
+
+        using var circle = new CircleShape
+        {
+            Radius = 5f,
+        };
+
+        var bodyDef = new BodyDef
+        {
+            Type = BodyType.Dyanmic,
+        };
+
+        var bodyA = world.CreateBody(bodyDef);
+        var bodyB = world.CreateBody(bodyDef);
+        bodyA.CreateFixture(circle, 0f);
+        bodyB.CreateFixture(circle, 0f);
+
+        bodyA.SetTransform(new Vec2(0f, 0f), 0f);
+        bodyB.SetTransform(new Vec2(100f, 0f), 0f);
+
+        var timeStep = 1f / 60f;
+        var velocityIterations = 6;
+        var positionIterations = 2;
+
+        world.Step(timeStep, velocityIterations, positionIterations);
+
+        //Assert.Null(world.ContactList); // TODO
+        Assert.False(listener.DidBeginContact);
+
+        bodyB.SetTransform(new Vec2(1f, 0f), 0f);
+
+        world.Step(timeStep, velocityIterations, positionIterations);
+
+        //Assert.NotNull(world.ContactList); // TODO
+        Assert.True(listener.DidBeginContact);
+    }
+
+    private class MyContactListener : ContactListener
+    {
+        public bool DidBeginContact { get; private set; }
+
+        public override void BeginContact(in Contact contact)
+        {
+            DidBeginContact = true;
         }
     }
 }
