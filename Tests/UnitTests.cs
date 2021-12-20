@@ -258,7 +258,7 @@ public class UnitTests
     {
         public bool DidBeginContact { get; private set; }
 
-        protected override void BeginContact(Contact contact)
+        protected override void BeginContact(in Contact contact)
         {
             DidBeginContact = true;
         }

@@ -101,7 +101,7 @@ public readonly ref struct Manifold
     {
         if (native == IntPtr.Zero)
         {
-            throw new ArgumentException("The native pointer cannot be null.", nameof(native));
+            return default;
         }
 
         var pointsNative = b2Manifold_get_points(native, out int pointsLength);

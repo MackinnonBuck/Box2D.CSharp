@@ -7,18 +7,33 @@ namespace Box2D;
 
 using static Interop.NativeMethods;
 
-// TODO: Should this be a ref struct so we don't persist the information longer than we should?
-// Or it could be a normal struct and we just use Marshal.PtrToStructure()?
-public readonly struct ContactImpulse
+public readonly ref struct ContactImpulse
 {
     private readonly IntPtr _native;
 
-    internal ContactImpulse(IntPtr native)
+    public bool IsValid => _native != IntPtr.Zero;
+
+    public Box2DArray<float> NormalImpulses { get; }
+
+    public Box2DArray<float> TangentImpulses { get; }
+
+    internal static ContactImpulse Create(IntPtr native)
     {
-        _native = native;
+        if (native == IntPtr.Zero)
+        {
+            return default;
+        }
+
+        b2ContactImpulse_get_impulses(native, out IntPtr normalImpulses, out IntPtr tangentImpulses, out int count);
+        return new(native, new(normalImpulses, count), new(tangentImpulses, count));
     }
 
-    // TODO: Implement
+    private ContactImpulse(IntPtr native, in Box2DArray<float> normalImpulses, in Box2DArray<float> tangentImpulses)
+    {
+        _native = native;
+        NormalImpulses = normalImpulses;
+        TangentImpulses = tangentImpulses;
+    }
 }
 
 public abstract class ContactListener : Box2DObject
@@ -62,21 +77,21 @@ public abstract class ContactListener : Box2DObject
         => PreSolve(new(contact), Manifold.Create(manifold));
 
     private void PostSolveUnmanaged(IntPtr contact, IntPtr impulse)
-        => PostSolve(new(contact), new(impulse));
+        => PostSolve(new(contact), ContactImpulse.Create(impulse));
 
-    protected virtual void BeginContact(Contact contact)
+    protected virtual void BeginContact(in Contact contact)
     {
     }
 
-    protected virtual void EndContact(Contact contact)
+    protected virtual void EndContact(in Contact contact)
     {
     }
 
-    protected virtual void PreSolve(Contact contact, Manifold manifold)
+    protected virtual void PreSolve(in Contact contact, in Manifold manifold)
     {
     }
 
-    protected virtual void PostSolve(Contact contact, ContactImpulse impulse)
+    protected virtual void PostSolve(in Contact contact, in ContactImpulse impulse)
     {
     }
 

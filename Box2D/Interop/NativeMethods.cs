@@ -121,6 +121,12 @@ internal static class NativeMethods
     public static extern void b2WorldManifold_delete(IntPtr obj);
 
     /*
+     * b2ContactImpulse
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2ContactImpulse_get_impulses(IntPtr obj, out IntPtr normalImpulses, out IntPtr tangentImpulses, out int count);
+
+    /*
      * b2ContactListenerWrapper
      */
     [DllImport(Dll, CallingConvention = Conv)]

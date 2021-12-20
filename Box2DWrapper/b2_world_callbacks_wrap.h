@@ -32,6 +32,14 @@ private:
 
 extern "C"
 {
+    /*
+     * b2ContactImpulse
+     */
+    BOX2D_API void b2ContactImpulse_get_impulses(b2ContactImpulse* obj, float** normalImpulses, float** tangentImpulses, int32* count);
+
+    /*
+     * b2ContactListenerWrapper
+     */
     BOX2D_API b2ContactListenerWrapper* b2ContactListenerWrapper_new(
         b2ContactListener_callback_BeginContact beginContact,
         b2ContactListener_callback_EndContact endContact,
