@@ -7,8 +7,6 @@ namespace Tests;
 
 public class UnitTests
 {
-    // TODO: Finish contact API.
-
     [Fact]
     public void HelloWorld_Works()
     {
@@ -260,7 +258,7 @@ public class UnitTests
     {
         public bool DidBeginContact { get; private set; }
 
-        protected override void BeginContact(in Contact contact)
+        protected override void BeginContact(Contact contact)
         {
             DidBeginContact = true;
         }

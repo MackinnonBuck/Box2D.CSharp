@@ -59,24 +59,24 @@ public abstract class ContactListener : Box2DObject
         => EndContact(new(contact));
 
     private void PreSolveUnmanaged(IntPtr contact, IntPtr manifold)
-        => PreSolve(new(contact), new(manifold));
+        => PreSolve(new(contact), Manifold.Create(manifold));
 
     private void PostSolveUnmanaged(IntPtr contact, IntPtr impulse)
         => PostSolve(new(contact), new(impulse));
 
-    protected virtual void BeginContact(in Contact contact)
+    protected virtual void BeginContact(Contact contact)
     {
     }
 
-    protected virtual void EndContact(in Contact contact)
+    protected virtual void EndContact(Contact contact)
     {
     }
 
-    protected virtual void PreSolve(in Contact contact, in Manifold manifold)
+    protected virtual void PreSolve(Contact contact, Manifold manifold)
     {
     }
 
-    protected virtual void PostSolve(in Contact contact, in ContactImpulse impulse)
+    protected virtual void PostSolve(Contact contact, ContactImpulse impulse)
     {
     }
 

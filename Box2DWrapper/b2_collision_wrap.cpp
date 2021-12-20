@@ -3,6 +3,54 @@
 #include "b2_collision_wrap.h"
 
 /*
+ * b2Manifold
+ */
+
+b2ManifoldPoint* b2Manifold_get_points(b2Manifold* obj, int32* pointCount)
+{
+    b2ManifoldPoint* result = obj->points;
+    *pointCount = obj->pointCount;
+
+    return result;
+}
+
+void b2Manifold_get_localNormal(b2Manifold* obj, b2Vec2* value)
+{
+    VERIFY_INSTANCE;
+    *value = obj->localNormal;
+}
+
+void b2Manifold_set_localNormal(b2Manifold* obj, b2Vec2* value)
+{
+    VERIFY_INSTANCE;
+    obj->localNormal = *value;
+}
+
+void b2Manifold_get_localPoint(b2Manifold* obj, b2Vec2* value)
+{
+    VERIFY_INSTANCE;
+    *value = obj->localPoint;
+}
+
+void b2Manifold_set_localPoint(b2Manifold* obj, b2Vec2* value)
+{
+    VERIFY_INSTANCE;
+    obj->localPoint = *value;
+}
+
+b2Manifold::Type b2Manifold_get_type(b2Manifold* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->type;
+}
+
+void b2Manifold_set_type(b2Manifold* obj, b2Manifold::Type value)
+{
+    VERIFY_INSTANCE;
+    obj->type = value;
+}
+
+/*
  * b2WorldManifold
  */
 

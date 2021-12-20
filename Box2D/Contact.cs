@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Box2D.Core;
+using Box2D.Math;
+using System;
 
 namespace Box2D;
 
@@ -16,7 +18,7 @@ public readonly ref struct Contact
         get
         {
             ThrowIfInvalidAccess(Native);
-            return new(b2Contact_GetManifold(Native));
+            return Manifold.Create(b2Contact_GetManifold(Native));
         }
     }
 
@@ -43,6 +45,107 @@ public readonly ref struct Contact
         }
     }
 
+    public Contact Next
+    {
+        get
+        {
+            ThrowIfInvalidAccess(Native);
+            return new(b2Contact_GetNext(Native));
+        }
+    }
+
+    public Fixture FixtureA
+    {
+        get
+        {
+            ThrowIfInvalidAccess(Native);
+            return Fixture.FromIntPtr.Get(b2Contact_GetFixtureA(Native))!;
+        }
+    }
+
+    public int ChildIndexA
+    {
+        get
+        {
+            ThrowIfInvalidAccess(Native);
+            return b2Contact_GetChildIndexA(Native);
+        }
+    }
+
+    public Fixture FixtureB
+    {
+        get
+        {
+            ThrowIfInvalidAccess(Native);
+            return Fixture.FromIntPtr.Get(b2Contact_GetFixtureB(Native))!;
+        }
+    }
+
+    public int ChildIndexB
+    {
+        get
+        {
+            ThrowIfInvalidAccess(Native);
+            return b2Contact_GetChildIndexB(Native);
+        }
+    }
+
+    public float Friction
+    {
+        get
+        {
+            ThrowIfInvalidAccess(Native);
+            return b2Contact_GetFriction(Native);
+        }
+        set
+        {
+            ThrowIfInvalidAccess(Native);
+            b2Contact_SetFriction(Native, value);
+        }
+    }
+
+    public float Restitution
+    {
+        get
+        {
+            ThrowIfInvalidAccess(Native);
+            return b2Contact_GetRestitution(Native);
+        }
+        set
+        {
+            ThrowIfInvalidAccess(Native);
+            b2Contact_SetRestitution(Native, value);
+        }
+    }
+
+    public float RestitutionThreshold
+    {
+        get
+        {
+            ThrowIfInvalidAccess(Native);
+            return b2Contact_GetRestitutionThreshold(Native);
+        }
+        set
+        {
+            ThrowIfInvalidAccess(Native);
+            b2Contact_SetRestitutionThreshold(Native, value);
+        }
+    }
+
+    public float TangentSpeed
+    {
+        get
+        {
+            ThrowIfInvalidAccess(Native);
+            return b2Contact_GetTangentSpeed(Native);
+        }
+        set
+        {
+            ThrowIfInvalidAccess(Native);
+            b2Contact_SetTangentSpeed(Native, value);
+        }
+    }
+
     internal Contact(IntPtr native)
     {
         Native = native;
@@ -60,6 +163,30 @@ public readonly ref struct Contact
         worldManifold.ThrowIfDisposed();
 
         b2Contact_GetWorldManifold(Native, worldManifold.Native);
+    }
+
+    public void ResetFriction()
+    {
+        ThrowIfInvalidAccess(Native);
+        b2Contact_ResetFriction(Native);
+    }
+
+    public void ResetRestitution()
+    {
+        ThrowIfInvalidAccess(Native);
+        b2Contact_ResetRestitution(Native);
+    }
+
+    public void ResetRestitutionThreshold()
+    {
+        ThrowIfInvalidAccess(Native);
+        b2Contact_ResetRestitutionThreshold(Native);
+    }
+
+    public void Evaluate(in Manifold manifold, Transform xfA, Transform xfB)
+    {
+        ThrowIfInvalidAccess(Native);
+        b2Contact_Evaluate(Native, manifold.Native, ref xfA, ref xfB);
     }
 
     public Enumerator GetEnumerator()

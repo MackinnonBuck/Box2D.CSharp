@@ -6,14 +6,112 @@ using System.Runtime.InteropServices;
 namespace Box2D;
 
 using static Interop.NativeMethods;
+using static Errors;
+
+public enum ContactFeatureType : byte
+{
+    Vertex = 0,
+    Face = 1,
+}
+
+[StructLayout(LayoutKind.Sequential)]
+public struct ContactFeature
+{
+    public byte IndexA { get; set; }
+
+    public byte IndexB { get; set; }
+
+    public ContactFeatureType TypeA { get; set; }
+
+    public ContactFeatureType TypeB { get; set; }
+}
+
+[StructLayout(LayoutKind.Sequential)]
+public struct ManifoldPoint
+{
+    public Vec2 LocalPoint { get; set; }
+
+    public float NormalImpulse { get; set; }
+
+    public float TangentImpulse { get; set; }
+
+    public ContactFeature Id { get; set; }
+}
+
+public enum ManifoldType
+{
+    Circles,
+    FaceA,
+    FaceB,
+}
 
 public readonly ref struct Manifold
 {
     internal IntPtr Native { get; }
 
-    internal Manifold(IntPtr native)
+    public bool IsValid => Native != IntPtr.Zero;
+
+    public Box2DArray<ManifoldPoint> Points { get; }
+
+    public Vec2 LocalNormal
+    {
+        get
+        {
+            ThrowIfInvalidAccess(Native);
+            b2Manifold_get_localNormal(Native, out var value);
+            return value;
+        }
+        set
+        {
+            ThrowIfInvalidAccess(Native);
+            b2Manifold_set_localNormal(Native, ref value);
+        }
+    }
+
+    public Vec2 LocalPoint
+    {
+        get
+        {
+            ThrowIfInvalidAccess(Native);
+            b2Manifold_get_localPoint(Native, out var value);
+            return value;
+        }
+        set
+        {
+            ThrowIfInvalidAccess(Native);
+            b2Manifold_set_localPoint(Native, ref value);
+        }
+    }
+
+    public ManifoldType Type
+    {
+        get
+        {
+            ThrowIfInvalidAccess(Native);
+            return b2Manifold_get_type(Native);
+        }
+        set
+        {
+            ThrowIfInvalidAccess(Native);
+            b2Manifold_set_type(Native, value);
+        }
+    }
+
+    internal static Manifold Create(IntPtr native)
+    {
+        if (native == IntPtr.Zero)
+        {
+            throw new ArgumentException("The native pointer cannot be null.", nameof(native));
+        }
+
+        var pointsNative = b2Manifold_get_points(native, out int pointsLength);
+        return new(native, new(pointsNative, pointsLength));
+    }
+
+    private Manifold(IntPtr native, in Box2DArray<ManifoldPoint> points)
     {
         Native = native;
+        Points = points;
     }
 }
 
@@ -34,9 +132,9 @@ public class WorldManifold : Box2DObject
         }
     }
 
-    public Box2DMemberArray<Vec2> Points { get; }
+    public Box2DOwnedArray<Vec2> Points { get; }
 
-    public Box2DMemberArray<float> Separations { get; }
+    public Box2DOwnedArray<float> Separations { get; }
 
     public WorldManifold() : base(isUserOwned: true)
     {

@@ -7,6 +7,17 @@
 extern "C"
 {
     /*
+     * b2Manifold
+     */
+    BOX2D_API b2ManifoldPoint* b2Manifold_get_points(b2Manifold* obj, int32* pointCount);
+    BOX2D_API void b2Manifold_get_localNormal(b2Manifold* obj, b2Vec2* value);
+    BOX2D_API void b2Manifold_set_localNormal(b2Manifold* obj, b2Vec2* value);
+    BOX2D_API void b2Manifold_get_localPoint(b2Manifold* obj, b2Vec2* value);
+    BOX2D_API void b2Manifold_set_localPoint(b2Manifold* obj, b2Vec2* value);
+    BOX2D_API b2Manifold::Type b2Manifold_get_type(b2Manifold* obj);
+    BOX2D_API void b2Manifold_set_type(b2Manifold* obj, b2Manifold::Type value);
+
+    /*
      * b2WorldManifold
      */
     BOX2D_API b2WorldManifold* b2WorldManifold_new(b2Vec2** points, float** separations);

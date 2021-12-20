@@ -5,7 +5,7 @@ namespace Box2D.Core;
 
 public abstract class Box2DSubObject : Box2DObject
 {
-    private protected IntPtr Handle { get; }
+    private protected IntPtr Handle { get; private set; }
 
     private protected Box2DSubObject() : base(isUserOwned: false)
     {
@@ -15,5 +15,6 @@ public abstract class Box2DSubObject : Box2DObject
     private protected override void Dispose(bool disposing)
     {
         GCHandle.FromIntPtr(Handle).Free();
+        Handle = IntPtr.Zero;
     }
 }

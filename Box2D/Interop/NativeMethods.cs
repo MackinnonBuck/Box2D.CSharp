@@ -55,6 +55,56 @@ internal static class NativeMethods
     public static extern void b2Contact_SetEnabled(IntPtr obj, bool flag);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Contact_GetNext(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2Contact_GetFixtureA(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern int b2Contact_GetChildIndexA(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2Contact_GetFixtureB(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern int b2Contact_GetChildIndexB(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2Contact_GetFriction(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Contact_SetFriction(IntPtr obj, float friction);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Contact_ResetFriction(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2Contact_GetRestitution(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Contact_SetRestitution(IntPtr obj, float restitution);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Contact_ResetRestitution(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2Contact_GetRestitutionThreshold(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Contact_SetRestitutionThreshold(IntPtr obj, float threshold);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Contact_ResetRestitutionThreshold(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2Contact_GetTangentSpeed(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Contact_SetTangentSpeed(IntPtr obj, float speed);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Contact_Evaluate(IntPtr obj, IntPtr manifold, [In] ref Transform xfA, [In] ref Transform xfB);
+
+    /*
+     * b2Manifold
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2Manifold_get_points(IntPtr obj, out int pointCount);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Manifold_get_localNormal(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Manifold_set_localNormal(IntPtr obj, [In] ref Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Manifold_get_localPoint(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Manifold_set_localPoint(IntPtr obj, [In] ref Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern ManifoldType b2Manifold_get_type(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Manifold_set_type(IntPtr obj, ManifoldType value);
 
     /*
      * b2WorldManifold
