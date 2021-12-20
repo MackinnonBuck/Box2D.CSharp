@@ -5,7 +5,7 @@ namespace Box2D;
 
 using static Interop.NativeMethods;
 
-public class World : Box2DRootObject
+public class World : Box2DObject
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage(
         "CodeQuality",
@@ -13,9 +13,32 @@ public class World : Box2DRootObject
         Justification = "Need to maintain a reference to the contact listener to keep it from getting garbage collected.")]
     private ContactListener? _contactListener;
 
-    public Body? BodyList => Body.FromIntPtr.Get(b2World_GetBodyList(Native));
+    public Body? BodyList
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return Body.FromIntPtr.Get(b2World_GetBodyList(Native));
+        }
+    }
 
-    public Joint? JointList => Joint.FromIntPtr.Get(b2World_GetJointList(Native));
+    public Joint? JointList
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return Joint.FromIntPtr.Get(b2World_GetJointList(Native));
+        }
+    }
+
+    public Contact ContactList
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return new(b2World_GetContactList(Native));
+        }
+    }
 
     public World(Vec2 gravity) : base(isUserOwned: true)
     {
@@ -26,15 +49,22 @@ public class World : Box2DRootObject
 
     public void SetContactListener(ContactListener listener)
     {
+        ThrowIfDisposed();
+
         _contactListener = listener;
         b2World_SetContactListener(Native, listener.Native);
     }
 
     public Body CreateBody(in BodyDef def)
-        => new(Native, in def);
+    {
+        ThrowIfDisposed();
+        return new(Native, in def);
+    }
 
     public void DestroyBody(Body body)
     {
+        ThrowIfDisposed();
+
         foreach (var joint in body.JointList)
         {
             joint.Dispose();
@@ -50,15 +80,20 @@ public class World : Box2DRootObject
     }
 
     public Joint CreateJoint(JointDef def)
-        => Joint.Create(Native, def);
+    {
+        ThrowIfDisposed();
+        return Joint.Create(Native, def);
+    }
 
     public void Step(float timeStep, int velocityIterations, int positionIterations)
     {
+        ThrowIfDisposed();
         b2World_Step(Native, timeStep, velocityIterations, positionIterations);
     }
 
     public void ClearForces()
     {
+        ThrowIfDisposed();
         b2World_ClearForces(Native);
     }
 

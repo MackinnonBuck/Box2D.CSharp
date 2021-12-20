@@ -16,5 +16,6 @@ extern "C"
     BOX2D_API void b2World_ClearForces(b2World* obj);
     BOX2D_API b2Body* b2World_GetBodyList(b2World* obj);
     BOX2D_API b2Joint* b2World_GetJointList(b2World* obj);
+    BOX2D_API b2Contact* b2World_GetContactList(b2World* obj);
     BOX2D_API void b2World_delete(b2World* obj);
 }

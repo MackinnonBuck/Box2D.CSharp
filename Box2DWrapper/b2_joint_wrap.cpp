@@ -135,3 +135,55 @@ void b2Joint_ShiftOrigin(b2Joint* obj, b2Vec2* newOrigin)
     VERIFY_INSTANCE;
     obj->ShiftOrigin(*newOrigin);
 }
+
+/*
+ * b2JointEdge
+ */
+
+b2Body* b2JointEdge_get_other(b2JointEdge* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->other;
+}
+
+void b2JointEdge_set_other(b2JointEdge* obj, b2Body* value)
+{
+    VERIFY_INSTANCE;
+    obj->other = value;
+}
+
+b2Joint* b2JointEdge_get_joint(b2JointEdge* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->joint;
+}
+
+void b2JointEdge_set_joint(b2JointEdge* obj, b2Joint* value)
+{
+    VERIFY_INSTANCE;
+    obj->joint = value;
+}
+
+b2JointEdge* b2JointEdge_get_prev(b2JointEdge* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->prev;
+}
+
+void b2JointEdge_set_prev(b2JointEdge* obj, b2JointEdge* value)
+{
+    VERIFY_INSTANCE;
+    obj->prev = value;
+}
+
+b2JointEdge* b2JointEdge_get_next(b2JointEdge* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->next;
+}
+
+void b2JointEdge_set_next(b2JointEdge* obj, b2JointEdge* value)
+{
+    VERIFY_INSTANCE;
+    obj->next = value;
+}

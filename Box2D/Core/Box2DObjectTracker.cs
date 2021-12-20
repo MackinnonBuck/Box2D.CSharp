@@ -5,8 +5,12 @@ using System.Linq;
 
 namespace Box2D.Core;
 
+using static Config.Conditionals;
+
 public sealed class Box2DObjectTracker
 {
+    public static Box2DObjectTracker Instance { get; } = new();
+
     private readonly object _box2DObjectsLock = new();
     private readonly HashSet<Box2DObject> _box2DObjects = new();
 
@@ -22,12 +26,11 @@ public sealed class Box2DObjectTracker
     {
     }
 
-#if BOX2D_OBJECT_TRACKING
-    public static Box2DObjectTracker? Instance { get; } = new();
-
+    [Conditional(BOX2D_OBJECT_TRACKING)]
     internal static void Add(Box2DObject box2DObject)
         => Instance!.AddRef(box2DObject);
 
+    [Conditional(BOX2D_OBJECT_TRACKING)]
     internal static void Remove(Box2DObject box2DObject)
         => Instance!.RemoveRef(box2DObject);
 
@@ -62,18 +65,4 @@ public sealed class Box2DObjectTracker
             }
         }
     }
-
-#else
-    public static Box2DObjectTracker? Instance { get; } = null;
-
-    [Conditional("BOX2D_OBJECT_TRACKING")]
-    internal static void Add(Box2DObject box2DObject)
-    {
-    }
-
-    [Conditional("BOX2D_OBJECT_TRACKING")]
-    internal static void Remove(Box2DObject box2DObject)
-    {
-    }
-#endif
 }

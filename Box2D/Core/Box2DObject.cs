@@ -1,12 +1,38 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace Box2D.Core;
+
+using static Config.Conditionals;
 
 public abstract class Box2DObject : IDisposable
 {
     internal IntPtr Native { get; private set; }
 
     internal bool IsDisposed { get; private set; }
+
+    internal bool IsUserOwned { get; }
+
+    internal Box2DObject(bool isUserOwned)
+    {
+        IsUserOwned = isUserOwned;
+
+        if (!IsUserOwned)
+        {
+            GC.SuppressFinalize(this);
+        }
+    }
+
+    [Conditional(BOX2D_VALID_ACCESS_CHECKING)]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal void ThrowIfDisposed()
+    {
+        if (IsDisposed)
+        {
+            throw new ObjectDisposedException(null, $"Cannot access a disposed object of type '{GetType()}'.");
+        }
+    }
 
     private protected void Initialize(IntPtr native)
     {
@@ -35,15 +61,6 @@ public abstract class Box2DObject : IDisposable
         }
     }
 
-    private protected abstract void Dispose(bool disposing);
-
-    private void HandleDispose()
-    {
-        Native = IntPtr.Zero;
-        IsDisposed = true;
-        Box2DObjectTracker.Remove(this);
-    }
-
     ~Box2DObject()
     {
         if (!IsDisposed)
@@ -51,5 +68,14 @@ public abstract class Box2DObject : IDisposable
             Dispose(false);
             HandleDispose();
         }
+    }
+
+    private protected abstract void Dispose(bool disposing);
+
+    private void HandleDispose()
+    {
+        Native = IntPtr.Zero;
+        IsDisposed = true;
+        Box2DObjectTracker.Remove(this);
     }
 }

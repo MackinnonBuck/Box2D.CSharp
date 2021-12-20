@@ -61,6 +61,12 @@ b2Joint* b2World_GetJointList(b2World* obj)
     return obj->GetJointList();
 }
 
+b2Contact* b2World_GetContactList(b2World* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->GetContactList();
+}
+
 void b2World_delete(b2World* obj)
 {
     VERIFY_INSTANCE;

@@ -34,4 +34,16 @@ extern "C"
     BOX2D_API bool b2Joint_IsEnabled(b2Joint* obj);
     BOX2D_API bool b2Joint_GetCollideConnected(b2Joint* obj);
     BOX2D_API void b2Joint_ShiftOrigin(b2Joint* obj, b2Vec2* newOrigin);
+
+    /*
+     * b2JointEdge
+     */
+    BOX2D_API b2Body* b2JointEdge_get_other(b2JointEdge* obj);
+    BOX2D_API void b2JointEdge_set_other(b2JointEdge* obj, b2Body* value);
+    BOX2D_API b2Joint* b2JointEdge_get_joint(b2JointEdge* obj);
+    BOX2D_API void b2JointEdge_set_joint(b2JointEdge* obj, b2Joint* value);
+    BOX2D_API b2JointEdge* b2JointEdge_get_prev(b2JointEdge* obj);
+    BOX2D_API void b2JointEdge_set_prev(b2JointEdge* obj, b2JointEdge* value);
+    BOX2D_API b2JointEdge* b2JointEdge_get_next(b2JointEdge* obj);
+    BOX2D_API void b2JointEdge_set_next(b2JointEdge* obj, b2JointEdge* value);
 }

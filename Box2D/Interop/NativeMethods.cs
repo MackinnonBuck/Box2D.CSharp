@@ -36,7 +36,39 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2World_GetJointList(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2World_GetContactList(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_delete(IntPtr obj);
+
+    /*
+     * b2Contact
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2Contact_GetManifold(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Contact_GetWorldManifold(IntPtr obj, IntPtr worldManifold);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern bool b2Contact_IsTouching(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern bool b2Contact_IsEnabled(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Contact_SetEnabled(IntPtr obj, bool flag);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2Contact_GetNext(IntPtr obj);
+
+    /*
+     * b2WorldManifold
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2WorldManifold_new(out IntPtr points, out IntPtr separations);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2WorldManifold_Initialize(IntPtr obj, IntPtr manifold, [In] ref Transform xfA, float radiusA, [In] ref Transform xfB, float radiusB);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2WorldManifold_get_normal(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2WorldManifold_set_normal(IntPtr obj, [In] ref Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2WorldManifold_delete(IntPtr obj);
 
     /*
      * b2ContactListenerWrapper
@@ -169,6 +201,26 @@ internal static class NativeMethods
     public static extern bool b2Joint_GetCollideConnected(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Joint_ShiftOrigin(IntPtr obj, [In] ref Vec2 newOrigin);
+
+    /*
+     * b2JointEdge
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2JointEdge_get_other(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2JointEdge_set_other(IntPtr obj, IntPtr value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2JointEdge_get_joint(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2JointEdge_set_joint(IntPtr obj, IntPtr value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2JointEdge_get_prev(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2JointEdge_set_prev(IntPtr obj, IntPtr value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2JointEdge_get_next(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2JointEdge_set_next(IntPtr obj, IntPtr value);
 
     /*
      * b2DistanceJointDef

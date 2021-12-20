@@ -14,6 +14,7 @@ public class PolygonShape : Shape
     {
         get
         {
+            ThrowIfDisposed();
             b2PolygonShape_get_m_centroid(Native, out var value);
             return value;
         }
@@ -31,11 +32,20 @@ public class PolygonShape : Shape
     }
 
     public void Set(Span<Vec2> points)
-        => b2PolygonShape_Set(Native, ref MemoryMarshal.GetReference(points), points.Length);
+    {
+        ThrowIfDisposed();
+        b2PolygonShape_Set(Native, ref MemoryMarshal.GetReference(points), points.Length);
+    }
 
     public void SetAsBox(float hx, float hy)
-        => b2PolygonShape_SetAsBox(Native, hx, hy);
+    {
+        ThrowIfDisposed();
+        b2PolygonShape_SetAsBox(Native, hx, hy);
+    }
 
     public void SetAsBox(float hx, float hy, Vec2 center, float angle)
-        => b2PolygonShape_SetAsBox2(Native, hx, hy, ref center, angle);
+    {
+        ThrowIfDisposed();
+        b2PolygonShape_SetAsBox2(Native, hx, hy, ref center, angle);
+    }
 }

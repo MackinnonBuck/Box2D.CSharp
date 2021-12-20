@@ -13,6 +13,7 @@ public class CircleShape : Shape
     {
         get
         {
+            ThrowIfDisposed();
             b2CircleShape_get_m_p(Native, out var value);
             return value;
         }

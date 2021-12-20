@@ -21,7 +21,7 @@ public readonly struct ContactImpulse
     // TODO: Implement
 }
 
-public abstract class ContactListener : Box2DRootObject
+public abstract class ContactListener : Box2DObject
 {
     [UnmanagedFunctionPointer(Conv), SuppressUnmanagedCodeSecurity]
     private delegate void BeginContactUnmanagedDelegate(IntPtr contact);
@@ -64,19 +64,19 @@ public abstract class ContactListener : Box2DRootObject
     private void PostSolveUnmanaged(IntPtr contact, IntPtr impulse)
         => PostSolve(new(contact), new(impulse));
 
-    public virtual void BeginContact(in Contact contact)
+    protected virtual void BeginContact(in Contact contact)
     {
     }
 
-    public virtual void EndContact(in Contact contact)
+    protected virtual void EndContact(in Contact contact)
     {
     }
 
-    public virtual void PreSolve(in Contact contact, in Manifold manifold)
+    protected virtual void PreSolve(in Contact contact, in Manifold manifold)
     {
     }
 
-    public virtual void PostSolve(in Contact contact, in ContactImpulse impulse)
+    protected virtual void PostSolve(in Contact contact, in ContactImpulse impulse)
     {
     }
 

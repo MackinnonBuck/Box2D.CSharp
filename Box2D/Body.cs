@@ -60,7 +60,7 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
 {
     internal static BodyFromIntPtr FromIntPtr { get; } = new();
 
-    internal struct BodyFromIntPtr : IGetFromIntPtr<Body>
+    internal class BodyFromIntPtr : IGetFromIntPtr<Body>
     {
         public IntPtr GetManagedHandle(IntPtr obj)
             => b2Body_GetUserData(obj);
@@ -72,6 +72,7 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
     {
         get
         {
+            ThrowIfDisposed();
             b2Body_GetPosition(Native, out var value);
             return value;
         }
@@ -81,18 +82,47 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
     {
         get
         {
+            ThrowIfDisposed();
             b2Body_GetTransform(Native, out var value);
             return value;
         }
     }
 
-    public float Angle => b2Body_GetAngle(Native);
+    public float Angle
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return b2Body_GetAngle(Native);
+        }
+    }
 
-    public Fixture? FixtureList => Fixture.FromIntPtr.Get(b2Body_GetFixtureList(Native));
+    public Fixture? FixtureList
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return Fixture.FromIntPtr.Get(b2Body_GetFixtureList(Native));
+        }
+    }
 
-    public JointEdge JointList => JointEdge.GetFromIntPtr(b2Body_GetJointList(Native));
+    public JointEdge JointList
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return new(b2Body_GetJointList(Native));
+        }
+    }
 
-    public Body? Next => FromIntPtr.Get(b2Body_GetNext(Native));
+    public Body? Next
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return FromIntPtr.Get(b2Body_GetNext(Native));
+        }
+    }
 
     internal Body(IntPtr worldNative, in BodyDef def)
     {
@@ -104,13 +134,22 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
     }
 
     public Fixture CreateFixture(in FixtureDef def)
-        => new(Native, in def);
+    {
+        ThrowIfDisposed();
+        return new(Native, in def);
+    }
 
     public Fixture CreateFixture(Shape shape, float density)
-        => new(Native, shape, density);
+    {
+        ThrowIfDisposed();
+        return new(Native, shape, density);
+    }
 
     public void SetTransform(Vec2 position, float angle)
-        => b2Body_SetTransform(Native, ref position, angle);
+    {
+        ThrowIfDisposed();
+        b2Body_SetTransform(Native, ref position, angle);
+    }
 }
 
 public static class BodyDefExtensions

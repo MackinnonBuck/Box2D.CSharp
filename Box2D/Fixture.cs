@@ -53,7 +53,7 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
 {
     internal static FixtureFromIntPtr FromIntPtr { get; } = new();
 
-    internal struct FixtureFromIntPtr : IGetFromIntPtr<Fixture>
+    internal class FixtureFromIntPtr : IGetFromIntPtr<Fixture>
     {
         public IntPtr GetManagedHandle(IntPtr obj)
             => b2Fixture_GetUserData(obj);
@@ -69,6 +69,8 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
     {
         get
         {
+            ThrowIfDisposed();
+
             if (_shape is null)
             {
                 var shapeNative = b2Fixture_GetShape(Native);
@@ -79,7 +81,14 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
         }
     }
 
-    public Fixture? Next => FromIntPtr.Get(b2Fixture_GetNext(Native));
+    public Fixture? Next
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return FromIntPtr.Get(b2Fixture_GetNext(Native));
+        }
+    }
 
     internal Fixture(IntPtr bodyNative, in FixtureDef def)
     {

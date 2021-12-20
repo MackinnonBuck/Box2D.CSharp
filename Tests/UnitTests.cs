@@ -7,10 +7,7 @@ namespace Tests;
 
 public class UnitTests
 {
-    // TODO: Implement "world_test".
-    // This will require:
-    // * Contact listener support
-    // * Contact list API and related structures.
+    // TODO: Finish contact API.
 
     [Fact]
     public void HelloWorld_Works()
@@ -248,14 +245,14 @@ public class UnitTests
 
         world.Step(timeStep, velocityIterations, positionIterations);
 
-        //Assert.Null(world.ContactList); // TODO
+        Assert.False(world.ContactList.IsValid);
         Assert.False(listener.DidBeginContact);
 
         bodyB.SetTransform(new Vec2(1f, 0f), 0f);
 
         world.Step(timeStep, velocityIterations, positionIterations);
 
-        //Assert.NotNull(world.ContactList); // TODO
+        Assert.True(world.ContactList.IsValid);
         Assert.True(listener.DidBeginContact);
     }
 
@@ -263,7 +260,7 @@ public class UnitTests
     {
         public bool DidBeginContact { get; private set; }
 
-        public override void BeginContact(in Contact contact)
+        protected override void BeginContact(in Contact contact)
         {
             DidBeginContact = true;
         }
