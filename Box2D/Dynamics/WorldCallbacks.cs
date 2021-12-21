@@ -1,11 +1,10 @@
-﻿using Box2D.Core;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
 namespace Box2D;
 
-using static Interop.NativeMethods;
+using static NativeMethods;
 
 public readonly ref struct ContactImpulse
 {

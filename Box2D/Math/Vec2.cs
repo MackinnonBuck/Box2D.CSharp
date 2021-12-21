@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Box2D.Math;
+namespace Box2D;
 
 [StructLayout(LayoutKind.Sequential)]
 public struct Vec2 : IEquatable<Vec2>

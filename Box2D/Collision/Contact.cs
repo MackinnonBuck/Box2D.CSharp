@@ -1,11 +1,9 @@
-﻿using Box2D.Core;
-using Box2D.Math;
-using System;
+﻿using System;
 
 namespace Box2D;
 
-using static Interop.NativeMethods;
-using static Core.Errors;
+using static NativeMethods;
+using static Errors;
 
 public readonly ref struct Contact
 {

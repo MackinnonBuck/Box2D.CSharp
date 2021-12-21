@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Box2D.Core;
+namespace Box2D;
 
 using static Config.Conditionals;
 

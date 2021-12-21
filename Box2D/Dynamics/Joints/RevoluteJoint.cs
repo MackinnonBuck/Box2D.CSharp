@@ -1,8 +1,6 @@
-﻿using Box2D.Math;
+﻿namespace Box2D;
 
-namespace Box2D;
-
-using static Interop.NativeMethods;
+using static NativeMethods;
 
 public sealed class RevoluteJointDef : JointDef
 {

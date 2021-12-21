@@ -1,10 +1,8 @@
-﻿using Box2D.Core;
-using Box2D.Math;
-using System;
+﻿using System;
 
 namespace Box2D;
 
-using static Interop.NativeMethods;
+using static NativeMethods;
 
 public enum ShapeType
 {
@@ -12,16 +10,6 @@ public enum ShapeType
     Edge = 1,
     Polygon = 2,
     Chain = 3,
-    // TypeCount = 4,
-}
-
-public struct MassData
-{
-    public float Mass { get; set; }
-
-    public Vec2 Center { get; set; }
-
-    public float I { get; set; }
 }
 
 public abstract class Shape : Box2DObject

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Box2D.Core;
+namespace Box2D;
 
 public abstract class Box2DSubObject : Box2DObject
 {

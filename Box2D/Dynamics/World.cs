@@ -1,9 +1,6 @@
-﻿using Box2D.Core;
-using Box2D.Math;
+﻿namespace Box2D;
 
-namespace Box2D;
-
-using static Interop.NativeMethods;
+using static NativeMethods;
 
 public class World : Box2DObject
 {

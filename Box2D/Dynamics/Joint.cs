@@ -1,10 +1,8 @@
-﻿using Box2D.Core;
-using Box2D.Math;
-using System;
+﻿using System;
 
 namespace Box2D;
 
-using static Interop.NativeMethods;
+using static NativeMethods;
 using static Errors;
 
 public enum JointType

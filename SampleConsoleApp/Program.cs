@@ -1,5 +1,4 @@
 ﻿using Box2D;
-using Box2D.Math;
 
 // Define the gravity vector.
 var gravity = new Vec2(0f, -10f);

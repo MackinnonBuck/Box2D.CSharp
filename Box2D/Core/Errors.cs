@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace Box2D.Core;
+namespace Box2D;
 
 using static Config.Conditionals;
 
