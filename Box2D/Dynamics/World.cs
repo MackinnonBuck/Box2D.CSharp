@@ -4,11 +4,10 @@ using static NativeMethods;
 
 public class World : Box2DObject
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "CodeQuality",
-        "IDE0052:Remove unread private members",
-        Justification = "Need to maintain a reference to the contact listener to keep it from getting garbage collected.")]
+#pragma warning disable IDE0052 // Remove unread private members
     private ContactListener? _contactListener;
+    private DestructionListener? _destructionListener;
+#pragma warning restore IDE0052 // Remove unread private members
 
     public Body? BodyList
     {
@@ -44,6 +43,13 @@ public class World : Box2DObject
         Initialize(native);
     }
 
+    public void SetDestructionListener(DestructionListener listener)
+    {
+        ThrowIfDisposed();
+
+        _destructionListener = listener;
+    }
+
     public void SetContactListener(ContactListener listener)
     {
         ThrowIfDisposed();
@@ -64,15 +70,18 @@ public class World : Box2DObject
 
         foreach (var joint in body.JointList)
         {
+            _destructionListener?.SayGoodbye(joint);
             joint.Dispose();
         }
 
         foreach (var fixture in body.FixtureList)
         {
+            _destructionListener?.SayGoodbye(fixture);
             fixture.Dispose();
         }
 
         b2World_DestroyBody(Native, body.Native);
+
         body.Dispose();
     }
 
@@ -96,6 +105,13 @@ public class World : Box2DObject
 
     private protected override void Dispose(bool disposing)
     {
+        // TODO: See if there's anything else to do here (do we care about the disposing parameter?).
+        // Might want to be careful that if this instance is being disposed due to having no references left,
+        // then we might invalidate other instances (bodies, etc.) actually in use.
+        // It would be a weird scenario, but it's feasible that this could happen.
+        // It might solve itself if each body has a reference to its containing world.
+        // This would have parity with the C++ implementation, too.
+
         foreach (var body in BodyList)
         {
             foreach (var fixture in body.FixtureList)
@@ -111,12 +127,6 @@ public class World : Box2DObject
             joint.Dispose();
         }
 
-        // TODO: See if there's anything else to do here (do we care about the disposing parameter?).
-        // Might want to be careful that if this instance is being disposed due to having no references left,
-        // then we might invalidate other instances (bodies, etc.) actually in use.
-        // It would be a weird scenario, but it's feasible that this could happen.
-        // It might solve itself if each body has a reference to its containing world.
-        // This would have parity with the C++ implementation, too.
         b2World_delete(Native);
     }
 }

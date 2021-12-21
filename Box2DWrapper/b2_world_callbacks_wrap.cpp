@@ -61,5 +61,6 @@ b2ContactListenerWrapper* b2ContactListenerWrapper_new(
 
 void b2ContactListenerWrapper_delete(b2ContactListenerWrapper* obj)
 {
+    VERIFY_INSTANCE;
     delete obj;
 }

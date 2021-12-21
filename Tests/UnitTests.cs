@@ -215,8 +215,10 @@ public class UnitTests
     public void WorldTest_Works()
     {
         using var world = new World(new Vec2(0f, -10f));
-        var listener = new MyContactListener();
-        world.SetContactListener(listener);
+        var destructionListener = new MyDestructionListener();
+        var contactListener = new MyContactListener();
+        world.SetDestructionListener(destructionListener);
+        world.SetContactListener(contactListener);
 
         using var circle = new CircleShape
         {
@@ -243,14 +245,40 @@ public class UnitTests
         world.Step(timeStep, velocityIterations, positionIterations);
 
         Assert.False(world.ContactList.IsValid);
-        Assert.False(listener.DidBeginContact);
+        Assert.False(contactListener.DidBeginContact);
 
         bodyB.SetTransform(new Vec2(1f, 0f), 0f);
 
         world.Step(timeStep, velocityIterations, positionIterations);
 
         Assert.True(world.ContactList.IsValid);
-        Assert.True(listener.DidBeginContact);
+        Assert.True(contactListener.DidBeginContact);
+
+        Assert.Equal(0, destructionListener.SayGoodbyeJointCount);
+        Assert.Equal(0, destructionListener.SayGoodbyeFixtureCount);
+
+        world.DestroyBody(bodyA);
+        world.DestroyBody(bodyB);
+
+        Assert.Equal(0, destructionListener.SayGoodbyeJointCount);
+        Assert.Equal(2, destructionListener.SayGoodbyeFixtureCount);
+    }
+
+    private class MyDestructionListener : DestructionListener
+    {
+        public int SayGoodbyeJointCount { get; private set; }
+
+        public int SayGoodbyeFixtureCount { get; private set; }
+
+        protected override void SayGoodbye(Joint joint)
+        {
+            SayGoodbyeJointCount++;
+        }
+
+        protected override void SayGoodbye(Fixture fixture)
+        {
+            SayGoodbyeFixtureCount++;
+        }
     }
 
     private class MyContactListener : ContactListener
