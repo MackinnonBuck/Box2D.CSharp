@@ -19,6 +19,8 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_SetContactListener(IntPtr obj, IntPtr listener);
     [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2World_SetDebugDraw(IntPtr obj, IntPtr debugDraw);
+    [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2World_CreateBody(IntPtr obj, [In] ref BodyDefInternal def);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_DestroyBody(IntPtr obj, IntPtr body);
@@ -30,6 +32,8 @@ internal static class NativeMethods
     public static extern void b2World_Step(IntPtr obj, float timeStep, int velocityIterations, int positionIterations);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_ClearForces(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2World_DebugDraw(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2World_GetBodyList(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -132,6 +136,18 @@ internal static class NativeMethods
     public static extern IntPtr b2ContactListenerWrapper_new(IntPtr beginContact, IntPtr endContact, IntPtr preSolve, IntPtr postSolve);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2ContactListenerWrapper_delete(IntPtr obj);
+
+    /*
+     * b2DrawWrapper
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2DrawWrapper_new(IntPtr drawPolygon, IntPtr drawSolidPolygon, IntPtr drawCircle, IntPtr drawSolidCircle, IntPtr drawSegment, IntPtr drawTransform, IntPtr drawPoint);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern uint b2DrawWrapper_GetFlags(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2DrawWrapper_SetFlags(IntPtr obj, uint flags);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2DrawWrapper_delete(IntPtr obj);
 
     /*
      * b2Body

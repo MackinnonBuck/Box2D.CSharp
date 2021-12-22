@@ -13,6 +13,12 @@ void b2World_SetContactListener(b2World* obj, b2ContactListener* listener)
     obj->SetContactListener(listener);
 }
 
+void b2World_SetDebugDraw(b2World* obj, b2Draw* debugDraw)
+{
+    VERIFY_INSTANCE;
+    obj->SetDebugDraw(debugDraw);
+}
+
 b2Body* b2World_CreateBody(b2World* obj, b2BodyDef* def)
 {
     VERIFY_INSTANCE;
@@ -47,6 +53,12 @@ void b2World_ClearForces(b2World* obj)
 {
     VERIFY_INSTANCE;
     obj->ClearForces();
+}
+
+void b2World_DebugDraw(b2World* obj)
+{
+    VERIFY_INSTANCE;
+    obj->DebugDraw();
 }
 
 b2Body* b2World_GetBodyList(b2World* obj)

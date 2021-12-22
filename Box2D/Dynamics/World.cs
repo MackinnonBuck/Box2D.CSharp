@@ -4,10 +4,9 @@ using static NativeMethods;
 
 public class World : Box2DObject
 {
-#pragma warning disable IDE0052 // Remove unread private members
     private ContactListener? _contactListener;
     private DestructionListener? _destructionListener;
-#pragma warning restore IDE0052 // Remove unread private members
+    private Draw? _debugDraw;
 
     public Body? BodyList
     {
@@ -55,7 +54,15 @@ public class World : Box2DObject
         ThrowIfDisposed();
 
         _contactListener = listener;
-        b2World_SetContactListener(Native, listener.Native);
+        b2World_SetContactListener(Native, _contactListener.Native);
+    }
+
+    public void SetDebugDraw(Draw debugDraw)
+    {
+        ThrowIfDisposed();
+
+        _debugDraw = debugDraw;
+        b2World_SetDebugDraw(Native, _debugDraw.Native);
     }
 
     public Body CreateBody(in BodyDef def)
@@ -101,6 +108,12 @@ public class World : Box2DObject
     {
         ThrowIfDisposed();
         b2World_ClearForces(Native);
+    }
+
+    public void DebugDraw()
+    {
+        ThrowIfDisposed();
+        b2World_DebugDraw(Native);
     }
 
     private protected override void Dispose(bool disposing)
