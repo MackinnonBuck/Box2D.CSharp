@@ -37,6 +37,9 @@ public readonly ref struct Box2DArray<T> where T : struct
         Length = length;
     }
 
+    public Enumerator GetEnumerator()
+        => new(in this);
+
     [Conditional(BOX2D_VALID_ACCESS_CHECKING)]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void ThrowIfInvalidAccess(int index)
@@ -46,6 +49,31 @@ public readonly ref struct Box2DArray<T> where T : struct
         if (index < 0 || index >= Length)
         {
             throw new IndexOutOfRangeException();
+        }
+    }
+
+    public ref struct Enumerator
+    {
+        private readonly Box2DArray<T> _source;
+        private int _index;
+
+        public T Current { get; private set; } = default;
+
+        public Enumerator(in Box2DArray<T> source)
+        {
+            _index = 0;
+            _source = source;
+        }
+
+        public bool MoveNext()
+        {
+            if (_index >= _source.Length)
+            {
+                return false;
+            }
+
+            Current = _source[_index++];
+            return true;
         }
     }
 }
@@ -97,6 +125,30 @@ public readonly struct Box2DOwnedArray<T> where T : struct
         if (index < 0 || index >= Length)
         {
             throw new IndexOutOfRangeException();
+        }
+    }
+    public struct Enumerator
+    {
+        private readonly Box2DOwnedArray<T> _source;
+        private int _index;
+
+        public T Current { get; private set; } = default;
+
+        public Enumerator(in Box2DOwnedArray<T> source)
+        {
+            _index = 0;
+            _source = source;
+        }
+
+        public bool MoveNext()
+        {
+            if (_index >= _source.Length)
+            {
+                return false;
+            }
+
+            Current = _source[_index++];
+            return true;
         }
     }
 }

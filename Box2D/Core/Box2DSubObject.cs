@@ -12,7 +12,7 @@ public abstract class Box2DSubObject : Box2DObject
         Handle = GCHandle.ToIntPtr(GCHandle.Alloc(this, GCHandleType.Weak));
     }
 
-    private protected override void Dispose(bool disposing)
+    protected override void Dispose(bool disposing)
     {
         GCHandle.FromIntPtr(Handle).Free();
         Handle = IntPtr.Zero;

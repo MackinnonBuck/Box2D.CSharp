@@ -3,6 +3,15 @@
 #include "b2_collision_wrap.h"
 
 /*
+ * Top-level functions
+ */
+
+void b2GetPointStates_wrap(b2PointState* state1, b2PointState* state2, b2Manifold* manifold1, b2Manifold* manifold2)
+{
+    b2GetPointStates(state1, state2, manifold1, manifold2);
+}
+
+/*
  * b2Manifold
  */
 

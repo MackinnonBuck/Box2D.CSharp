@@ -1,19 +1,23 @@
-﻿using Silk.NET.Input;
+﻿using ImGuiNET;
+using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 using Silk.NET.OpenGL.Extensions.ImGui;
 using Silk.NET.Windowing;
-using System.Drawing;
 using System.Numerics;
+using Testbed.Drawing;
 
 namespace Testbed;
 
 internal class Program
 {
+    private static readonly Camera _camera = new();
+
     private static IWindow _window = default!;
     private static ImGuiController _controller = default!;
     private static GL _gl = default!;
     private static IInputContext _inputContext = default!;
+    private static DebugDraw _debugDraw = default!;
 
     private static void Main()
     {
@@ -36,8 +40,11 @@ internal class Program
         _gl = _window.CreateOpenGL();
         _inputContext = _window.CreateInput();
         _controller = new ImGuiController(_gl, _window, _inputContext);
+        _debugDraw = new(_gl, _camera);
 
         InitializeInputCallbacks();
+
+        _gl.ClearColor(0.2f, 0.2f, 0.2f, 1f);
     }
 
     private static void InitializeInputCallbacks()
@@ -61,22 +68,42 @@ internal class Program
     private static void OnWindowFramebufferResize(Vector2D<int> size)
     {
         _gl.Viewport(size);
+        _camera.Width = size.X;
+        _camera.Height = size.Y;
     }
 
     private static void OnWindowRender(double deltaTime)
     {
         _controller.Update((float)deltaTime);
 
-        _gl.ClearColor(Color.FromArgb(255, (int)(.45f * 255), (int)(.55f * 255), (int)(.60f * 255)));
-        _gl.Clear((uint)ClearBufferMask.ColorBufferBit);
+        _gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-        ImGuiNET.ImGui.ShowDemoWindow();
+        ImGui.NewFrame();
+        
+        if (_debugDraw.ShowUI)
+        {
+            ImGui.SetNextWindowPos(new(0f, 0f));
+            ImGui.SetNextWindowSize(new(_camera.Width, _camera.Height));
+            ImGui.SetNextWindowBgAlpha(0f);
+            ImGui.Begin("Overlay", ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoInputs | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoScrollbar);
+            ImGui.End();
+
+            // TODO: Draw test title (you've already implemented, just create test instance and call).
+        }
+
+        //ImGuiNET.ImGui.ShowDemoWindow();
 
         _controller.Render();
+
+        //_debugDraw.DrawPoint(new Box2D.Vec2(0f, 0f), 5f, new Box2D.Color(1f, 0f, 0f));
+        //_debugDraw.DrawPoint(new Box2D.Vec2(15f, 10f), 10f, new Box2D.Color(1f, 1f, 0f));
+        //_debugDraw.DrawSolidCircle(new(0f, 10f), 10f, new(1, 0), new(1f, 1f, 0f));
+        _debugDraw.Flush();
     }
 
     private static void OnWindowClosing()
     {
+        _debugDraw?.Dispose();
         _controller?.Dispose();
         _inputContext?.Dispose();
         _gl?.Dispose();

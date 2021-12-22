@@ -116,7 +116,7 @@ public class World : Box2DObject
         b2World_DebugDraw(Native);
     }
 
-    private protected override void Dispose(bool disposing)
+    protected override void Dispose(bool disposing)
     {
         // TODO: See if there's anything else to do here (do we care about the disposing parameter?).
         // Might want to be careful that if this instance is being disposed due to having no references left,

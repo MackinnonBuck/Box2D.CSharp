@@ -70,7 +70,7 @@ public abstract class Box2DObject : IDisposable
         }
     }
 
-    private protected abstract void Dispose(bool disposing);
+    protected abstract void Dispose(bool disposing);
 
     private void HandleDispose()
     {

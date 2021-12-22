@@ -97,35 +97,35 @@ public class Draw : Box2DObject
     private void DrawPointUnmanaged(ref Vec2 p, float size, ref Color color)
         => DrawPoint(p, size, color);
 
-    protected virtual void DrawPolygon(in Box2DArray<Vec2> vertices, Color color)
+    public virtual void DrawPolygon(in Box2DArray<Vec2> vertices, Color color)
     {
     }
 
-    protected virtual void DrawSolidPolygon(in Box2DArray<Vec2> vertices, Color color)
+    public virtual void DrawSolidPolygon(in Box2DArray<Vec2> vertices, Color color)
     {
     }
 
-    protected virtual void DrawCircle(Vec2 center, float radius, Color color)
+    public virtual void DrawCircle(Vec2 center, float radius, Color color)
     {
     }
 
-    protected virtual void DrawSolidCircle(Vec2 center, float radius, Vec2 axis, Color color)
+    public virtual void DrawSolidCircle(Vec2 center, float radius, Vec2 axis, Color color)
     {
     }
 
-    protected virtual void DrawSegment(Vec2 p1, Vec2 p2, Color color)
+    public virtual void DrawSegment(Vec2 p1, Vec2 p2, Color color)
     {
     }
 
-    protected virtual void DrawTransform(Transform xf)
+    public virtual void DrawTransform(Transform xf)
     {
     }
 
-    protected virtual void DrawPoint(Vec2 p, float size, Color color)
+    public virtual void DrawPoint(Vec2 p, float size, Color color)
     {
     }
 
-    sealed private protected override void Dispose(bool disposing)
+    protected override void Dispose(bool disposing)
     {
         b2DrawWrapper_delete(Native);
     }

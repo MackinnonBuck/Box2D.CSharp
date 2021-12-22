@@ -40,7 +40,7 @@ public class WorldManifold : Box2DObject
         b2WorldManifold_Initialize(Native, manifold.Native, ref xfA, radiusA, ref xfB, radiusB);
     }
 
-    private protected override void Dispose(bool disposing)
+    protected override void Dispose(bool disposing)
     {
         b2WorldManifold_delete(Native);
     }

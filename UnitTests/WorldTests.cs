@@ -105,12 +105,12 @@ public class WorldTests
 
         public int PolygonDrawCount { get; private set; }
 
-        protected override void DrawPolygon(in Box2DArray<Vec2> vertices, Color color)
+        public override void DrawPolygon(in Box2DArray<Vec2> vertices, Color color)
         {
             PolygonDrawCount++;
         }
 
-        protected override void DrawSolidCircle(Vec2 center, float radius, Vec2 axis, Color color)
+        public override void DrawSolidCircle(Vec2 center, float radius, Vec2 axis, Color color)
         {
             SolidCircleDrawCount++;
         }

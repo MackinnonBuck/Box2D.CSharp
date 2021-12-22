@@ -144,7 +144,7 @@ public sealed class RevoluteJointDef : JointDef
         b2RevoluteJointDef_Initialize(Native, bodyA.Native, bodyB.Native, ref anchor);
     }
 
-    private protected override void Dispose(bool disposing)
+    protected override void Dispose(bool disposing)
     {
         b2RevoluteJointDef_delete(Native);
     }

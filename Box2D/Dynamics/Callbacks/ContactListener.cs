@@ -43,8 +43,8 @@ public abstract class ContactListener : Box2DObject
     private void EndContactUnmanaged(IntPtr contact)
         => EndContact(new(contact));
 
-    private void PreSolveUnmanaged(IntPtr contact, IntPtr manifold)
-        => PreSolve(new(contact), Manifold.Create(manifold));
+    private void PreSolveUnmanaged(IntPtr contact, IntPtr oldManifold)
+        => PreSolve(new(contact), Manifold.Create(oldManifold));
 
     private void PostSolveUnmanaged(IntPtr contact, IntPtr impulse)
         => PostSolve(new(contact), ContactImpulse.Create(impulse));
@@ -57,7 +57,7 @@ public abstract class ContactListener : Box2DObject
     {
     }
 
-    protected virtual void PreSolve(in Contact contact, in Manifold manifold)
+    protected virtual void PreSolve(in Contact contact, in Manifold oldManifold)
     {
     }
 
@@ -65,7 +65,7 @@ public abstract class ContactListener : Box2DObject
     {
     }
 
-    sealed private protected override void Dispose(bool disposing)
+    protected override void Dispose(bool disposing)
     {
         b2ContactListenerWrapper_delete(Native);
     }

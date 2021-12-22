@@ -17,7 +17,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleConsoleApp", "SampleC
 		{BB16667D-DADF-415C-93F9-E6581B6767D3} = {BB16667D-DADF-415C-93F9-E6581B6767D3}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testbed", "Testbed\Testbed.csproj", "{0C202138-3A42-4730-9366-268CB6CC3329}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testbed", "Testbed\Testbed.csproj", "{0C202138-3A42-4730-9366-268CB6CC3329}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BB16667D-DADF-415C-93F9-E6581B6767D3} = {BB16667D-DADF-415C-93F9-E6581B6767D3}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

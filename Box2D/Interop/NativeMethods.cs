@@ -92,6 +92,12 @@ internal static class NativeMethods
     public static extern void b2Contact_Evaluate(IntPtr obj, IntPtr manifold, [In] ref Transform xfA, [In] ref Transform xfB);
 
     /*
+     * b2_collision_wrap top-level functions
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2GetPointStates_wrap(IntPtr state1, IntPtr state2, in Manifold manifold1, in Manifold manifold2);
+
+    /*
      * b2Manifold
      */
     [DllImport(Dll, CallingConvention = Conv)]

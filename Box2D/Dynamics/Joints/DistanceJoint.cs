@@ -116,7 +116,7 @@ public sealed class DistanceJointDef : JointDef
         b2DistanceJointDef_Initialize(Native, bodyA.Native, bodyB.Native, anchorA, anchorB);
     }
 
-    private protected override void Dispose(bool disposing)
+    protected override void Dispose(bool disposing)
     {
         b2DistanceJointDef_delete(Native);
     }

@@ -159,7 +159,7 @@ public sealed class PrismaticJointDef : JointDef
         b2PrismaticJointDef_Initialize(Native, bodyA.Native, bodyB.Native, ref anchor, ref axis);
     }
 
-    private protected override void Dispose(bool disposing)
+    protected override void Dispose(bool disposing)
     {
         b2PrismaticJointDef_delete(Native);
     }

@@ -89,7 +89,7 @@ public abstract class Shape : Box2DObject
         return b2Shape_TestPoint(Native, ref transform, ref p);
     }
 
-    sealed private protected override void Dispose(bool disposing)
+    protected override void Dispose(bool disposing)
     {
         if (IsUserOwned)
         {

@@ -113,7 +113,7 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
     {
     }
 
-    private protected override void Dispose(bool disposing)
+    protected override void Dispose(bool disposing)
     {
         // This shape is not user-owned, so disposing it is safe.
         _shape?.Dispose();
