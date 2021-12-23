@@ -41,6 +41,22 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2World_GetContactList(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
+    public static extern bool b2World_GetAllowSleeping(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2World_SetAllowSleeping(IntPtr obj, bool flag);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern bool b2World_GetWarmStarting(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2World_SetWarmStarting(IntPtr obj, bool flag);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern bool b2World_GetContinuousPhysics(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2World_SetContinuousPhysics(IntPtr obj, bool flag);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern bool b2World_GetSubStepping(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2World_SetSubStepping(IntPtr obj, bool flag);
+    [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_GetGravity(IntPtr obj, out Vec2 value);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_SetGravity(IntPtr obj, [In] ref Vec2 gravity);

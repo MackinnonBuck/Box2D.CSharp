@@ -19,6 +19,14 @@ extern "C"
     BOX2D_API b2Body* b2World_GetBodyList(b2World* obj);
     BOX2D_API b2Joint* b2World_GetJointList(b2World* obj);
     BOX2D_API b2Contact* b2World_GetContactList(b2World* obj);
+    BOX2D_API bool b2World_GetAllowSleeping(b2World* obj);
+    BOX2D_API void b2World_SetAllowSleeping(b2World* obj, bool flag);
+    BOX2D_API bool b2World_GetWarmStarting(b2World* obj);
+    BOX2D_API void b2World_SetWarmStarting(b2World* obj, bool flag);
+    BOX2D_API bool b2World_GetContinuousPhysics(b2World* obj);
+    BOX2D_API void b2World_SetContinuousPhysics(b2World* obj, bool flag);
+    BOX2D_API bool b2World_GetSubStepping(b2World* obj);
+    BOX2D_API void b2World_SetSubStepping(b2World* obj, bool flag);
     BOX2D_API void b2World_GetGravity(b2World* obj, b2Vec2* value);
     BOX2D_API void b2World_SetGravity(b2World* obj, b2Vec2* gravity);
     BOX2D_API void b2World_delete(b2World* obj);

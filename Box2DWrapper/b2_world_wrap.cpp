@@ -79,6 +79,54 @@ b2Contact* b2World_GetContactList(b2World* obj)
     return obj->GetContactList();
 }
 
+bool b2World_GetAllowSleeping(b2World* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->GetAllowSleeping();
+}
+
+void b2World_SetAllowSleeping(b2World* obj, bool flag)
+{
+    VERIFY_INSTANCE;
+    obj->SetAllowSleeping(flag);
+}
+
+bool b2World_GetWarmStarting(b2World* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->GetWarmStarting();
+}
+
+void b2World_SetWarmStarting(b2World* obj, bool flag)
+{
+    VERIFY_INSTANCE;
+    obj->SetWarmStarting(flag);
+}
+
+bool b2World_GetContinuousPhysics(b2World* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->GetContinuousPhysics();
+}
+
+void b2World_SetContinuousPhysics(b2World* obj, bool flag)
+{
+    VERIFY_INSTANCE;
+    obj->SetContinuousPhysics(flag);
+}
+
+bool b2World_GetSubStepping(b2World* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->GetSubStepping();
+}
+
+void b2World_SetSubStepping(b2World* obj, bool flag)
+{
+    VERIFY_INSTANCE;
+    obj->SetSubStepping(flag);
+}
+
 void b2World_GetGravity(b2World* obj, b2Vec2* value)
 {
     VERIFY_INSTANCE;

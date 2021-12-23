@@ -35,6 +35,62 @@ public class World : Box2DObject
         }
     }
 
+    public bool AllowSleeping
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return b2World_GetAllowSleeping(Native);
+        }
+        set
+        {
+            ThrowIfDisposed();
+            b2World_SetAllowSleeping(Native, value);
+        }
+    }
+
+    public bool WarmStarting
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return b2World_GetWarmStarting(Native);
+        }
+        set
+        {
+            ThrowIfDisposed();
+            b2World_SetWarmStarting(Native, value);
+        }
+    }
+
+    public bool ContinuousPhysics
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return b2World_GetContinuousPhysics(Native);
+        }
+        set
+        {
+            ThrowIfDisposed();
+            b2World_SetContinuousPhysics(Native, value);
+        }
+    }
+
+    public bool SubStepping
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return b2World_GetSubStepping(Native);
+        }
+        set
+        {
+            ThrowIfDisposed();
+            b2World_SetSubStepping(Native, value);
+        }
+    }
+
     public Vec2 Gravity
     {
         get

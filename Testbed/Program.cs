@@ -141,7 +141,6 @@ internal class Program
         }
 
         _controller.Render();
-        _debugDraw.Flush();
 
         var t2 = _stopwatch.Elapsed;
         var timeUsed = t2 - _t1;

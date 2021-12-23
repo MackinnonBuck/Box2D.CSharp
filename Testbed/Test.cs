@@ -140,8 +140,15 @@ internal class Test : ContactListener
 
         _debugDraw.Flags = (DrawFlags)flags;
 
+        World.AllowSleeping = _settings.enableSleep;
+        World.WarmStarting = _settings.enableWarmStarting;
+        World.ContinuousPhysics = _settings.enableContinuous;
+        World.SubStepping = _settings.enableSubStepping;
+
         World.Step(timeStep, 8, 3);
         World.DebugDraw();
+
+        _debugDraw.Flush();
     }
 
     public void DrawTitle(string title)
