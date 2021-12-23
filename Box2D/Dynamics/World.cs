@@ -91,6 +91,69 @@ public class World : Box2DObject
         }
     }
 
+    public int ProxyCount
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return b2World_GetProxyCount(Native);
+        }
+    }
+
+    public int BodyCount
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return b2World_GetBodyCount(Native);
+        }
+    }
+
+    public int JointCount
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return b2World_GetJointCount(Native);
+        }
+    }
+
+    public int ContactCount
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return b2World_GetContactCount(Native);
+        }
+    }
+
+    public int TreeHeight
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return b2World_GetTreeHeight(Native);
+        }
+    }
+
+    public int TreeBalance
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return b2World_GetTreeBalance(Native);
+        }
+    }
+
+    public float TreeQuality
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return b2World_GetTreeQuality(Native);
+        }
+    }
+
     public Vec2 Gravity
     {
         get

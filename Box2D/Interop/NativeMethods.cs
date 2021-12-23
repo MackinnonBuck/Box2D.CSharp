@@ -57,6 +57,20 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_SetSubStepping(IntPtr obj, bool flag);
     [DllImport(Dll, CallingConvention = Conv)]
+    public static extern int b2World_GetProxyCount(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern int b2World_GetBodyCount(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern int b2World_GetJointCount(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern int b2World_GetContactCount(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern int b2World_GetTreeHeight(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern int b2World_GetTreeBalance(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2World_GetTreeQuality(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_GetGravity(IntPtr obj, out Vec2 value);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_SetGravity(IntPtr obj, [In] ref Vec2 gravity);

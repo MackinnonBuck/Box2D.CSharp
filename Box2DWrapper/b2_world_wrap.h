@@ -27,6 +27,13 @@ extern "C"
     BOX2D_API void b2World_SetContinuousPhysics(b2World* obj, bool flag);
     BOX2D_API bool b2World_GetSubStepping(b2World* obj);
     BOX2D_API void b2World_SetSubStepping(b2World* obj, bool flag);
+    BOX2D_API int b2World_GetProxyCount(b2World* obj);
+    BOX2D_API int b2World_GetBodyCount(b2World* obj);
+    BOX2D_API int b2World_GetJointCount(b2World* obj);
+    BOX2D_API int b2World_GetContactCount(b2World* obj);
+    BOX2D_API int b2World_GetTreeHeight(b2World* obj);
+    BOX2D_API int b2World_GetTreeBalance(b2World* obj);
+    BOX2D_API float b2World_GetTreeQuality(b2World* obj);
     BOX2D_API void b2World_GetGravity(b2World* obj, b2Vec2* value);
     BOX2D_API void b2World_SetGravity(b2World* obj, b2Vec2* gravity);
     BOX2D_API void b2World_delete(b2World* obj);

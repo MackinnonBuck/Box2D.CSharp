@@ -127,6 +127,48 @@ void b2World_SetSubStepping(b2World* obj, bool flag)
     obj->SetSubStepping(flag);
 }
 
+int b2World_GetProxyCount(b2World* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->GetProxyCount();
+}
+
+int b2World_GetBodyCount(b2World* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->GetBodyCount();
+}
+
+int b2World_GetJointCount(b2World* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->GetJointCount();
+}
+
+int b2World_GetContactCount(b2World* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->GetContactCount();
+}
+
+int b2World_GetTreeHeight(b2World* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->GetTreeHeight();
+}
+
+int b2World_GetTreeBalance(b2World* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->GetTreeBalance();
+}
+
+float b2World_GetTreeQuality(b2World* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->GetTreeQuality();
+}
+
 void b2World_GetGravity(b2World* obj, b2Vec2* value)
 {
     VERIFY_INSTANCE;

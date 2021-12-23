@@ -149,6 +149,27 @@ internal class Test : ContactListener
         World.DebugDraw();
 
         _debugDraw.Flush();
+
+        if (timeStep > 0f)
+        {
+            StepCount++;
+        }
+
+        if (_settings.drawStats)
+        {
+            var bodyCount = World.BodyCount;
+            var contactCount = World.ContactCount;
+            var jointCount = World.JointCount;
+            _debugDraw.DrawString(5, TextLine, $"bodies/contacts/joints = {bodyCount}/{contactCount}/{jointCount}");
+            TextLine += TextIncrement;
+
+            var proxyCount = World.ProxyCount;
+            var height = World.TreeHeight;
+            var balance = World.TreeBalance;
+            var quality = World.TreeQuality;
+            _debugDraw.DrawString(5, TextLine, $"proxies/height/balance/quality = {proxyCount}/{height}/{balance}/{quality}");
+            TextLine += TextIncrement;
+        }
     }
 
     public void DrawTitle(string title)
