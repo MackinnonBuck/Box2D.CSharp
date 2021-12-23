@@ -52,15 +52,17 @@ internal class Test : ContactListener
 
     private readonly WorldManifold _worldManifold = new();
 
-    public Joint? MouseJoint { get; set; } = default!;
+    private DebugDraw _debugDraw = default!;
 
-    protected DebugDraw DebugDraw { get; }
+    private Settings _settings = default!;
+
+    public Joint? MouseJoint { get; set; } = default!;
 
     protected World World { get; }
 
     protected TestDestructionListener DestructionListener { get; }
 
-    protected ContactPoint[] ContactPoints { get; } = new ContactPoint[2];
+    protected ContactPoint[] Points { get; } = new ContactPoint[MaxContactPoints];
 
     protected Body GroundBody { get; }
 
@@ -74,14 +76,12 @@ internal class Test : ContactListener
 
     protected int TextLine { get; set; } = 30;
 
-    public Test(DebugDraw debugDraw)
+    public Test()
     {
-        DebugDraw = debugDraw;
         DestructionListener = new(this);
         World = new World(new(0f, -10f));
         World.SetDestructionListener(DestructionListener);
         World.SetContactListener(this);
-        World.SetDebugDraw(debugDraw);
 
         var bodyDef = new BodyDef();
         GroundBody = World.CreateBody(bodyDef);
@@ -89,9 +89,64 @@ internal class Test : ContactListener
         // TODO: Profiling support and display.
     }
 
+    public void Initialize(DebugDraw debugDraw, Settings settings)
+    {
+        _debugDraw = debugDraw;
+        _settings = settings;
+
+        World.SetDebugDraw(_debugDraw);
+    }
+
+    public void Step()
+    {
+        var timeStep = _settings.hertz > 0f ? 1f / _settings.hertz : 0f;
+
+        if (_settings.pause)
+        {
+            if (_settings.singleStep)
+            {
+                _settings.singleStep = false;
+            }
+            else
+            {
+                timeStep = 0f;
+            }
+
+            _debugDraw.DrawString(5, TextLine, "****PAUSED****");
+            TextLine += TextIncrement;
+        }
+
+        uint flags = 0;
+
+        if (_settings.drawShapes)
+        {
+            flags += (uint)DrawFlags.ShapeBit;
+        }
+
+        if (_settings.drawJoints)
+        {
+            flags += (uint)DrawFlags.JointBit;
+        }
+
+        if (_settings.drawAABBs)
+        {
+            flags += (uint)DrawFlags.AabbBit;
+        }
+
+        if (_settings.drawCOMs)
+        {
+            flags += (uint)DrawFlags.CenterOfMassBit;
+        }
+
+        _debugDraw.Flags = (DrawFlags)flags;
+
+        World.Step(timeStep, 8, 3);
+        World.DebugDraw();
+    }
+
     public void DrawTitle(string title)
     {
-        DebugDraw.DrawString(5, 5, title);
+        _debugDraw.DrawString(5, 5, title);
         TextLine = 26;
     }
 
@@ -120,7 +175,7 @@ internal class Test : ContactListener
 
         for (var i = 0; i < manifold.Points.Length && PointCount < MaxContactPoints; i++, PointCount++)
         {
-            ContactPoints[i] = new()
+            Points[i] = new()
             {
                 FixtureA = fixtureA,
                 FixtureB = fixtureB,

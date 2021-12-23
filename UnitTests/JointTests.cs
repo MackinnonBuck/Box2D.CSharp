@@ -14,7 +14,7 @@ public class JointTests
 
         var bodyDef = new BodyDef
         {
-            Type = BodyType.Dyanmic,
+            Type = BodyType.Dynamic,
             Position = new(-2f, 3f),
         };
         var ground = world.CreateBody(bodyDef);

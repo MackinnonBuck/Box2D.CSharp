@@ -1,6 +1,7 @@
 ﻿using Box2D;
 using ImGuiNET;
 using Silk.NET.OpenGL;
+using System.Numerics;
 
 namespace Testbed.Drawing;
 
@@ -12,12 +13,13 @@ internal class DebugDraw : Draw
 
     private static readonly Color _red = new(1f, 0f, 0f);
     private static readonly Color _green = new(0f, 1f, 0f);
+    private static readonly Vector4 _textColor = new Vector4(230f, 153f, 153f, 255f) / 255f;
 
     private readonly PointRenderer _points;
     private readonly LineRenderer _lines;
     private readonly TriangleRenderer _triangles;
 
-    public bool ShowUI { get; set; } = true;
+    public bool showUI = true;
 
     public DebugDraw(GL gl, Camera camera)
     {
@@ -157,14 +159,14 @@ internal class DebugDraw : Draw
 
     public void DrawString(int x, int y, string s)
     {
-        if (!ShowUI)
+        if (!showUI)
         {
             return;
         }
 
         ImGui.Begin("Overlay", ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoInputs | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoScrollbar);
         ImGui.SetCursorPos(new(x, y));
-        ImGui.TextColored(new(230f, 153f, 153f, 255f), s);
+        ImGui.TextColored(_textColor, s);
         ImGui.End();
     }
 

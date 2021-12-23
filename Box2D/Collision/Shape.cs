@@ -28,7 +28,7 @@ public abstract class Shape : Box2DObject
             return type switch
             {
                 ShapeType.Circle => new CircleShape(obj),
-                ShapeType.Edge => throw new NotImplementedException(),
+                ShapeType.Edge => new EdgeShape(obj),
                 ShapeType.Chain => throw new NotImplementedException(),
                 ShapeType.Polygon => new PolygonShape(obj),
                 var x => throw new ArgumentException($"Invalid shape type '{x}'.", nameof(type)),

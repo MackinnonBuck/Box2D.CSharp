@@ -9,7 +9,7 @@ public abstract class Box2DSubObject : Box2DObject
 
     private protected Box2DSubObject() : base(isUserOwned: false)
     {
-        Handle = GCHandle.ToIntPtr(GCHandle.Alloc(this, GCHandleType.Weak));
+        Handle = GCHandle.ToIntPtr(GCHandle.Alloc(this, GCHandleType.Normal));
     }
 
     protected override void Dispose(bool disposing)

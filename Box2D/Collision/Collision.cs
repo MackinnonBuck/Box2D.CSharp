@@ -6,7 +6,7 @@ using static NativeMethods;
 
 public static class Collision
 {
-    public unsafe static void GetPointStates(Span<PointState> state1, Span<PointState> state2, in Manifold manifold1, in Manifold manifold2)
+    public static void GetPointStates(Span<PointState> state1, Span<PointState> state2, in Manifold manifold1, in Manifold manifold2)
     {
         if (state1.Length != 2)
         {
@@ -18,12 +18,6 @@ public static class Collision
             throw new ArgumentException($"Expected '{nameof(state2)}' to have a length of 2.", nameof(state2));
         }
 
-        fixed (PointState* pinnedState1 = state1)
-        {
-            fixed (PointState* pinnedState2 = state2)
-            {
-                b2GetPointStates_wrap((IntPtr)pinnedState1, (IntPtr)pinnedState2, in manifold1, in manifold2);
-            }
-        }
+        b2GetPointStates_wrap(out state1.GetPinnableReference(), out state2.GetPinnableReference(), manifold1.Native, manifold2.Native);
     }
 }

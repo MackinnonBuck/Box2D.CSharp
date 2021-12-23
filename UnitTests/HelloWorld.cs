@@ -35,7 +35,7 @@ public class HelloWorld
         // Define the dynamic body. We set its position and call the body factory.
         var bodyDef = new BodyDef
         {
-            Type = BodyType.Dyanmic,
+            Type = BodyType.Dynamic,
             Position = new(0f, 4f),
         };
         var body = world.CreateBody(bodyDef);

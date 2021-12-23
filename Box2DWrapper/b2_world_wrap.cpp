@@ -79,6 +79,18 @@ b2Contact* b2World_GetContactList(b2World* obj)
     return obj->GetContactList();
 }
 
+void b2World_GetGravity(b2World* obj, b2Vec2* value)
+{
+    VERIFY_INSTANCE;
+    *value = obj->GetGravity();
+}
+
+void b2World_SetGravity(b2World* obj, b2Vec2* gravity)
+{
+    VERIFY_INSTANCE;
+    obj->SetGravity(*gravity);
+}
+
 void b2World_delete(b2World* obj)
 {
     VERIFY_INSTANCE;

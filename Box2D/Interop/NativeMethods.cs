@@ -41,6 +41,10 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2World_GetContactList(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2World_GetGravity(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2World_SetGravity(IntPtr obj, [In] ref Vec2 gravity);
+    [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_delete(IntPtr obj);
 
     /*
@@ -95,7 +99,7 @@ internal static class NativeMethods
      * b2_collision_wrap top-level functions
      */
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2GetPointStates_wrap(IntPtr state1, IntPtr state2, in Manifold manifold1, in Manifold manifold2);
+    public static extern void b2GetPointStates_wrap(out PointState state1, out PointState state2, IntPtr manifold1, IntPtr manifold2);
 
     /*
      * b2Manifold
@@ -169,6 +173,14 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2Body_GetAngle(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_GetLinearVelocity(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_SetLinearVelocity(IntPtr obj, [In] ref Vec2 v);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2Body_GetAngularVelocity(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_SetAngularVelocity(IntPtr obj, float omega);
+    [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Body_GetFixtureList(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Body_GetJointList(IntPtr obj);
@@ -214,6 +226,28 @@ internal static class NativeMethods
     public static extern IntPtr b2CircleShape_new();
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2CircleShape_get_m_p(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2CircleShape_set_m_p(IntPtr obj, [In] ref Vec2 value);
+
+    /*
+     * b2EdgeShape
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2EdgeShape_new();
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2EdgeShape_SetOneSided(IntPtr obj, [In] ref Vec2 v0, [In] ref Vec2 v1, [In] ref Vec2 v2, [In] ref Vec2 v3);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2EdgeShape_SetTwoSided(IntPtr obj, [In] ref Vec2 v1, [In] ref Vec2 v2);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2EdgeShape_get_m_vertex0(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2EdgeShape_get_m_vertex1(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2EdgeShape_get_m_vertex2(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2EdgeShape_get_m_vertex3(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern bool b2EdgeShape_get_m_oneSided(IntPtr obj);
 
     /*
      * b2PolygonShape

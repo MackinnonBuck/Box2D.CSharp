@@ -35,6 +35,21 @@ public class World : Box2DObject
         }
     }
 
+    public Vec2 Gravity
+    {
+        get
+        {
+            ThrowIfDisposed();
+            b2World_GetGravity(Native, out var value);
+            return value;
+        }
+        set
+        {
+            ThrowIfDisposed();
+            b2World_SetGravity(Native, ref value);
+        }
+    }
+
     public World(Vec2 gravity) : base(isUserOwned: true)
     {
         var native = b2World_new(ref gravity);

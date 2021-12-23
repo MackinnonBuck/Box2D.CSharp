@@ -27,7 +27,7 @@ public class WorldTests
 
         var bodyDef = new BodyDef
         {
-            Type = BodyType.Dyanmic,
+            Type = BodyType.Dynamic,
         };
 
         var bodyA = world.CreateBody(bodyDef);

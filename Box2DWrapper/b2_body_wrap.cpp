@@ -32,10 +32,28 @@ float b2Body_GetAngle(b2Body* obj)
     return obj->GetAngle();
 }
 
-void b2Body_SetLinearVelocity(b2Body* obj, const b2Vec2* v)
+void b2Body_GetLinearVelocity(b2Body* obj, b2Vec2* value)
+{
+    VERIFY_INSTANCE;
+    *value = obj->GetLinearVelocity();
+}
+
+void b2Body_SetLinearVelocity(b2Body* obj, b2Vec2* v)
 {
     VERIFY_INSTANCE;
     obj->SetLinearVelocity(*v);
+}
+
+float b2Body_GetAngularVelocity(b2Body* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->GetAngularVelocity();
+}
+
+void b2Body_SetAngularVelocity(b2Body* obj, float omega)
+{
+    VERIFY_INSTANCE;
+    obj->SetAngularVelocity(omega);
 }
 
 b2Fixture* b2Body_GetFixtureList(b2Body* obj)

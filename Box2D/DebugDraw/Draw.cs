@@ -7,7 +7,7 @@ namespace Box2D;
 using static NativeMethods;
 
 [Flags]
-public enum DrawFlags
+public enum DrawFlags : uint
 {
     ShapeBit        = 0x0001,
     JointBit        = 0x0002,

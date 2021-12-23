@@ -9,7 +9,7 @@ public enum BodyType
 {
     Static,
     Kinematic,
-    Dyanmic,
+    Dynamic,
 }
 
 public readonly struct BodyDef
@@ -83,6 +83,35 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
             ThrowIfDisposed();
             b2Body_GetTransform(Native, out var value);
             return value;
+        }
+    }
+
+    public Vec2 LinearVelocity
+    {
+        get
+        {
+            ThrowIfDisposed();
+            b2Body_GetLinearVelocity(Native, out var value);
+            return value;
+        }
+        set
+        {
+            ThrowIfDisposed();
+            b2Body_SetLinearVelocity(Native, ref value);
+        }
+    }
+
+    public float AngularVelocity
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return b2Body_GetAngularVelocity(Native);
+        }
+        set
+        {
+            ThrowIfDisposed();
+            b2Body_SetAngularVelocity(Native, value);
         }
     }
 
