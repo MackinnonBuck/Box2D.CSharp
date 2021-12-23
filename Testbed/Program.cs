@@ -43,7 +43,7 @@ internal class Program
         var options = WindowOptions.Default with
         {
             Size = new Vector2D<int>(_camera.Width, _camera.Height),
-            Title = "Box2D TestBed",
+            Title = "Box2D TestBed (C#)",
         };
 
         _window = Window.Create(options);

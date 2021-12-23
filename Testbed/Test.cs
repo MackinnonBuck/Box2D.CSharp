@@ -76,6 +76,10 @@ internal class Test : ContactListener
 
     protected int TextLine { get; set; } = 30;
 
+    protected Profile MaxProfile { get; private set; }
+
+    protected Profile TotalProfile { get; private set; }
+
     public Test()
     {
         DestructionListener = new(this);
@@ -168,6 +172,67 @@ internal class Test : ContactListener
             var balance = World.TreeBalance;
             var quality = World.TreeQuality;
             _debugDraw.DrawString(5, TextLine, $"proxies/height/balance/quality = {proxyCount}/{height}/{balance}/{quality}");
+            TextLine += TextIncrement;
+        }
+
+        World.GetProfile(out var profile);
+
+        MaxProfile = new()
+        {
+            Step = Math.Max(MaxProfile.Step, profile.Step),
+            Collide = Math.Max(MaxProfile.Collide, profile.Collide),
+            Solve = Math.Max(MaxProfile.Solve, profile.Solve),
+            SolveInit = Math.Max(MaxProfile.SolveInit, profile.SolveInit),
+            SolveVelocity = Math.Max(MaxProfile.SolveVelocity, profile.SolveVelocity),
+            SolvePosition = Math.Max(MaxProfile.SolvePosition, profile.SolvePosition),
+            SolveTOI = Math.Max(MaxProfile.SolveTOI, profile.SolveTOI),
+            Broadphase = Math.Max(MaxProfile.Broadphase, profile.Broadphase),
+        };
+
+        TotalProfile = new()
+        {
+            Step = TotalProfile.Step + profile.Step,
+            Collide = TotalProfile.Collide + profile.Collide,
+            Solve = TotalProfile.Solve + profile.Solve,
+            SolveInit = TotalProfile.SolveInit + profile.SolveInit,
+            SolveVelocity = TotalProfile.SolveVelocity + profile.SolveVelocity,
+            SolvePosition = TotalProfile.SolvePosition + profile.SolvePosition,
+            SolveTOI = TotalProfile.SolveTOI + profile.SolveTOI,
+            Broadphase = TotalProfile.Broadphase + profile.Broadphase,
+        };
+
+        if (_settings.drawProfile)
+        {
+            var averageProfile = new Profile();
+
+            if (StepCount > 0)
+            {
+                var scale = 1f / StepCount;
+                averageProfile.Step = scale * TotalProfile.Step;
+                averageProfile.Collide = scale * TotalProfile.Collide;
+                averageProfile.Solve = scale * TotalProfile.Solve;
+                averageProfile.SolveInit = scale * TotalProfile.SolveInit;
+                averageProfile.SolveVelocity = scale * TotalProfile.SolveVelocity;
+                averageProfile.SolvePosition = scale * TotalProfile.SolvePosition;
+                averageProfile.SolveTOI = scale * TotalProfile.SolveTOI;
+                averageProfile.Broadphase = scale * TotalProfile.Broadphase;
+            }
+
+            _debugDraw.DrawString(5, TextLine, $"step [ave] (max) = {profile.Step:.00} [{averageProfile.Step:.00}] ({MaxProfile.Step:.00})");
+            TextLine += TextIncrement;
+            _debugDraw.DrawString(5, TextLine, $"collide [ave] (max) = {profile.Collide:.00} [{averageProfile.Collide:.00}] ({MaxProfile.Collide:.00})");
+            TextLine += TextIncrement;
+            _debugDraw.DrawString(5, TextLine, $"solve [ave] (max) = {profile.Solve:.00} [{averageProfile.Solve:.00}] ({MaxProfile.Solve:.00})");
+            TextLine += TextIncrement;
+            _debugDraw.DrawString(5, TextLine, $"solve init [ave] (max) = {profile.SolveInit:.00} [{averageProfile.SolveInit:.00}] ({MaxProfile.SolveInit:.00})");
+            TextLine += TextIncrement;
+            _debugDraw.DrawString(5, TextLine, $"solve velocity [ave] (max) = {profile.SolveVelocity:.00} [{averageProfile.SolveVelocity:.00}] ({MaxProfile.SolveVelocity:.00})");
+            TextLine += TextIncrement;
+            _debugDraw.DrawString(5, TextLine, $"solve position [ave] (max) = {profile.SolvePosition:.00} [{averageProfile.SolvePosition:.00}] ({MaxProfile.SolvePosition:.00})");
+            TextLine += TextIncrement;
+            _debugDraw.DrawString(5, TextLine, $"solveTOI [ave] (max) = {profile.SolveTOI:.00} [{averageProfile.SolveTOI:.00}] ({MaxProfile.SolveTOI:.00})");
+            TextLine += TextIncrement;
+            _debugDraw.DrawString(5, TextLine, $"broad-phase [ave] (max) = {profile.Broadphase:.00} [{averageProfile.Broadphase:.00}] ({MaxProfile.Broadphase:.00})");
             TextLine += TextIncrement;
         }
     }

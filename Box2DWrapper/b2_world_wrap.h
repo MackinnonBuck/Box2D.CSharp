@@ -36,5 +36,6 @@ extern "C"
     BOX2D_API float b2World_GetTreeQuality(b2World* obj);
     BOX2D_API void b2World_GetGravity(b2World* obj, b2Vec2* value);
     BOX2D_API void b2World_SetGravity(b2World* obj, b2Vec2* gravity);
+    BOX2D_API void b2World_GetProfile(b2World* obj, b2Profile* value);
     BOX2D_API void b2World_delete(b2World* obj);
 }

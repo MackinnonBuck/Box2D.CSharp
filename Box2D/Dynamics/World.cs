@@ -250,6 +250,12 @@ public class World : Box2DObject
         b2World_DebugDraw(Native);
     }
 
+    public void GetProfile(out Profile profile)
+    {
+        ThrowIfDisposed();
+        b2World_GetProfile(Native, out profile);
+    }
+
     protected override void Dispose(bool disposing)
     {
         // TODO: See if there's anything else to do here (do we care about the disposing parameter?).

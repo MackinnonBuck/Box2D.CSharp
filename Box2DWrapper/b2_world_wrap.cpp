@@ -181,6 +181,12 @@ void b2World_SetGravity(b2World* obj, b2Vec2* gravity)
     obj->SetGravity(*gravity);
 }
 
+void b2World_GetProfile(b2World* obj, b2Profile* value)
+{
+    VERIFY_INSTANCE;
+    *value = obj->GetProfile();
+}
+
 void b2World_delete(b2World* obj)
 {
     VERIFY_INSTANCE;
