@@ -149,6 +149,8 @@ internal class Test : ContactListener
         World.ContinuousPhysics = _settings.enableContinuous;
         World.SubStepping = _settings.enableSubStepping;
 
+        PointCount = 0;
+
         World.Step(timeStep, 8, 3);
         World.DebugDraw();
 
@@ -235,6 +237,51 @@ internal class Test : ContactListener
             _debugDraw.DrawString(5, TextLine, $"broad-phase [ave] (max) = {profile.Broadphase:.00} [{averageProfile.Broadphase:.00}] ({MaxProfile.Broadphase:.00})");
             TextLine += TextIncrement;
         }
+
+        // TODO: Bomb spawning.
+
+        if (_settings.drawContactPoints)
+        {
+            var impulseScale = 0.1f;
+            var axisScale = 0.3f;
+
+            Console.WriteLine(PointCount);
+
+            for (var i = 0; i < PointCount; i++)
+            {
+                ref var point = ref Points[i];
+
+                if (point.State == PointState.Add)
+                {
+                    _debugDraw.DrawPoint(point.Position, 10f, new(0.3f, 0.95f, 0.3f));
+                }
+                else if (point.State == PointState.Persist)
+                {
+                    _debugDraw.DrawPoint(point.Position, 5f, new(0.3f, 0.3f, 0.95f));
+                }
+
+                if (_settings.drawContactNormals)
+                {
+                    var p1 = point.Position;
+                    var p2 = p1 + axisScale * point.Normal;
+                    _debugDraw.DrawSegment(p1, p2, new(0.9f, 0.9f, 0.9f));
+                }
+                else if (_settings.drawContactImpulse)
+                {
+                    var p1 = point.Position;
+                    var p2 = p1 + impulseScale * point.NormalImpulse * point.Normal;
+                    _debugDraw.DrawSegment(p1, p2, new(0.9f, 0.9f, 0.3f));
+                }
+
+                if (_settings.drawFrictionImpulse)
+                {
+                    var tangent = point.Normal.Cross(1f);
+                    var p1 = point.Position;
+                    var p2 = p1 + impulseScale * point.TangentImpulse * tangent;
+                    _debugDraw.DrawSegment(p1, p2, new(0.9f, 0.9f, 0.3f));
+                }
+            }
+        }
     }
 
     public void DrawTitle(string title)
@@ -268,7 +315,7 @@ internal class Test : ContactListener
 
         for (var i = 0; i < manifold.Points.Length && PointCount < MaxContactPoints; i++, PointCount++)
         {
-            Points[i] = new()
+            Points[PointCount] = new()
             {
                 FixtureA = fixtureA,
                 FixtureB = fixtureB,

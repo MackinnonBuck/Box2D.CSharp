@@ -2,8 +2,8 @@
 
 public enum PointState
 {
-    NullState,
-    AddState,
-    PersistState,
-    RemoveState,
+    Null,
+    Add,
+    Persist,
+    Remove,
 }

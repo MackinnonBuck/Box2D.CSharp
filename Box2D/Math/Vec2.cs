@@ -81,6 +81,12 @@ public struct Vec2 : IEquatable<Vec2>
     public float Dot(Vec2 other)
         => X * other.X + Y * other.Y;
 
+    public float Cross(Vec2 other)
+        => X * other.Y - Y * other.X;
+
+    public Vec2 Cross(float s)
+        => new(s * Y, -s * X);
+
     public static Vec2 operator +(Vec2 v)
         => v;
 
@@ -107,6 +113,15 @@ public struct Vec2 : IEquatable<Vec2>
 
     public static float Dot(Vec2 a, Vec2 b)
         => a.Dot(b);
+
+    public static float Cross(Vec2 a, Vec2 b)
+        => a.Cross(b);
+
+    public static Vec2 Cross(Vec2 a, float s)
+        => a.Cross(s);
+
+    public static Vec2 Cross(float s, Vec2 a)
+        => new(-s * a.Y, s * a.X);
 
     private static IndexOutOfRangeException ComponentIndexOutOfRange(int i)
         => new($"The component index '{i}' is out of range for {nameof(Vec2)} instances.");
