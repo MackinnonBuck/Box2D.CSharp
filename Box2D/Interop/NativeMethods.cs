@@ -45,21 +45,25 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2World_GetContactList(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2World_GetAllowSleeping(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2World_SetAllowSleeping(IntPtr obj, bool flag);
+    public static extern void b2World_SetAllowSleeping(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool flag);
     [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2World_GetWarmStarting(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2World_SetWarmStarting(IntPtr obj, bool flag);
+    public static extern void b2World_SetWarmStarting(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool flag);
     [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2World_GetContinuousPhysics(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2World_SetContinuousPhysics(IntPtr obj, bool flag);
+    public static extern void b2World_SetContinuousPhysics(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool flag);
     [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2World_GetSubStepping(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2World_SetSubStepping(IntPtr obj, bool flag);
+    public static extern void b2World_SetSubStepping(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool flag);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern int b2World_GetProxyCount(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -93,11 +97,13 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Contact_GetWorldManifold(IntPtr obj, IntPtr worldManifold);
     [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2Contact_IsTouching(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2Contact_IsEnabled(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Contact_SetEnabled(IntPtr obj, bool flag);
+    public static extern void b2Contact_SetEnabled(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool flag);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Contact_GetNext(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -237,9 +243,10 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2Body_GetMass(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2Body_IsAwake(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Body_SetAwake(IntPtr obj, bool flag);
+    public static extern void b2Body_SetAwake(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool flag);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Body_GetFixtureList(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -259,6 +266,7 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Fixture_GetUserData(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2Fixture_TestPoint(IntPtr obj, [In] ref Vec2 p);
 
     /*
@@ -267,8 +275,10 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern int b2Shape_GetChildCount(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2Shape_TestPoint(IntPtr obj, [In] ref Transform transform, [In] ref Vec2 p);
     [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2Shape_RayCast(IntPtr obj, out RayCastOutput output, in RayCastInput input, [In] ref Transform transform, int childIndex);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Shape_ComputeAABB(IntPtr obj, out AABB aabb, [In] ref Transform transform, int childIndex);
@@ -309,6 +319,7 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2EdgeShape_get_m_vertex3(IntPtr obj, out Vec2 value);
     [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2EdgeShape_get_m_oneSided(IntPtr obj);
 
     /*
@@ -353,9 +364,10 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2JointDef_set_bodyB(IntPtr obj, IntPtr value);
     [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2JointDef_get_collideConnected(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2JointDef_set_collideConnected(IntPtr obj, bool value);
+    public static extern void b2JointDef_set_collideConnected(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool value);
 
     /*
      * b2Joint
@@ -377,8 +389,10 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Joint_GetUserData(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2Joint_IsEnabled(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2Joint_GetCollideConnected(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Joint_ShiftOrigin(IntPtr obj, [In] ref Vec2 newOrigin);
@@ -495,9 +509,10 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2PrismaticJointDef_set_referenceAngle(IntPtr obj, float value);
     [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2PrismaticJointDef_get_enableLimit(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2PrismaticJointDef_set_enableLimit(IntPtr obj, bool value);
+    public static extern void b2PrismaticJointDef_set_enableLimit(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool value);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2PrismaticJointDef_get_lowerTranslation(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -507,9 +522,10 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2PrismaticJointDef_set_upperTranslation(IntPtr obj, float value);
     [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2PrismaticJointDef_get_enableMotor(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2PrismaticJointDef_set_enableMotor(IntPtr obj, bool value);
+    public static extern void b2PrismaticJointDef_set_enableMotor(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool value);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2PrismaticJointDef_get_maxMotorForce(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -537,9 +553,10 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2PrismaticJoint_GetJointSpeed(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2PrismaticJoint_IsLimitEnabled(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2PrismaticJoint_EnableLimit(IntPtr obj, bool flag);
+    public static extern void b2PrismaticJoint_EnableLimit(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool flag);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2PrismaticJoint_GetLowerLimit(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -547,9 +564,10 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2PrismaticJoint_SetLimits(IntPtr obj, float lower, float upper);
     [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2PrismaticJoint_IsMotorEnabled(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2PrismaticJoint_EnableMotor(IntPtr obj, bool flag);
+    public static extern void b2PrismaticJoint_EnableMotor(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool flag);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2PrismaticJoint_GetMotorSpeed(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -581,9 +599,10 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2RevoluteJointDef_set_referenceAngle(IntPtr obj, float value);
     [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2RevoluteJointDef_get_enableLimit(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2RevoluteJointDef_set_enableLimit(IntPtr obj, bool value);
+    public static extern void b2RevoluteJointDef_set_enableLimit(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool value);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2RevoluteJointDef_get_lowerAngle(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -593,9 +612,10 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2RevoluteJointDef_set_upperAngle(IntPtr obj, float value);
     [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2RevoluteJointDef_get_enableMotor(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2RevoluteJointDef_set_enableMotor(IntPtr obj, bool value);
+    public static extern void b2RevoluteJointDef_set_enableMotor(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool value);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2RevoluteJointDef_get_motorSpeed(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -621,9 +641,10 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2RevoluteJoint_GetJointSpeed(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2RevoluteJoint_IsLimitEnabled(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2RevoluteJoint_EnableLimit(IntPtr obj, bool flag);
+    public static extern void b2RevoluteJoint_EnableLimit(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool flag);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2RevoluteJoint_GetLowerLimit(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -631,9 +652,10 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2RevoluteJoint_SetLimits(IntPtr obj, float lower, float upper);
     [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2RevoluteJoint_IsMotorEnabled(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2RevoluteJoint_EnableMotor(IntPtr obj, bool flag);
+    public static extern void b2RevoluteJoint_EnableMotor(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool flag);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2RevoluteJoint_GetMotorSpeed(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]

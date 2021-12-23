@@ -9,6 +9,7 @@ using static NativeMethods;
 public abstract class QueryCallback : Box2DObject
 {
     [UnmanagedFunctionPointer(Conv), SuppressUnmanagedCodeSecurity]
+    [return: MarshalAs(UnmanagedType.U1)]
     private delegate bool ReportFixtureUnmanagedDelegate(IntPtr fixture);
 
     private readonly ReportFixtureUnmanagedDelegate _reportFixture;
