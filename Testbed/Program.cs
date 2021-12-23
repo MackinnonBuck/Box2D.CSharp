@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Numerics;
 using System.Reflection;
 using Testbed.Drawing;
+using B2 = Box2D;
 
 namespace Testbed;
 
@@ -26,6 +27,11 @@ internal class Program
     private static DebugDraw _debugDraw = default!;
     private static Settings _settings = default!;
     private static Test _test = default!;
+
+    private static IMouse _mouse = default!;
+    private static IKeyboard _keyboard = default!;
+    private static bool _rightMouseDown;
+    private static B2.Vec2 _clickPointWorldSpace;
 
     private static TimeSpan _t1 = TimeSpan.Zero;
     private static TimeSpan _frameTime = TimeSpan.Zero;
@@ -90,20 +96,25 @@ internal class Program
 
     private static void InitializeInputCallbacks()
     {
-        foreach (var mouse in _inputContext.Mice)
+        if (_inputContext.Mice.Count == 0)
         {
-            mouse.MouseMove += OnMouseMove;
-            mouse.MouseDown += OnMouseDown;
-            mouse.MouseUp += OnMouseUp;
-            mouse.Scroll += OnMouseScroll;
+            throw new InvalidOperationException("Could not find a connected mouse.");
         }
 
-        foreach (var keyboard in _inputContext.Keyboards)
+        if (_inputContext.Keyboards.Count == 0)
         {
-            keyboard.KeyChar += OnKeyChar;
-            keyboard.KeyDown += OnKeyDown;
-            keyboard.KeyUp += OnKeyUp;
+            throw new InvalidOperationException("Could not find a connected keyboard.");
         }
+
+        _mouse = _inputContext.Mice[0];
+        _mouse.MouseMove += OnMouseMove;
+        _mouse.MouseDown += OnMouseDown;
+        _mouse.MouseUp += OnMouseUp;
+        _mouse.Scroll += OnMouseScroll;
+
+        _keyboard = _inputContext.Keyboards[0];
+        _keyboard.KeyDown += OnKeyDown;
+        _keyboard.KeyUp += OnKeyUp;
     }
 
     private static void OnWindowFramebufferResize(Vector2D<int> size)
@@ -287,6 +298,8 @@ internal class Program
         }
 
         ImGui.End();
+
+        _test.UpdateUI();
     }
 
     private static void OnWindowClosing()
@@ -299,29 +312,193 @@ internal class Program
 
     private static void OnMouseMove(IMouse mouse, Vector2 position)
     {
+        var ps = new B2.Vec2(position.X, position.Y);
+        var pw = _camera.ConvertScreenToWorld(ps);
+        _test.MouseMove(pw);
+
+        if (_rightMouseDown)
+        {
+            var diff = pw - _clickPointWorldSpace;
+            _camera.Center -= diff;
+            _clickPointWorldSpace = _camera.ConvertScreenToWorld(ps);
+        }
     }
 
     private static void OnMouseDown(IMouse mouse, MouseButton button)
     {
+        if (button == MouseButton.Left)
+        {
+            var pw = _camera.ConvertScreenToWorld(new(mouse.Position.X, mouse.Position.Y));
+
+            if (_keyboard.IsKeyPressed(Key.ShiftLeft) || _keyboard.IsKeyPressed(Key.ShiftRight))
+            {
+                _test.ShiftMouseDown(pw);
+            }
+            else
+            {
+                _test.MouseDown(pw);
+            }
+        }
+        else if (button == MouseButton.Right)
+        {
+            _clickPointWorldSpace = _camera.ConvertScreenToWorld(new(mouse.Position.X, mouse.Position.Y));
+            _rightMouseDown = true;
+        }
     }
 
     private static void OnMouseUp(IMouse mouse, MouseButton button)
     {
+        if (button == MouseButton.Left)
+        {
+            var pw = _camera.ConvertScreenToWorld(new(mouse.Position.X, mouse.Position.Y));
+
+            _test.MouseUp(pw);
+        }
+        else if (button == MouseButton.Right)
+        {
+            _rightMouseDown = false;
+        }
     }
 
     private static void OnMouseScroll(IMouse mouse, ScrollWheel scrollWheel)
     {
+        if (ImGui.GetIO().WantCaptureMouse)
+        {
+            return;
+        }
+
+        if (scrollWheel.Y > 0)
+        {
+            _camera.Zoom /= 1.1f;
+        }
+        else
+        {
+            _camera.Zoom *= 1.1f;
+        }
     }
 
-    private static void OnKeyChar(IKeyboard keyboard, char c)
+    private static void OnKeyDown(IKeyboard keyboard, Key key, int code)
     {
+        if (ImGui.GetIO().WantCaptureKeyboard)
+        {
+            return;
+        }
+
+        var controlPressed = keyboard.IsKeyPressed(Key.ControlLeft) || keyboard.IsKeyPressed(Key.ControlRight);
+
+        switch (key)
+        {
+            case Key.Escape:
+                _window.Close();
+                break;
+
+            case Key.Left:
+                if (controlPressed)
+                {
+                    var newOrigin = new B2.Vec2(2f, 0f);
+                    _test.ShiftOrigin(newOrigin);
+                }
+                else
+                {
+                    _camera.Center += new B2.Vec2(-0.5f, 0f);
+                }
+                break;
+
+            case Key.Right:
+                if (controlPressed)
+                {
+                    var newOrigin = new B2.Vec2(-2f, 0f);
+                    _test.ShiftOrigin(newOrigin);
+                }
+                else
+                {
+                    _camera.Center += new B2.Vec2(0.5f, 0f);
+                }
+                break;
+
+            case Key.Down:
+                if (controlPressed)
+                {
+                    var newOrigin = new B2.Vec2(0f, 2f);
+                    _test.ShiftOrigin(newOrigin);
+                }
+                else
+                {
+                    _camera.Center += new B2.Vec2(0f, -0.5f);
+                }
+                break;
+
+            case Key.Up:
+                if (controlPressed)
+                {
+                    var newOrigin = new B2.Vec2(0f, -2f);
+                    _test.ShiftOrigin(newOrigin);
+                }
+                else
+                {
+                    _camera.Center += new B2.Vec2(0f, 0.5f);
+                }
+                break;
+
+            case Key.Home:
+                _camera.Zoom = 1f;
+                _camera.Center = new(0f, 20f);
+                break;
+
+            case Key.Z:
+                _camera.Zoom = Math.Min(1.1f * _camera.Zoom, 20f);
+                break;
+
+            case Key.X:
+                _camera.Zoom = Math.Max(0.9f * _camera.Zoom, 0.02f);
+                break;
+
+            case Key.R:
+                RestartTest();
+                break;
+
+            case Key.Space:
+                _test.LaunchBomb();
+                break;
+
+            case Key.O:
+                _settings.singleStep = true;
+                break;
+
+            case Key.P:
+                _settings.pause = !_settings.pause;
+                break;
+
+            case Key.LeftBracket:
+                _settings.testIndex--;
+                if (_settings.testIndex < 0)
+                {
+                    _settings.testIndex = _testEntries.Count - 1;
+                }
+                RestartTest();
+                break;
+
+            case Key.RightBracket:
+                _settings.testIndex++;
+                if (_settings.testIndex >= _testEntries.Count)
+                {
+                    _settings.testIndex = 0;
+                }
+                RestartTest();
+                break;
+
+            case Key.Tab:
+                _debugDraw.showUI = !_debugDraw.showUI;
+                break;
+
+            default:
+                _test.Keyboard(key);
+                break;
+        }
     }
 
-    private static void OnKeyDown(IKeyboard keyboard, Key key, int _)
+    private static void OnKeyUp(IKeyboard keyboard, Key key, int code)
     {
-    }
-
-    private static void OnKeyUp(IKeyboard keyboard, Key key, int _)
-    {
+        _test.KeyboardUp(key);
     }
 }

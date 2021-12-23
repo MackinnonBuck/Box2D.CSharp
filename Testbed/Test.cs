@@ -1,4 +1,5 @@
 ﻿using Box2D;
+using Silk.NET.Input;
 using Testbed.Drawing;
 
 namespace Testbed;
@@ -72,6 +73,8 @@ internal class Test : ContactListener
 
     protected bool BombSpawning { get; private set; }
 
+    protected Vec2 MouseWorld { get; private set; }
+
     protected int StepCount { get; private set; }
 
     protected int TextLine { get; set; } = 30;
@@ -89,8 +92,6 @@ internal class Test : ContactListener
 
         var bodyDef = new BodyDef();
         GroundBody = World.CreateBody(bodyDef);
-
-        // TODO: Profiling support and display.
     }
 
     public void Initialize(DebugDraw debugDraw, Settings settings)
@@ -101,7 +102,7 @@ internal class Test : ContactListener
         World.SetDebugDraw(_debugDraw);
     }
 
-    public void Step()
+    public virtual void Step()
     {
         var timeStep = _settings.hertz > 0f ? 1f / _settings.hertz : 0f;
 
@@ -245,8 +246,6 @@ internal class Test : ContactListener
             var impulseScale = 0.1f;
             var axisScale = 0.3f;
 
-            Console.WriteLine(PointCount);
-
             for (var i = 0; i < PointCount; i++)
             {
                 ref var point = ref Points[i];
@@ -284,14 +283,23 @@ internal class Test : ContactListener
         }
     }
 
-    public void DrawTitle(string title)
+    public virtual void UpdateUI()
     {
-        _debugDraw.DrawString(5, 5, title);
-        TextLine = 26;
     }
 
     public virtual void JointDestroyed(Joint joint)
     {
+    }
+
+    public void ShiftOrigin(Vec2 newOrigin)
+    {
+        World.ShiftOrigin(newOrigin);
+    }
+
+    public void DrawTitle(string title)
+    {
+        _debugDraw.DrawString(5, 5, title);
+        TextLine = 26;
     }
 
     protected override void PreSolve(in Contact contact, in Manifold oldManifold)
@@ -327,6 +335,56 @@ internal class Test : ContactListener
                 Separation = _worldManifold.Separations[i],
             };
         }
+    }
+
+    public virtual void Keyboard(Key key)
+    {
+    }
+
+    public virtual void KeyboardUp(Key key)
+    {
+    }
+
+    public virtual void MouseDown(Vec2 p)
+    {
+        MouseWorld = p;
+
+        if (MouseJoint is null)
+        {
+            return;
+        }
+
+        var aabb = new AABB();
+        var d = new Vec2(0.001f, 0.001f);
+        aabb.LowerBound = p - d;
+        aabb.UpperBound = p + d;
+
+        // TODO: Query callback support.
+    }
+
+    public virtual void ShiftMouseDown(Vec2 p)
+    {
+
+    }
+
+    public virtual void MouseUp(Vec2 p)
+    {
+
+    }
+
+    public virtual void MouseMove(Vec2 p)
+    {
+
+    }
+
+    public void LaunchBomb()
+    {
+
+    }
+
+    public void LaunchBomb(Vec2 position, Vec2 velocity)
+    {
+
     }
 
     protected override void Dispose(bool disposing)

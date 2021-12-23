@@ -75,6 +75,8 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_SetGravity(IntPtr obj, [In] ref Vec2 gravity);
     [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2World_ShiftOrigin(IntPtr obj, [In] ref Vec2 newOrigin);
+    [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_GetProfile(IntPtr obj, out Profile value);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_delete(IntPtr obj);

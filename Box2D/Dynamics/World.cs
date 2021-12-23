@@ -250,6 +250,12 @@ public class World : Box2DObject
         b2World_DebugDraw(Native);
     }
 
+    public void ShiftOrigin(Vec2 newOrigin)
+    {
+        ThrowIfDisposed();
+        b2World_ShiftOrigin(Native, ref newOrigin);
+    }
+
     public void GetProfile(out Profile profile)
     {
         ThrowIfDisposed();
