@@ -26,6 +26,35 @@ internal class TestDestructionListener : DestructionListener
     }
 }
 
+internal class TestQueryCallback : QueryCallback
+{
+    public Vec2 Point { get; private set; }
+
+    public Fixture? Fixture { get; private set; }
+
+    public void Reset(Vec2 point)
+    {
+        Point = point;
+        Fixture = null;
+    }
+
+    protected override bool ReportFixture(Fixture fixture)
+    {
+        var body = fixture.Body;
+        if (body.Type == BodyType.Dynamic)
+        {
+            var inside = fixture.TestPoint(Point);
+            if (inside)
+            {
+                Fixture = fixture;
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+
 struct ContactPoint
 {
     public Fixture? FixtureA { get; init; }
@@ -53,11 +82,17 @@ internal class Test : ContactListener
 
     private readonly WorldManifold _worldManifold = new();
 
+    private readonly TestQueryCallback _queryCallback = new();
+
+    private readonly MouseJointDef _mouseJointDef = new();
+
+    private readonly CircleShape _bombShape = new() { Radius = 0.3f };
+
     private DebugDraw _debugDraw = default!;
 
     private Settings _settings = default!;
 
-    public Joint? MouseJoint { get; set; } = default!;
+    public MouseJoint? MouseJoint { get; set; } = default!;
 
     protected World World { get; }
 
@@ -70,6 +105,8 @@ internal class Test : ContactListener
     protected Body? Bomb { get; private set; } = default!;
 
     protected int PointCount { get; private set; }
+
+    protected Vec2 BombSpawnPoint { get; private set; }
 
     protected bool BombSpawning { get; private set; }
 
@@ -239,7 +276,11 @@ internal class Test : ContactListener
             TextLine += TextIncrement;
         }
 
-        // TODO: Bomb spawning.
+        if (BombSpawning)
+        {
+            _debugDraw.DrawPoint(BombSpawnPoint, 4f, new Color(0f, 0f, 1f));
+            _debugDraw.DrawSegment(MouseWorld, BombSpawnPoint, new Color(0.8f, 0.8f, 0.8f));
+        }
 
         if (_settings.drawContactPoints)
         {
@@ -349,7 +390,7 @@ internal class Test : ContactListener
     {
         MouseWorld = p;
 
-        if (MouseJoint is null)
+        if (MouseJoint is not null)
         {
             return;
         }
@@ -359,37 +400,125 @@ internal class Test : ContactListener
         aabb.LowerBound = p - d;
         aabb.UpperBound = p + d;
 
-        // TODO: Query callback support.
+        _queryCallback.Reset(p);
+        World.QueryAABB(_queryCallback, aabb);
+
+        if (_queryCallback.Fixture is not null)
+        {
+            var frequencyHz = 5f;
+            var dampingRatio = 0.7f;
+
+            var body = _queryCallback.Fixture.Body;
+            _mouseJointDef.BodyA = GroundBody;
+            _mouseJointDef.BodyB = body;
+            _mouseJointDef.Target = p;
+            _mouseJointDef.MaxForce = 1000f * body.Mass;
+            Joint.LinearStiffness(out var stiffness, out var damping, frequencyHz, dampingRatio, _mouseJointDef.BodyA, _mouseJointDef.BodyB);
+            _mouseJointDef.Stiffness = stiffness;
+            _mouseJointDef.Damping = damping;
+
+            MouseJoint = (MouseJoint)World.CreateJoint(_mouseJointDef);
+            body.Awake = true;
+        }
     }
 
     public virtual void ShiftMouseDown(Vec2 p)
     {
+        MouseWorld = p;
 
+        if (MouseJoint is not null)
+        {
+            return;
+        }
+
+        SpawnBomb(p);
     }
 
     public virtual void MouseUp(Vec2 p)
     {
+        if (MouseJoint is not null)
+        {
+            World.DestroyJoint(MouseJoint);
+            MouseJoint = null;
+        }
 
+        if (BombSpawning)
+        {
+            CompleteBombSpawn(p);
+        }
     }
 
     public virtual void MouseMove(Vec2 p)
     {
+        MouseWorld = p;
 
+        if (MouseJoint is not null)
+        {
+            MouseJoint.Target = p;
+        }
+    }
+
+    private void SpawnBomb(Vec2 worldPoint)
+    {
+        BombSpawnPoint = worldPoint;
+        BombSpawning = true;
+    }
+
+    private void CompleteBombSpawn(Vec2 p)
+    {
+        if (!BombSpawning)
+        {
+            return;
+        }
+
+        var multiplier = 30f;
+        var vel = BombSpawnPoint - p;
+        vel *= multiplier;
+        LaunchBomb(BombSpawnPoint, vel);
+        BombSpawning = false;
     }
 
     public void LaunchBomb()
     {
-
+        var p = new Vec2(MathUtils.RandomFloat(-15f, 15f), 30f);
+        var v = -5f * p;
+        LaunchBomb(p, v);
     }
 
     public void LaunchBomb(Vec2 position, Vec2 velocity)
     {
+        if (Bomb is not null)
+        {
+            World.DestroyBody(Bomb);
+            Bomb = null;
+        }
 
+        var bd = new BodyDef
+        {
+            Type = BodyType.Dynamic,
+            Position = position,
+            Bullet = true,
+        };
+        Bomb = World.CreateBody(bd);
+        Bomb.LinearVelocity = velocity;
+
+        var fd = new FixtureDef
+        {
+            Shape = _bombShape,
+            Density = 20f,
+            Restitution = 0f,
+        };
+
+        Bomb.CreateFixture(fd);
     }
 
     protected override void Dispose(bool disposing)
     {
         World.Dispose();
+        _worldManifold.Dispose();
+        _queryCallback.Dispose();
+        _mouseJointDef.Dispose();
+        _bombShape.Dispose();
 
         base.Dispose(disposing);
     }

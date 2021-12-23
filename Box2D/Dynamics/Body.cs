@@ -64,6 +64,10 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
             => b2Body_GetUserData(obj);
     }
 
+    public BodyType Type { get; }
+
+    public World World { get; }
+
     public object? UserData { get; set; }
 
     public Vec2 Position
@@ -124,6 +128,29 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
         }
     }
 
+    public float Mass
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return b2Body_GetMass(Native);
+        }
+    }
+
+    public bool Awake
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return b2Body_IsAwake(Native);
+        }
+        set
+        {
+            ThrowIfDisposed();
+            b2Body_SetAwake(Native, value);
+        }
+    }
+
     public Fixture? FixtureList
     {
         get
@@ -151,11 +178,13 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
         }
     }
 
-    internal Body(IntPtr worldNative, in BodyDef def)
+    internal Body(World world, in BodyDef def)
     {
+        Type = def.Type;
+        World = world;
         UserData = def.UserData;
         var defInternal = def.ToInternalFormat(Handle);
-        var native = b2World_CreateBody(worldNative, ref defInternal);
+        var native = b2World_CreateBody(world.Native, ref defInternal);
 
         Initialize(native);
     }
@@ -163,13 +192,13 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
     public Fixture CreateFixture(in FixtureDef def)
     {
         ThrowIfDisposed();
-        return new(Native, in def);
+        return new(this, in def);
     }
 
     public Fixture CreateFixture(Shape shape, float density)
     {
         ThrowIfDisposed();
-        return new(Native, shape, density);
+        return new(this, shape, density);
     }
 
     public void SetTransform(Vec2 position, float angle)

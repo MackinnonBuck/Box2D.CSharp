@@ -16,6 +16,8 @@ extern "C"
     BOX2D_API void b2World_Step(b2World* obj, float timeStep, int32 velocityIterations, int32 positionIterations);
     BOX2D_API void b2World_ClearForces(b2World* obj);
     BOX2D_API void b2World_DebugDraw(b2World* obj);
+    BOX2D_API void b2World_QueryAABB(b2World* obj, b2QueryCallback* callback, b2AABB* aabb);
+    BOX2D_API void b2World_RayCast(b2World* obj, b2RayCastCallback* callback, b2Vec2* point1, b2Vec2* point2);
     BOX2D_API b2Body* b2World_GetBodyList(b2World* obj);
     BOX2D_API b2Joint* b2World_GetJointList(b2World* obj);
     BOX2D_API b2Contact* b2World_GetContactList(b2World* obj);

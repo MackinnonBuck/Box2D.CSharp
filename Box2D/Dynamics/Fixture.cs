@@ -62,6 +62,8 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
 
     public ShapeType Type { get; }
 
+    public Body Body { get; }
+
     public object? UserData { get; set; }
 
     public Shape Shape
@@ -89,7 +91,7 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
         }
     }
 
-    internal Fixture(IntPtr bodyNative, in FixtureDef def)
+    internal Fixture(Body body, in FixtureDef def)
     {
         if (def.Shape is null)
         {
@@ -97,20 +99,27 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
         }
 
         Type = def.Shape.Type;
+        Body = body;
         UserData = def.UserData;
         var defInternal = def.ToInternalFormat(Handle);
-        var native = b2Body_CreateFixture(bodyNative, ref defInternal);
+        var native = b2Body_CreateFixture(body.Native, ref defInternal);
 
         Initialize(native);
     }
 
-    internal Fixture(IntPtr bodyNative, Shape shape, float density)
-        : this(bodyNative, new()
+    internal Fixture(Body body, Shape shape, float density)
+        : this(body, new()
         {
             Shape = shape,
             Density = density
         })
     {
+    }
+
+    public bool TestPoint(Vec2 p)
+    {
+        ThrowIfDisposed();
+        return b2Fixture_TestPoint(Native, ref p);
     }
 
     protected override void Dispose(bool disposing)

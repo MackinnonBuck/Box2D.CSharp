@@ -27,13 +27,17 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2World_CreateJoint(IntPtr obj, IntPtr def);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2World_DestroyJoint(IntPtr obj, IntPtr def);
+    public static extern void b2World_DestroyJoint(IntPtr obj, IntPtr joint);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_Step(IntPtr obj, float timeStep, int velocityIterations, int positionIterations);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_ClearForces(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_DebugDraw(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2World_QueryAABB(IntPtr obj, IntPtr callback, [In] ref AABB aabb);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2World_RayCast(IntPtr obj, IntPtr callback, [In] ref Vec2 point1, [In] ref Vec2 point2);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2World_GetBodyList(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -182,6 +186,22 @@ internal static class NativeMethods
     public static extern void b2ContactListenerWrapper_delete(IntPtr obj);
 
     /*
+     * b2QueryCallbackWrapper
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2QueryCallbackWrapper_new(IntPtr reportFixture);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2QueryCallbackWrapper_delete(IntPtr obj);
+
+    /*
+     * b2RayCastCallbackWrapper
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2RayCastCallbackWrapper_new(IntPtr reportFixture);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2RayCastCallbackWrapper_delete(IntPtr obj);
+
+    /*
      * b2DrawWrapper
      */
     [DllImport(Dll, CallingConvention = Conv)]
@@ -215,6 +235,12 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Body_SetAngularVelocity(IntPtr obj, float omega);
     [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2Body_GetMass(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern bool b2Body_IsAwake(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_SetAwake(IntPtr obj, bool flag);
+    [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Body_GetFixtureList(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Body_GetJointList(IntPtr obj);
@@ -232,6 +258,8 @@ internal static class NativeMethods
     public static extern IntPtr b2Fixture_GetNext(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Fixture_GetUserData(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern bool b2Fixture_TestPoint(IntPtr obj, [In] ref Vec2 p);
 
     /*
      * b2Shape
@@ -296,6 +324,14 @@ internal static class NativeMethods
     public static extern int b2PolygonShape_SetAsBox2(IntPtr obj, float hx, float hy, [In] ref Vec2 center, float angle);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2PolygonShape_get_m_centroid(IntPtr obj, out Vec2 value);
+
+    /*
+     * b2_joint_wrap top-level functions
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2LinearStiffness_wrap(out float stiffness, out float damping, float frequencyHertz, float dampingRatio, IntPtr bodyA, IntPtr bodyB);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2AngularStiffness_wrap(out float stiffness, out float damping, float frequencyHertz, float dampingRatio, IntPtr bodyA, IntPtr bodyB);
 
     /*
      * b2JointDef
@@ -608,4 +644,48 @@ internal static class NativeMethods
     public static extern void b2RevoluteJoint_SetMaxMotorTorque(IntPtr obj, float torque);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2RevoluteJoint_GetMotorTorque(IntPtr obj, float inv_dt);
+
+    /*
+     * b2MouseJointDef
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2MouseJointDef_new();
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2MouseJointDef_get_target(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2MouseJointDef_set_target(IntPtr obj, [In] ref Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2MouseJointDef_get_maxForce(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2MouseJointDef_set_maxForce(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2MouseJointDef_get_stiffness(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2MouseJointDef_set_stiffness(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2MouseJointDef_get_damping(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2MouseJointDef_set_damping(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2MouseJointDef_delete(IntPtr obj);
+
+    /*
+     * b2MouseJoint
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2MouseJoint_GetTarget(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2MouseJoint_SetTarget(IntPtr obj, [In] ref Vec2 target);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2MouseJoint_GetMaxForce(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2MouseJoint_SetMaxForce(IntPtr obj, float force);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2MouseJoint_GetStiffness(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2MouseJoint_SetStiffness(IntPtr obj, float stiffness);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2MouseJoint_GetDamping(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2MouseJoint_SetDamping(IntPtr obj, float damping);
 }

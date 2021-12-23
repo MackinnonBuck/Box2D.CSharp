@@ -287,7 +287,7 @@ public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
             JointType.Prismatic => new PrismaticJoint(userData),
             JointType.Distance => new DistanceJoint(userData),
             JointType.Pulley => throw new NotImplementedException(),
-            JointType.Mouse => throw new NotImplementedException(),
+            JointType.Mouse => new MouseJoint(userData),
             JointType.Gear => throw new NotImplementedException(),
             JointType.Wheel => throw new NotImplementedException(),
             JointType.Weld => throw new NotImplementedException(),
@@ -302,6 +302,22 @@ public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
         joint.Initialize(native);
 
         return joint;
+    }
+
+    public static void LinearStiffness(out float stiffness, out float damping, float frequencyHertz, float dampingRatio, Body bodyA, Body bodyB)
+    {
+        bodyA.ThrowIfDisposed();
+        bodyB.ThrowIfDisposed();
+
+        b2LinearStiffness_wrap(out stiffness, out damping, frequencyHertz, dampingRatio, bodyA.Native, bodyB.Native);
+    }
+
+    public static void AngularStiffness(out float stiffness, out float damping, float frequencyHertz, float dampingRatio, Body bodyA, Body bodyB)
+    {
+        bodyA.ThrowIfDisposed();
+        bodyB.ThrowIfDisposed();
+
+        b2AngularStiffness_wrap(out stiffness, out damping, frequencyHertz, dampingRatio, bodyA.Native, bodyB.Native);
     }
 
     internal Joint(object? userData)

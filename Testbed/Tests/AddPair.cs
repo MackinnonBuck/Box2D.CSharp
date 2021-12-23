@@ -26,7 +26,7 @@ internal class AddPair : Test
                 var bd = new BodyDef
                 {
                     Type = BodyType.Dynamic,
-                    Position = new(RandomFloat(minX, maxX), RandomFloat(minY, maxY)),
+                    Position = new(MathUtils.RandomFloat(minX, maxX), MathUtils.RandomFloat(minY, maxY)),
                 };
                 var body = World.CreateBody(bd);
                 body.CreateFixture(shape, 0.01f);
@@ -46,12 +46,5 @@ internal class AddPair : Test
             body.CreateFixture(shape, 1f);
             body.LinearVelocity = new(10f, 0f);
         }
-    }
-
-    private static float RandomFloat(float lo, float hi)
-    {
-        float r = Random.Shared.NextSingle();
-        r = (hi - lo) * r + lo;
-        return r;
     }
 }

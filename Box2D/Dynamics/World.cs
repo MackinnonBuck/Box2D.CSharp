@@ -202,7 +202,7 @@ public class World : Box2DObject
     public Body CreateBody(in BodyDef def)
     {
         ThrowIfDisposed();
-        return new(Native, in def);
+        return new(this, in def);
     }
 
     public void DestroyBody(Body body)
@@ -232,6 +232,12 @@ public class World : Box2DObject
         return Joint.Create(Native, def);
     }
 
+    public void DestroyJoint(Joint joint)
+    {
+        ThrowIfDisposed();
+        b2World_DestroyJoint(Native, joint.Native);
+    }
+
     public void Step(float timeStep, int velocityIterations, int positionIterations)
     {
         ThrowIfDisposed();
@@ -248,6 +254,18 @@ public class World : Box2DObject
     {
         ThrowIfDisposed();
         b2World_DebugDraw(Native);
+    }
+
+    public void QueryAABB(QueryCallback callback, AABB aabb)
+    {
+        ThrowIfDisposed();
+        b2World_QueryAABB(Native, callback.Native, ref aabb);
+    }
+
+    public void RayCast(RayCastCallback callback, Vec2 point1, Vec2 point2)
+    {
+        ThrowIfDisposed();
+        b2World_RayCast(Native, callback.Native, ref point1, ref point2);
     }
 
     public void ShiftOrigin(Vec2 newOrigin)

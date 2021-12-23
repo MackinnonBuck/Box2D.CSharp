@@ -19,3 +19,9 @@ uintptr_t b2Fixture_GetUserData(b2Fixture* obj)
     VERIFY_INSTANCE;
     return obj->GetUserData().pointer;
 }
+
+bool b2Fixture_TestPoint(b2Fixture* obj, b2Vec2* p)
+{
+    VERIFY_INSTANCE;
+    return obj->TestPoint(*p);
+}

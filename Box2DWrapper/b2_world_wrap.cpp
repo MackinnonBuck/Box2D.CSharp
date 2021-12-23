@@ -61,6 +61,18 @@ void b2World_DebugDraw(b2World* obj)
     obj->DebugDraw();
 }
 
+void b2World_QueryAABB(b2World* obj, b2QueryCallback* callback, b2AABB* aabb)
+{
+    VERIFY_INSTANCE;
+    obj->QueryAABB(callback, *aabb);
+}
+
+void b2World_RayCast(b2World* obj, b2RayCastCallback* callback, b2Vec2* point1, b2Vec2* point2)
+{
+    VERIFY_INSTANCE;
+    obj->RayCast(callback, *point1, *point2);
+}
+
 b2Body* b2World_GetBodyList(b2World* obj)
 {
     VERIFY_INSTANCE;

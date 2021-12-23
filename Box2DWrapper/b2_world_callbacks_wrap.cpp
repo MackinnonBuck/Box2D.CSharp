@@ -2,6 +2,10 @@
 #include "verify.h"
 #include "b2_world_callbacks_wrap.h"
 
+/*
+ * b2ContactListenerWrapper
+ */
+
 b2ContactListenerWrapper::b2ContactListenerWrapper(
     b2ContactListener_callback_BeginContact beginContact,
     b2ContactListener_callback_EndContact endContact,
@@ -35,6 +39,35 @@ void b2ContactListenerWrapper::PostSolve(b2Contact* contact, const b2ContactImpu
 }
 
 /*
+ * b2QueryCallbackWrapper
+ */
+
+b2QueryCallbackWrapper::b2QueryCallbackWrapper(
+    b2QueryCallback_callback_ReportFixture reportFixture)
+    : m_reportFixture(reportFixture)
+{
+}
+
+bool b2QueryCallbackWrapper::ReportFixture(b2Fixture* fixture)
+{
+    return m_reportFixture(fixture);
+}
+/*
+ * b2RayCastCallbackWrapper
+ */
+
+b2RayCastCallbackWrapper::b2RayCastCallbackWrapper(
+    b2RayCastCallback_callback_ReportFixture reportFixture)
+    : m_reportFixture(reportFixture)
+{
+}
+
+float b2RayCastCallbackWrapper::ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction)
+{
+    return m_reportFixture(fixture, &point, &normal, fraction);
+}
+
+/*
  * b2ContactImpulse
  */
 
@@ -60,6 +93,36 @@ b2ContactListenerWrapper* b2ContactListenerWrapper_new(
 }
 
 void b2ContactListenerWrapper_delete(b2ContactListenerWrapper* obj)
+{
+    VERIFY_INSTANCE;
+    delete obj;
+}
+
+/*
+ * b2QueryCallbackWrapper
+ */
+
+b2QueryCallbackWrapper* b2QueryCallbackWrapper_new(b2QueryCallback_callback_ReportFixture reportFixture)
+{
+    return new b2QueryCallbackWrapper(reportFixture);
+}
+
+void b2QueryCallbackWrapper_delete(b2QueryCallbackWrapper* obj)
+{
+    VERIFY_INSTANCE;
+    delete obj;
+}
+
+/*
+ * b2RayCastCallbackWrapper
+ */
+
+b2RayCastCallbackWrapper* b2RayCastCallbackWrapper_new(b2RayCastCallback_callback_ReportFixture reportFixture)
+{
+    return new b2RayCastCallbackWrapper(reportFixture);
+}
+
+void b2RayCastCallbackWrapper_delete(b2RayCastCallbackWrapper* obj)
 {
     VERIFY_INSTANCE;
     delete obj;

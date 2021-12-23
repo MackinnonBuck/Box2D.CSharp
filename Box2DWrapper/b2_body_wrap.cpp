@@ -56,6 +56,24 @@ void b2Body_SetAngularVelocity(b2Body* obj, float omega)
     obj->SetAngularVelocity(omega);
 }
 
+float b2Body_GetMass(b2Body* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->GetMass();
+}
+
+bool b2Body_IsAwake(b2Body* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->IsAwake();
+}
+
+void b2Body_SetAwake(b2Body* obj, bool flag)
+{
+    VERIFY_INSTANCE;
+    obj->SetAwake(flag);
+}
+
 b2Fixture* b2Body_GetFixtureList(b2Body* obj)
 {
     VERIFY_INSTANCE;

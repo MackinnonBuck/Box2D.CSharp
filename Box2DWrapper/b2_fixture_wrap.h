@@ -9,4 +9,5 @@ extern "C"
     BOX2D_API b2Shape* b2Fixture_GetShape(b2Fixture* obj);
     BOX2D_API b2Fixture* b2Fixture_GetNext(b2Fixture* obj);
     BOX2D_API uintptr_t b2Fixture_GetUserData(b2Fixture* obj);
+    BOX2D_API bool b2Fixture_TestPoint(b2Fixture* obj, b2Vec2* p);
 }

@@ -22,7 +22,7 @@ public abstract class ContactListener : Box2DObject
     private readonly PreSolveUnmanagedDelegate _preSolve;
     private readonly PostSolveUnmanagedDelegate _postSolve;
 
-    public ContactListener() : base(isUserOwned: true)
+    protected ContactListener() : base(isUserOwned: true)
     {
         _beginContact = BeginContactUnmanaged;
         _endContact = EndContactUnmanaged;

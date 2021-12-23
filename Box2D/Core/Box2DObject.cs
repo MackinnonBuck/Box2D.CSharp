@@ -8,6 +8,11 @@ using static Config.Conditionals;
 
 public abstract class Box2DObject : IDisposable
 {
+    // TODO: Can we have some sort of "checked" Native where we throw if the object is disposed?
+    // We could even just make the property do that and have a backing field that can be accessed
+    // privately/protectedly without throwing?
+    // This would be great because then we could remove all those manual calls to ThrowIfDisposed()...
+
     internal IntPtr Native { get; private set; }
 
     internal bool IsDisposed { get; private set; }
