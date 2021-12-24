@@ -192,7 +192,7 @@ internal class Test : ContactListener
 
         PointCount = 0;
 
-        World.Step(timeStep, 8, 3);
+        World.Step(timeStep, Settings.velocityIterations, Settings.positionIterations);
         World.DebugDraw();
 
         DebugDraw.Flush();
