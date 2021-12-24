@@ -105,7 +105,7 @@ public class WorldTests
 
         public int PolygonDrawCount { get; private set; }
 
-        public override void DrawPolygon(in Box2DArray<Vec2> vertices, Color color)
+        public override void DrawPolygon(in Box2DArrayRef<Vec2> vertices, Color color)
         {
             PolygonDrawCount++;
         }

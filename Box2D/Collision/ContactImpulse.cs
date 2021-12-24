@@ -10,9 +10,9 @@ public readonly ref struct ContactImpulse
 
     public bool IsValid => _native != IntPtr.Zero;
 
-    public Box2DArray<float> NormalImpulses { get; }
+    public Box2DArrayRef<float> NormalImpulses { get; }
 
-    public Box2DArray<float> TangentImpulses { get; }
+    public Box2DArrayRef<float> TangentImpulses { get; }
 
     internal static ContactImpulse Create(IntPtr native)
     {
@@ -25,7 +25,7 @@ public readonly ref struct ContactImpulse
         return new(native, new(normalImpulses, count), new(tangentImpulses, count));
     }
 
-    private ContactImpulse(IntPtr native, in Box2DArray<float> normalImpulses, in Box2DArray<float> tangentImpulses)
+    private ContactImpulse(IntPtr native, in Box2DArrayRef<float> normalImpulses, in Box2DArrayRef<float> tangentImpulses)
     {
         _native = native;
         NormalImpulses = normalImpulses;

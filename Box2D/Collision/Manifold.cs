@@ -26,7 +26,7 @@ public readonly ref struct Manifold
 
     public bool IsValid => _native != IntPtr.Zero;
 
-    public Box2DArray<ManifoldPoint> Points { get; }
+    public Box2DArrayRef<ManifoldPoint> Points { get; }
 
     public Vec2 LocalNormal
     {
@@ -65,7 +65,7 @@ public readonly ref struct Manifold
         return new(native, new(pointsNative, pointsLength));
     }
 
-    private Manifold(IntPtr native, in Box2DArray<ManifoldPoint> points)
+    private Manifold(IntPtr native, in Box2DArrayRef<ManifoldPoint> points)
     {
         _native = native;
         Points = points;

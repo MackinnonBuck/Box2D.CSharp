@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace Box2D;
 
-public readonly ref struct Box2DArray<T> where T : struct
+public readonly ref struct Box2DArrayRef<T> where T : struct
 {
     private static readonly int _elementSize = Marshal.SizeOf<T>();
 
@@ -28,7 +28,7 @@ public readonly ref struct Box2DArray<T> where T : struct
         }
     }
 
-    internal Box2DArray(IntPtr native, int length)
+    internal Box2DArrayRef(IntPtr native, int length)
     {
         _native = native;
         Length = length;
@@ -50,26 +50,17 @@ public readonly ref struct Box2DArray<T> where T : struct
 
     public ref struct Enumerator
     {
-        private readonly Box2DArray<T> _source;
-        private int _index;
+        private readonly Box2DArrayRef<T> _source;
+        private int _index = -1;
 
-        public T Current { get; private set; } = default;
+        public T Current => _source[_index];
 
-        public Enumerator(in Box2DArray<T> source)
+        public Enumerator(in Box2DArrayRef<T> source)
         {
-            _index = 0;
             _source = source;
         }
 
         public bool MoveNext()
-        {
-            if (_index >= _source.Length)
-            {
-                return false;
-            }
-
-            Current = _source[_index++];
-            return true;
-        }
+            => ++_index < _source.Length;
     }
 }

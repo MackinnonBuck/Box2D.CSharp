@@ -89,11 +89,11 @@ public class Draw : Box2DDisposableObject
     private void DrawPointUnmanaged(ref Vec2 p, float size, ref Color color)
         => DrawPoint(p, size, color);
 
-    public virtual void DrawPolygon(in Box2DArray<Vec2> vertices, Color color)
+    public virtual void DrawPolygon(in Box2DArrayRef<Vec2> vertices, Color color)
     {
     }
 
-    public virtual void DrawSolidPolygon(in Box2DArray<Vec2> vertices, Color color)
+    public virtual void DrawSolidPolygon(in Box2DArrayRef<Vec2> vertices, Color color)
     {
     }
 

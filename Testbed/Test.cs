@@ -371,6 +371,8 @@ internal class Test : ContactListener
 
         contact.GetWorldManifold(_worldManifold);
 
+        var points = _worldManifold.Points;
+
         for (var i = 0; i < manifold.Points.Length && PointCount < MaxContactPoints; i++, PointCount++)
         {
             Points[PointCount] = new()
