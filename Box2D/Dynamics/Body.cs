@@ -139,6 +139,24 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
 
     public void SetTransform(Vec2 position, float angle)
         => b2Body_SetTransform(Native, ref position, angle);
+
+    public void ApplyForce(Vec2 force, Vec2 point, bool wake)
+        => b2Body_ApplyForce(Native, ref force, ref point, wake);
+
+    public void ApplyForceToCenter(Vec2 force, bool wake)
+        => b2Body_ApplyForceToCenter(Native, ref force, wake);
+
+    public void ApplyTorque(float torque, bool wake)
+        => b2Body_ApplyTorque(Native, torque, wake);
+
+    public void ApplyLinearImpulse(Vec2 impluse, Vec2 point, bool wake)
+        => b2Body_ApplyLinearImpulse(Native, ref impluse, ref point, wake);
+
+    public void ApplyLinearImpulseToCenter(Vec2 impulse, bool wake)
+        => b2Body_ApplyLinearImpulseToCenter(Native, ref impulse, wake);
+
+    public void ApplyAngularImpulse(float impulse, bool wake)
+        => b2Body_ApplyAngularImpulse(Native, impulse, wake);
 }
 
 public static class BodyDefExtensions

@@ -74,7 +74,7 @@ internal class Program
     private static void RestartTest()
     {
         _test.Dispose();
-        _test = _testEntries[_settings.testIndex].CreateTest(_debugDraw, _settings);
+        _test = _testEntries[_settings.testIndex].CreateTest(_debugDraw, _settings, _camera);
     }
 
     private static void OnWindowLoad()
@@ -87,7 +87,7 @@ internal class Program
         InitializeInputCallbacks();
 
         _settings.testIndex = Math.Clamp(_settings.testIndex, 0, _testEntries.Count - 1);
-        _test = _testEntries[_settings.testIndex].CreateTest(_debugDraw, _settings);
+        _test = _testEntries[_settings.testIndex].CreateTest(_debugDraw, _settings, _camera);
 
         _gl.ClearColor(0.2f, 0.2f, 0.2f, 1f);
 
@@ -270,7 +270,7 @@ internal class Program
                             {
                                 _test.Dispose();
                                 _settings.testIndex = i;
-                                _test = _testEntries[i].CreateTest(_debugDraw, _settings);
+                                _test = _testEntries[i].CreateTest(_debugDraw, _settings, _camera);
                                 _settings.testIndex = i;
                             }
                             i++;

@@ -88,9 +88,11 @@ internal class Test : ContactListener
 
     private readonly CircleShape _bombShape = new() { Radius = 0.3f };
 
-    private DebugDraw _debugDraw = default!;
+    protected DebugDraw DebugDraw { get; private set; } = default!;
 
-    private Settings _settings = default!;
+    protected Settings Settings { get; private set; } = default!;
+
+    protected Camera Camera { get; private set; } = default!;
 
     public MouseJoint? MouseJoint { get; set; } = default!;
 
@@ -131,92 +133,93 @@ internal class Test : ContactListener
         GroundBody = World.CreateBody(bodyDef);
     }
 
-    public void Initialize(DebugDraw debugDraw, Settings settings)
+    public void Initialize(DebugDraw debugDraw, Settings settings, Camera camera)
     {
-        _debugDraw = debugDraw;
-        _settings = settings;
+        DebugDraw = debugDraw;
+        Settings = settings;
+        Camera = camera;
 
-        World.SetDebugDraw(_debugDraw);
+        World.SetDebugDraw(DebugDraw);
     }
 
     public virtual void Step()
     {
-        var timeStep = _settings.hertz > 0f ? 1f / _settings.hertz : 0f;
+        var timeStep = Settings.hertz > 0f ? 1f / Settings.hertz : 0f;
 
-        if (_settings.pause)
+        if (Settings.pause)
         {
-            if (_settings.singleStep)
+            if (Settings.singleStep)
             {
-                _settings.singleStep = false;
+                Settings.singleStep = false;
             }
             else
             {
                 timeStep = 0f;
             }
 
-            _debugDraw.DrawString(5, TextLine, "****PAUSED****");
+            DebugDraw.DrawString(5, TextLine, "****PAUSED****");
             TextLine += TextIncrement;
         }
 
         uint flags = 0;
 
-        if (_settings.drawShapes)
+        if (Settings.drawShapes)
         {
             flags += (uint)DrawFlags.ShapeBit;
         }
 
-        if (_settings.drawJoints)
+        if (Settings.drawJoints)
         {
             flags += (uint)DrawFlags.JointBit;
         }
 
-        if (_settings.drawAABBs)
+        if (Settings.drawAABBs)
         {
             flags += (uint)DrawFlags.AabbBit;
         }
 
-        if (_settings.drawCOMs)
+        if (Settings.drawCOMs)
         {
             flags += (uint)DrawFlags.CenterOfMassBit;
         }
 
-        _debugDraw.Flags = (DrawFlags)flags;
+        DebugDraw.Flags = (DrawFlags)flags;
 
-        World.AllowSleeping = _settings.enableSleep;
-        World.WarmStarting = _settings.enableWarmStarting;
-        World.ContinuousPhysics = _settings.enableContinuous;
-        World.SubStepping = _settings.enableSubStepping;
+        World.AllowSleeping = Settings.enableSleep;
+        World.WarmStarting = Settings.enableWarmStarting;
+        World.ContinuousPhysics = Settings.enableContinuous;
+        World.SubStepping = Settings.enableSubStepping;
 
         PointCount = 0;
 
         World.Step(timeStep, 8, 3);
         World.DebugDraw();
 
-        _debugDraw.Flush();
+        DebugDraw.Flush();
 
         if (timeStep > 0f)
         {
             StepCount++;
         }
 
-        if (_settings.drawStats)
+        if (Settings.drawStats)
         {
             var bodyCount = World.BodyCount;
             var contactCount = World.ContactCount;
             var jointCount = World.JointCount;
-            _debugDraw.DrawString(5, TextLine, $"bodies/contacts/joints = {bodyCount}/{contactCount}/{jointCount}");
+            DebugDraw.DrawString(5, TextLine, $"bodies/contacts/joints = {bodyCount}/{contactCount}/{jointCount}");
             TextLine += TextIncrement;
 
             var proxyCount = World.ProxyCount;
             var height = World.TreeHeight;
             var balance = World.TreeBalance;
             var quality = World.TreeQuality;
-            _debugDraw.DrawString(5, TextLine, $"proxies/height/balance/quality = {proxyCount}/{height}/{balance}/{quality}");
+            DebugDraw.DrawString(5, TextLine, $"proxies/height/balance/quality = {proxyCount}/{height}/{balance}/{quality}");
             TextLine += TextIncrement;
 
             if (Box2DObjectTracker.Instance is { } tracker)
             {
-                _debugDraw.DrawString(5, TextLine, $"managed objects = {tracker.ObjectCount}");
+                DebugDraw.DrawString(5, TextLine, $"managed objects = {tracker.ObjectCount}");
                 TextLine += TextIncrement;
             }
         }
@@ -247,7 +250,7 @@ internal class Test : ContactListener
             Broadphase = TotalProfile.Broadphase + profile.Broadphase,
         };
 
-        if (_settings.drawProfile)
+        if (Settings.drawProfile)
         {
             var averageProfile = new Profile();
 
@@ -264,31 +267,31 @@ internal class Test : ContactListener
                 averageProfile.Broadphase = scale * TotalProfile.Broadphase;
             }
 
-            _debugDraw.DrawString(5, TextLine, $"step [ave] (max) = {profile.Step:.00} [{averageProfile.Step:.00}] ({MaxProfile.Step:.00})");
+            DebugDraw.DrawString(5, TextLine, $"step [ave] (max) = {profile.Step:.00} [{averageProfile.Step:.00}] ({MaxProfile.Step:.00})");
             TextLine += TextIncrement;
-            _debugDraw.DrawString(5, TextLine, $"collide [ave] (max) = {profile.Collide:.00} [{averageProfile.Collide:.00}] ({MaxProfile.Collide:.00})");
+            DebugDraw.DrawString(5, TextLine, $"collide [ave] (max) = {profile.Collide:.00} [{averageProfile.Collide:.00}] ({MaxProfile.Collide:.00})");
             TextLine += TextIncrement;
-            _debugDraw.DrawString(5, TextLine, $"solve [ave] (max) = {profile.Solve:.00} [{averageProfile.Solve:.00}] ({MaxProfile.Solve:.00})");
+            DebugDraw.DrawString(5, TextLine, $"solve [ave] (max) = {profile.Solve:.00} [{averageProfile.Solve:.00}] ({MaxProfile.Solve:.00})");
             TextLine += TextIncrement;
-            _debugDraw.DrawString(5, TextLine, $"solve init [ave] (max) = {profile.SolveInit:.00} [{averageProfile.SolveInit:.00}] ({MaxProfile.SolveInit:.00})");
+            DebugDraw.DrawString(5, TextLine, $"solve init [ave] (max) = {profile.SolveInit:.00} [{averageProfile.SolveInit:.00}] ({MaxProfile.SolveInit:.00})");
             TextLine += TextIncrement;
-            _debugDraw.DrawString(5, TextLine, $"solve velocity [ave] (max) = {profile.SolveVelocity:.00} [{averageProfile.SolveVelocity:.00}] ({MaxProfile.SolveVelocity:.00})");
+            DebugDraw.DrawString(5, TextLine, $"solve velocity [ave] (max) = {profile.SolveVelocity:.00} [{averageProfile.SolveVelocity:.00}] ({MaxProfile.SolveVelocity:.00})");
             TextLine += TextIncrement;
-            _debugDraw.DrawString(5, TextLine, $"solve position [ave] (max) = {profile.SolvePosition:.00} [{averageProfile.SolvePosition:.00}] ({MaxProfile.SolvePosition:.00})");
+            DebugDraw.DrawString(5, TextLine, $"solve position [ave] (max) = {profile.SolvePosition:.00} [{averageProfile.SolvePosition:.00}] ({MaxProfile.SolvePosition:.00})");
             TextLine += TextIncrement;
-            _debugDraw.DrawString(5, TextLine, $"solveTOI [ave] (max) = {profile.SolveTOI:.00} [{averageProfile.SolveTOI:.00}] ({MaxProfile.SolveTOI:.00})");
+            DebugDraw.DrawString(5, TextLine, $"solveTOI [ave] (max) = {profile.SolveTOI:.00} [{averageProfile.SolveTOI:.00}] ({MaxProfile.SolveTOI:.00})");
             TextLine += TextIncrement;
-            _debugDraw.DrawString(5, TextLine, $"broad-phase [ave] (max) = {profile.Broadphase:.00} [{averageProfile.Broadphase:.00}] ({MaxProfile.Broadphase:.00})");
+            DebugDraw.DrawString(5, TextLine, $"broad-phase [ave] (max) = {profile.Broadphase:.00} [{averageProfile.Broadphase:.00}] ({MaxProfile.Broadphase:.00})");
             TextLine += TextIncrement;
         }
 
         if (BombSpawning)
         {
-            _debugDraw.DrawPoint(BombSpawnPoint, 4f, new Color(0f, 0f, 1f));
-            _debugDraw.DrawSegment(MouseWorld, BombSpawnPoint, new Color(0.8f, 0.8f, 0.8f));
+            DebugDraw.DrawPoint(BombSpawnPoint, 4f, new Color(0f, 0f, 1f));
+            DebugDraw.DrawSegment(MouseWorld, BombSpawnPoint, new Color(0.8f, 0.8f, 0.8f));
         }
 
-        if (_settings.drawContactPoints)
+        if (Settings.drawContactPoints)
         {
             var impulseScale = 0.1f;
             var axisScale = 0.3f;
@@ -299,32 +302,32 @@ internal class Test : ContactListener
 
                 if (point.State == PointState.Add)
                 {
-                    _debugDraw.DrawPoint(point.Position, 10f, new(0.3f, 0.95f, 0.3f));
+                    DebugDraw.DrawPoint(point.Position, 10f, new(0.3f, 0.95f, 0.3f));
                 }
                 else if (point.State == PointState.Persist)
                 {
-                    _debugDraw.DrawPoint(point.Position, 5f, new(0.3f, 0.3f, 0.95f));
+                    DebugDraw.DrawPoint(point.Position, 5f, new(0.3f, 0.3f, 0.95f));
                 }
 
-                if (_settings.drawContactNormals)
+                if (Settings.drawContactNormals)
                 {
                     var p1 = point.Position;
                     var p2 = p1 + axisScale * point.Normal;
-                    _debugDraw.DrawSegment(p1, p2, new(0.9f, 0.9f, 0.9f));
+                    DebugDraw.DrawSegment(p1, p2, new(0.9f, 0.9f, 0.9f));
                 }
-                else if (_settings.drawContactImpulse)
+                else if (Settings.drawContactImpulse)
                 {
                     var p1 = point.Position;
                     var p2 = p1 + impulseScale * point.NormalImpulse * point.Normal;
-                    _debugDraw.DrawSegment(p1, p2, new(0.9f, 0.9f, 0.3f));
+                    DebugDraw.DrawSegment(p1, p2, new(0.9f, 0.9f, 0.3f));
                 }
 
-                if (_settings.drawFrictionImpulse)
+                if (Settings.drawFrictionImpulse)
                 {
                     var tangent = point.Normal.Cross(1f);
                     var p1 = point.Position;
                     var p2 = p1 + impulseScale * point.TangentImpulse * tangent;
-                    _debugDraw.DrawSegment(p1, p2, new(0.9f, 0.9f, 0.3f));
+                    DebugDraw.DrawSegment(p1, p2, new(0.9f, 0.9f, 0.3f));
                 }
             }
         }
@@ -345,7 +348,7 @@ internal class Test : ContactListener
 
     public void DrawTitle(string title)
     {
-        _debugDraw.DrawString(5, 5, title);
+        DebugDraw.DrawString(5, 5, title);
         TextLine = 26;
     }
 

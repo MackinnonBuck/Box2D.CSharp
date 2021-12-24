@@ -20,6 +20,42 @@ void b2Body_SetTransform(b2Body* obj, b2Vec2* position, float angle)
     obj->SetTransform(*position, angle);
 }
 
+void b2Body_ApplyForce(b2Body* obj, b2Vec2* force, b2Vec2* point, bool wake)
+{
+    VERIFY_INSTANCE;
+    obj->ApplyForce(*force, *point, wake);
+}
+
+void b2Body_ApplyForceToCenter(b2Body* obj, b2Vec2* force, bool wake)
+{
+    VERIFY_INSTANCE;
+    obj->ApplyForceToCenter(*force, wake);
+}
+
+void b2Body_ApplyTorque(b2Body* obj, float torque, bool wake)
+{
+    VERIFY_INSTANCE;
+    obj->ApplyTorque(torque, wake);
+}
+
+void b2Body_ApplyLinearImpulse(b2Body* obj, b2Vec2* impulse, b2Vec2* point, bool wake)
+{
+    VERIFY_INSTANCE;
+    obj->ApplyLinearImpulse(*impulse, *point, wake);
+}
+
+void b2Body_ApplyLinearImpulseToCenter(b2Body* obj, b2Vec2* impulse, bool wake)
+{
+    VERIFY_INSTANCE;
+    obj->ApplyLinearImpulseToCenter(*impulse, wake);
+}
+
+void b2Body_ApplyAngularImpulse(b2Body* obj, float impulse, bool wake)
+{
+    VERIFY_INSTANCE;
+    obj->ApplyAngularImpulse(impulse, wake);
+}
+
 void b2Body_GetPosition(b2Body* obj, b2Vec2* v)
 {
     VERIFY_INSTANCE;

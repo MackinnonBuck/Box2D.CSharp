@@ -188,7 +188,7 @@ public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
             JointType.Pulley => throw new NotImplementedException(),
             JointType.Mouse => new MouseJoint(userData),
             JointType.Gear => throw new NotImplementedException(),
-            JointType.Wheel => throw new NotImplementedException(),
+            JointType.Wheel => new WheelJoint(userData),
             JointType.Weld => throw new NotImplementedException(),
             JointType.Friction => throw new NotImplementedException(),
             JointType.Rope => throw new NotImplementedException(),

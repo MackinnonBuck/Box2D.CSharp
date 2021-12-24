@@ -53,10 +53,10 @@ internal class TestEntry : IComparable<TestEntry>
         Name = attribute.Name;
     }
 
-    public Test CreateTest(DebugDraw debugDraw, Settings settings)
+    public Test CreateTest(DebugDraw debugDraw, Settings settings, Camera camera)
     {
         var test = (Test)_testConstructor.Invoke(null);
-        test.Initialize(debugDraw, settings);
+        test.Initialize(debugDraw, settings, camera);
 
         return test;
     }
