@@ -3,7 +3,6 @@
 namespace Box2D;
 
 using static NativeMethods;
-using static Errors;
 
 public enum ManifoldType
 {
@@ -14,9 +13,18 @@ public enum ManifoldType
 
 public readonly ref struct Manifold
 {
-    internal IntPtr Native { get; }
+    private readonly IntPtr _native;
 
-    public bool IsValid => Native != IntPtr.Zero;
+    internal IntPtr Native
+    {
+        get
+        {
+            Errors.ThrowIfInvalidAccess(_native);
+            return _native;
+        }
+    }
+
+    public bool IsValid => _native != IntPtr.Zero;
 
     public Box2DArray<ManifoldPoint> Points { get; }
 
@@ -24,44 +32,26 @@ public readonly ref struct Manifold
     {
         get
         {
-            ThrowIfInvalidAccess(Native);
             b2Manifold_get_localNormal(Native, out var value);
             return value;
         }
-        set
-        {
-            ThrowIfInvalidAccess(Native);
-            b2Manifold_set_localNormal(Native, ref value);
-        }
+        set => b2Manifold_set_localNormal(Native, ref value);
     }
 
     public Vec2 LocalPoint
     {
         get
         {
-            ThrowIfInvalidAccess(Native);
             b2Manifold_get_localPoint(Native, out var value);
             return value;
         }
-        set
-        {
-            ThrowIfInvalidAccess(Native);
-            b2Manifold_set_localPoint(Native, ref value);
-        }
+        set => b2Manifold_set_localPoint(Native, ref value);
     }
 
     public ManifoldType Type
     {
-        get
-        {
-            ThrowIfInvalidAccess(Native);
-            return b2Manifold_get_type(Native);
-        }
-        set
-        {
-            ThrowIfInvalidAccess(Native);
-            b2Manifold_set_type(Native, value);
-        }
+        get => b2Manifold_get_type(Native);
+        set => b2Manifold_set_type(Native, value);
     }
 
     internal static Manifold Create(IntPtr native)
@@ -77,7 +67,7 @@ public readonly ref struct Manifold
 
     private Manifold(IntPtr native, in Box2DArray<ManifoldPoint> points)
     {
-        Native = native;
+        _native = native;
         Points = points;
     }
 }

@@ -213,6 +213,12 @@ internal class Test : ContactListener
             var quality = World.TreeQuality;
             _debugDraw.DrawString(5, TextLine, $"proxies/height/balance/quality = {proxyCount}/{height}/{balance}/{quality}");
             TextLine += TextIncrement;
+
+            if (Box2DObjectTracker.Instance is { } tracker)
+            {
+                _debugDraw.DrawString(5, TextLine, $"managed objects = {tracker.ObjectCount}");
+                TextLine += TextIncrement;
+            }
         }
 
         World.GetProfile(out var profile);

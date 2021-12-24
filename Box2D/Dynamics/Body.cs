@@ -74,7 +74,6 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
     {
         get
         {
-            ThrowIfDisposed();
             b2Body_GetPosition(Native, out var value);
             return value;
         }
@@ -84,7 +83,6 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
     {
         get
         {
-            ThrowIfDisposed();
             b2Body_GetTransform(Native, out var value);
             return value;
         }
@@ -94,89 +92,33 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
     {
         get
         {
-            ThrowIfDisposed();
             b2Body_GetLinearVelocity(Native, out var value);
             return value;
         }
-        set
-        {
-            ThrowIfDisposed();
-            b2Body_SetLinearVelocity(Native, ref value);
-        }
+        set => b2Body_SetLinearVelocity(Native, ref value);
     }
 
     public float AngularVelocity
     {
-        get
-        {
-            ThrowIfDisposed();
-            return b2Body_GetAngularVelocity(Native);
-        }
-        set
-        {
-            ThrowIfDisposed();
-            b2Body_SetAngularVelocity(Native, value);
-        }
+        get => b2Body_GetAngularVelocity(Native);
+        set => b2Body_SetAngularVelocity(Native, value);
     }
 
-    public float Angle
-    {
-        get
-        {
-            ThrowIfDisposed();
-            return b2Body_GetAngle(Native);
-        }
-    }
+    public float Angle => b2Body_GetAngle(Native);
 
-    public float Mass
-    {
-        get
-        {
-            ThrowIfDisposed();
-            return b2Body_GetMass(Native);
-        }
-    }
+    public float Mass => b2Body_GetMass(Native);
 
     public bool Awake
     {
-        get
-        {
-            ThrowIfDisposed();
-            return b2Body_IsAwake(Native);
-        }
-        set
-        {
-            ThrowIfDisposed();
-            b2Body_SetAwake(Native, value);
-        }
+        get => b2Body_IsAwake(Native);
+        set => b2Body_SetAwake(Native, value);
     }
 
-    public Fixture? FixtureList
-    {
-        get
-        {
-            ThrowIfDisposed();
-            return Fixture.FromIntPtr.Get(b2Body_GetFixtureList(Native));
-        }
-    }
+    public Fixture? FixtureList => Fixture.FromIntPtr.Get(b2Body_GetFixtureList(Native));
 
-    public JointEdge JointList
-    {
-        get
-        {
-            ThrowIfDisposed();
-            return new(b2Body_GetJointList(Native));
-        }
-    }
+    public JointEdge JointList => new(b2Body_GetJointList(Native));
 
-    public Body? Next
-    {
-        get
-        {
-            ThrowIfDisposed();
-            return FromIntPtr.Get(b2Body_GetNext(Native));
-        }
-    }
+    public Body? Next => FromIntPtr.Get(b2Body_GetNext(Native));
 
     internal Body(World world, in BodyDef def)
     {
@@ -190,22 +132,13 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
     }
 
     public Fixture CreateFixture(in FixtureDef def)
-    {
-        ThrowIfDisposed();
-        return new(this, in def);
-    }
+        => new(this, in def);
 
     public Fixture CreateFixture(Shape shape, float density)
-    {
-        ThrowIfDisposed();
-        return new(this, shape, density);
-    }
+        => new(this, shape, density);
 
     public void SetTransform(Vec2 position, float angle)
-    {
-        ThrowIfDisposed();
-        b2Body_SetTransform(Native, ref position, angle);
-    }
+        => b2Body_SetTransform(Native, ref position, angle);
 }
 
 public static class BodyDefExtensions

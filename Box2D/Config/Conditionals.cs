@@ -1,4 +1,4 @@
-﻿namespace Box2D.Config;
+﻿namespace Box2D;
 
 internal static class Conditionals
 {

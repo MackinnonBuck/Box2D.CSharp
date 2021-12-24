@@ -6,7 +6,7 @@ namespace Box2D;
 
 using static NativeMethods;
 
-public abstract class QueryCallback : Box2DObject
+public abstract class QueryCallback : Box2DDisposableObject
 {
     [UnmanagedFunctionPointer(Conv), SuppressUnmanagedCodeSecurity]
     [return: MarshalAs(UnmanagedType.U1)]

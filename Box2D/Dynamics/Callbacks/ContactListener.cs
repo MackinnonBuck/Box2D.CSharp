@@ -6,7 +6,7 @@ namespace Box2D;
 
 using static NativeMethods;
 
-public abstract class ContactListener : Box2DObject
+public abstract class ContactListener : Box2DDisposableObject
 {
     [UnmanagedFunctionPointer(Conv), SuppressUnmanagedCodeSecurity]
     private delegate void BeginContactUnmanagedDelegate(IntPtr contact);

@@ -6,7 +6,7 @@ namespace Box2D;
 
 using static NativeMethods;
 
-public abstract class RayCastCallback : Box2DObject
+public abstract class RayCastCallback : Box2DDisposableObject
 {
     [UnmanagedFunctionPointer(Conv), SuppressUnmanagedCodeSecurity]
     private delegate float ReportFixtureUnmanagedDelegate(IntPtr fixture, [In] ref Vec2 point, [In] ref Vec2 normal, float fraction);

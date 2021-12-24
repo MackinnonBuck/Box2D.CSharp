@@ -70,9 +70,7 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
     {
         get
         {
-            ThrowIfDisposed();
-
-            if (_shape is null)
+            if (_shape is null || !_shape.IsValid)
             {
                 var shapeNative = b2Fixture_GetShape(Native);
                 _shape = Shape.FromIntPtr.Create(shapeNative, Type)!;
@@ -82,14 +80,7 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
         }
     }
 
-    public Fixture? Next
-    {
-        get
-        {
-            ThrowIfDisposed();
-            return FromIntPtr.Get(b2Fixture_GetNext(Native));
-        }
-    }
+    public Fixture? Next => FromIntPtr.Get(b2Fixture_GetNext(Native));
 
     internal Fixture(Body body, in FixtureDef def)
     {
@@ -117,17 +108,12 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
     }
 
     public bool TestPoint(Vec2 p)
-    {
-        ThrowIfDisposed();
-        return b2Fixture_TestPoint(Native, ref p);
-    }
+        => b2Fixture_TestPoint(Native, ref p);
 
-    protected override void Dispose(bool disposing)
+    private protected override void OnFreeingHandle()
     {
         // This shape is not user-owned, so disposing it is safe.
         _shape?.Dispose();
-
-        base.Dispose(disposing);
     }
 }
 

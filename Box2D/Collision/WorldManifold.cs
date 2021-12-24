@@ -1,47 +1,37 @@
-﻿using System.Runtime.InteropServices;
+﻿namespace Box2D;
 
-namespace Box2D;
-
+using System;
 using static NativeMethods;
 
-public class WorldManifold : Box2DObject
+public class WorldManifold : Box2DDisposableObject
 {
+    private readonly IntPtr _points;
+
+    private readonly IntPtr _separations;
+
     public Vec2 Normal
     {
         get
         {
-            ThrowIfDisposed();
             b2WorldManifold_get_normal(Native, out var value);
             return value;
         }
-        set
-        {
-            ThrowIfDisposed();
-            b2WorldManifold_set_normal(Native, ref value);
-        }
+        set => b2WorldManifold_set_normal(Native, ref value);
     }
 
-    public Box2DOwnedArray<Vec2> Points { get; }
+    public Box2DArray<Vec2> Points => new(_points, 2);
 
-    public Box2DOwnedArray<float> Separations { get; }
+    public Box2DArray<float> Separations => new(_separations, 2);
 
     public WorldManifold() : base(isUserOwned: true)
     {
-        var native = b2WorldManifold_new(out var points, out var separations);
-        Points = new(this, points, 2);
-        Separations = new(this, separations, 2);
-
+        var native = b2WorldManifold_new(out _points, out _separations);
         Initialize(native);
     }
 
     public void Initialize(in Manifold manifold, Transform xfA, float radiusA, Transform xfB, float radiusB)
-    {
-        ThrowIfDisposed();
-        b2WorldManifold_Initialize(Native, manifold.Native, ref xfA, radiusA, ref xfB, radiusB);
-    }
+        => b2WorldManifold_Initialize(Native, manifold.Native, ref xfA, radiusA, ref xfB, radiusB);
 
     protected override void Dispose(bool disposing)
-    {
-        b2WorldManifold_delete(Native);
-    }
+        => b2WorldManifold_delete(Native);
 }

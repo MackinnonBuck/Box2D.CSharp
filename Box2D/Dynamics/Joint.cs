@@ -3,7 +3,6 @@
 namespace Box2D;
 
 using static NativeMethods;
-using static Errors;
 
 public enum JointType
 {
@@ -23,73 +22,50 @@ public enum JointType
 
 public readonly ref struct JointEdge
 {
-    internal IntPtr Native { get; }
+    private readonly IntPtr _native;
 
-    public bool IsValid => Native != IntPtr.Zero;
-
-    public Body? Other
+    internal IntPtr Native
     {
         get
         {
-            ThrowIfInvalidAccess(Native);
-            return Body.FromIntPtr.Get(b2JointEdge_get_other(Native));
+            Errors.ThrowIfInvalidAccess(_native);
+            return _native;
         }
-        set
-        {
-            ThrowIfInvalidAccess(Native);
-            b2JointEdge_set_other(Native, value?.Native ?? IntPtr.Zero);
-        }
+    }
+
+    public bool IsValid => _native != IntPtr.Zero;
+
+    public Body? Other
+    {
+        get => Body.FromIntPtr.Get(b2JointEdge_get_other(Native));
+        set => b2JointEdge_set_other(Native, value?.Native ?? IntPtr.Zero);
     }
 
     public Joint? Joint
     {
-        get
-        {
-            ThrowIfInvalidAccess(Native);
-            return Joint.FromIntPtr.Get(b2JointEdge_get_joint(Native));
-        }
-        set
-        {
-            ThrowIfInvalidAccess(Native);
-            b2JointEdge_set_joint(Native, value?.Native ?? IntPtr.Zero);
-        }
+        get => Joint.FromIntPtr.Get(b2JointEdge_get_joint(Native));
+        set => b2JointEdge_set_joint(Native, value?.Native ?? IntPtr.Zero);
     }
 
     public JointEdge Prev
     {
-        get
-        {
-            ThrowIfInvalidAccess(Native);
-            return new(b2JointEdge_get_prev(Native));
-        }
-        set
-        {
-            ThrowIfInvalidAccess(Native);
-            b2JointEdge_set_prev(Native, value.Native);
-        }
+        get => new(b2JointEdge_get_prev(Native));
+        set => b2JointEdge_set_prev(Native, value.Native);
     }
 
     public JointEdge Next
     {
-        get
-        {
-            ThrowIfInvalidAccess(Native);
-            return new(b2JointEdge_get_next(Native));
-        }
-        set
-        {
-            ThrowIfInvalidAccess(Native);
-            b2JointEdge_set_next(Native, value.Native);
-        }
+        get => new(b2JointEdge_get_next(Native));
+        set => b2JointEdge_set_next(Native, value.Native);
     }
 
     internal JointEdge(IntPtr native)
     {
-        Native = native;
+        _native = native;
     }
 
     public Enumerator GetEnumerator()
-        => new(Native);
+        => new(_native);
 
     public struct Enumerator
     {
@@ -119,78 +95,38 @@ public readonly ref struct JointEdge
     }
 }
 
-public abstract class JointDef : Box2DObject
+public abstract class JointDef : Box2DDisposableObject
 {
     public object? UserData { get; set; }
 
     public JointType Type
     {
-        get
-        {
-            ThrowIfDisposed();
-            return b2JointDef_get_type(Native);
-        }
-        set
-        {
-            ThrowIfDisposed();
-            b2JointDef_set_type(Native, value);
-        } 
+        get => b2JointDef_get_type(Native);
+        set => b2JointDef_set_type(Native, value);
     }
 
     public Body? BodyA
     {
-        get
-        {
-            ThrowIfDisposed();
-            return Body.FromIntPtr.Get(b2JointDef_get_bodyA(Native));
-        }
-        set
-        {
-            ThrowIfDisposed();
-            b2JointDef_set_bodyA(Native, value?.Native ?? IntPtr.Zero);
-        }
+        get => Body.FromIntPtr.Get(b2JointDef_get_bodyA(Native));
+        set => b2JointDef_set_bodyA(Native, value?.Native ?? IntPtr.Zero);
     }
 
     public Body? BodyB
     {
-        get
-        {
-            ThrowIfDisposed();
-            return Body.FromIntPtr.Get(b2JointDef_get_bodyB(Native));
-        }
-        set
-        {
-            ThrowIfDisposed();
-            b2JointDef_set_bodyB(Native, value?.Native ?? IntPtr.Zero);
-        }
+        get => Body.FromIntPtr.Get(b2JointDef_get_bodyB(Native));
+        set => b2JointDef_set_bodyB(Native, value?.Native ?? IntPtr.Zero);
     }
 
     public bool CollideConnected
     {
-        get
-        {
-            ThrowIfDisposed();
-            return b2JointDef_get_collideConnected(Native);
-        }
-        set
-        {
-            ThrowIfDisposed();
-            b2JointDef_set_collideConnected(Native, value);
-        }
+        get => b2JointDef_get_collideConnected(Native);
+        set => b2JointDef_set_collideConnected(Native, value);
     }
 
     internal IntPtr InternalUserData
     {
-        get
-        {
-            ThrowIfDisposed();
-            return b2JointDef_get_userData(Native);
-        }
-        set
-        {
-            ThrowIfDisposed();
-            b2JointDef_set_userData(Native, value);
-        }
+        get => b2JointDef_get_userData(Native);
+        set => b2JointDef_set_userData(Native, value);
     }
 
     protected JointDef() : base(isUserOwned: true)
@@ -212,29 +148,14 @@ public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
 
     public abstract JointType Type { get; }
 
-    public Body BodyA
-    {
-        get
-        {
-            ThrowIfDisposed();
-            return Body.FromIntPtr.Get(b2Joint_GetBodyA(Native))!;
-        }
-    }
+    public Body BodyA => Body.FromIntPtr.Get(b2Joint_GetBodyA(Native))!;
 
-    public Body BodyB
-    {
-        get
-        {
-            ThrowIfDisposed();
-            return Body.FromIntPtr.Get(b2Joint_GetBodyB(Native))!;
-        }
-    }
+    public Body BodyB => Body.FromIntPtr.Get(b2Joint_GetBodyB(Native))!;
 
     public Vec2 AnchorA
     {
         get
         {
-            ThrowIfDisposed();
             b2Joint_GetAnchorA(Native, out var value);
             return value;
         }
@@ -244,38 +165,16 @@ public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
     {
         get
         {
-            ThrowIfDisposed();
             b2Joint_GetAnchorB(Native, out var value);
             return value;
         }
     }
 
-    public Joint? Next
-    {
-        get
-        {
-            ThrowIfDisposed();
-            return FromIntPtr.Get(b2Joint_GetNext(Native));
-        }
-    }
+    public Joint? Next => FromIntPtr.Get(b2Joint_GetNext(Native));
 
-    public bool IsEnabled
-    {
-        get
-        {
-            ThrowIfDisposed();
-            return b2Joint_IsEnabled(Native);
-        }
-    }
+    public bool IsEnabled => b2Joint_IsEnabled(Native);
 
-    public bool CollideConnected
-    {
-        get
-        {
-            ThrowIfDisposed();
-            return b2Joint_GetCollideConnected(Native);
-        }
-    }
+    public bool CollideConnected => b2Joint_GetCollideConnected(Native);
 
     internal static Joint Create(IntPtr worldNative, JointDef def)
     {
@@ -305,20 +204,10 @@ public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
     }
 
     public static void LinearStiffness(out float stiffness, out float damping, float frequencyHertz, float dampingRatio, Body bodyA, Body bodyB)
-    {
-        bodyA.ThrowIfDisposed();
-        bodyB.ThrowIfDisposed();
-
-        b2LinearStiffness_wrap(out stiffness, out damping, frequencyHertz, dampingRatio, bodyA.Native, bodyB.Native);
-    }
+        => b2LinearStiffness_wrap(out stiffness, out damping, frequencyHertz, dampingRatio, bodyA.Native, bodyB.Native);
 
     public static void AngularStiffness(out float stiffness, out float damping, float frequencyHertz, float dampingRatio, Body bodyA, Body bodyB)
-    {
-        bodyA.ThrowIfDisposed();
-        bodyB.ThrowIfDisposed();
-
-        b2AngularStiffness_wrap(out stiffness, out damping, frequencyHertz, dampingRatio, bodyA.Native, bodyB.Native);
-    }
+        => b2AngularStiffness_wrap(out stiffness, out damping, frequencyHertz, dampingRatio, bodyA.Native, bodyB.Native);
 
     internal Joint(object? userData)
     {
@@ -327,20 +216,13 @@ public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
 
     public Vec2 GetReactionForce(float invDt)
     {
-        ThrowIfDisposed();
         b2Joint_GetReactionForce(Native, invDt, out var value);
         return value;
     }
 
     public float GetReactionTorque(float invDt)
-    {
-        ThrowIfDisposed();
-        return b2Joint_GetReactionTorque(Native, invDt);
-    }
+        => b2Joint_GetReactionTorque(Native, invDt);
 
     public void ShiftOrigin(Vec2 newOrigin)
-    {
-        ThrowIfDisposed();
-        b2Joint_ShiftOrigin(Native, ref newOrigin);
-    }
+        => b2Joint_ShiftOrigin(Native, ref newOrigin);
 }

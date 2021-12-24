@@ -16,7 +16,7 @@ public enum DrawFlags : uint
     CenterOfMassBit = 0x0010,
 }
 
-public class Draw : Box2DObject
+public class Draw : Box2DDisposableObject
 {
     [UnmanagedFunctionPointer(Conv), SuppressUnmanagedCodeSecurity]
     private delegate void DrawPolygonUnmanagedDelegate(IntPtr vertices, int vertexCount, [In] ref Color color);
@@ -35,16 +35,8 @@ public class Draw : Box2DObject
 
     public DrawFlags Flags
     {
-        get
-        {
-            ThrowIfDisposed();
-            return (DrawFlags)b2DrawWrapper_GetFlags(Native);
-        }
-        set
-        {
-            ThrowIfDisposed();
-            b2DrawWrapper_SetFlags(Native, (uint)value);
-        }
+        get => (DrawFlags)b2DrawWrapper_GetFlags(Native);
+        set => b2DrawWrapper_SetFlags(Native, (uint)value);
     }
 
     private readonly DrawPolygonUnmanagedDelegate _drawPolygon;

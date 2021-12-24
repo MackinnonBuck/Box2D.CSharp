@@ -12,15 +12,10 @@ public class CircleShape : Shape
     {
         get
         {
-            ThrowIfDisposed();
             b2CircleShape_get_m_p(Native, out var value);
             return value;
         }
-        set
-        {
-            ThrowIfDisposed();
-            b2CircleShape_set_m_p(Native, ref value);
-        }
+        set => b2CircleShape_set_m_p(Native, ref value);
     }
 
     public CircleShape() : base(isUserOwned: true)
