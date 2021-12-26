@@ -6,7 +6,10 @@ namespace Box2D;
 [StructLayout(LayoutKind.Sequential)]
 public struct Rot : IEquatable<Rot>
 {
+    public static readonly Rot Identity = new() { S = 0, C = 1 };
+
     public float S { get; set; }
+
     public float C { get; set; }
 
     public float Angle => MathF.Atan2(S, C);
@@ -19,18 +22,6 @@ public struct Rot : IEquatable<Rot>
     {
         S = MathF.Sin(angle);
         C = MathF.Cos(angle);
-    }
-
-    public void Set(float angle)
-    {
-        S = MathF.Sin(angle);
-        C = MathF.Cos(angle);
-    }
-
-    public void SetIdentity()
-    {
-        S = 0f;
-        C = 1f;
     }
 
     public bool Equals(Rot other)

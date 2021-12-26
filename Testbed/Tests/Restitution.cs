@@ -12,7 +12,7 @@ internal class Restitution : Test
     public Restitution()
     {
         {
-            var bd = new BodyDef();
+            using var bd = new BodyDef();
             var ground = World.CreateBody(bd);
 
             using var shape = new EdgeShape();
@@ -36,13 +36,14 @@ internal class Restitution : Test
                 Density = 1f,
             };
 
+            using var bd = new BodyDef
+            {
+                Type = BodyType.Dynamic,
+            };
+
             for (var i = 0; i < _restitution.Length; i++)
             {
-                var bd = new BodyDef
-                {
-                    Type = BodyType.Dynamic,
-                    Position = new(-10f + 3f * i, 20f),
-                };
+                bd.Position = new(-10f + 3f * i, 20f);
 
                 var body = World.CreateBody(bd);
 

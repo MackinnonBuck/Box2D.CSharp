@@ -9,10 +9,11 @@ internal class Tumbler : Test
 
     public Tumbler()
     {
-        var ground = World.CreateBody(new());
+        using var groundBd = new BodyDef();
+        var ground = World.CreateBody(groundBd);
 
         {
-            var bd = new BodyDef
+            using var bd = new BodyDef
             {
                 Type = BodyType.Dynamic,
                 AllowSleep = false,
@@ -53,7 +54,7 @@ internal class Tumbler : Test
 
         if (_count < 800)
         {
-            var bd = new BodyDef
+            using var bd = new BodyDef
             {
                 Type = BodyType.Dynamic,
                 Position = new(0f, 10f),

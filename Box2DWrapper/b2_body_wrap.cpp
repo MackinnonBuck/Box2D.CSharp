@@ -2,6 +2,193 @@
 #include "verify.h"
 #include "b2_body_wrap.h"
 
+/*
+ * b2BodyDef
+ */
+
+b2BodyDef* b2BodyDef_new()
+{
+    return new b2BodyDef;
+}
+
+b2BodyType b2BodyDef_get_type(b2BodyDef* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->type;
+}
+
+void b2BodyDef_set_type(b2BodyDef* obj, b2BodyType value)
+{
+    VERIFY_INSTANCE;
+    obj->type = value;
+}
+
+void b2BodyDef_get_position(b2BodyDef* obj, b2Vec2* value)
+{
+    VERIFY_INSTANCE;
+    *value = obj->position;
+}
+
+void b2BodyDef_set_position(b2BodyDef* obj, b2Vec2* value)
+{
+    VERIFY_INSTANCE;
+    obj->position = *value;
+}
+
+float b2BodyDef_get_angle(b2BodyDef* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->angle;
+}
+
+void b2BodyDef_set_angle(b2BodyDef* obj, float value)
+{
+    VERIFY_INSTANCE;
+    obj->angle = value;
+}
+
+void b2BodyDef_get_linearVelocity(b2BodyDef* obj, b2Vec2* value)
+{
+    VERIFY_INSTANCE;
+    *value = obj->linearVelocity;
+}
+
+void b2BodyDef_set_linearVelocity(b2BodyDef* obj, b2Vec2* value)
+{
+    VERIFY_INSTANCE;
+    obj->linearVelocity = *value;
+}
+
+float b2BodyDef_get_angularVelocity(b2BodyDef* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->angularVelocity;
+}
+
+void b2BodyDef_set_angularVelocity(b2BodyDef* obj, float value)
+{
+    VERIFY_INSTANCE;
+    obj->angularVelocity = value;
+}
+
+float b2BodyDef_get_linearDamping(b2BodyDef* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->linearDamping;
+}
+
+void b2BodyDef_set_linearDamping(b2BodyDef* obj, float value)
+{
+    VERIFY_INSTANCE;
+    obj->linearDamping = value;
+}
+
+float b2BodyDef_get_angularDamping(b2BodyDef* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->angularDamping;
+}
+
+void b2BodyDef_set_angularDamping(b2BodyDef* obj, float value)
+{
+    VERIFY_INSTANCE;
+    obj->angularDamping = value;
+}
+
+bool b2BodyDef_get_allowSleep(b2BodyDef* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->allowSleep;
+}
+
+void b2BodyDef_set_allowSleep(b2BodyDef* obj, bool value)
+{
+    VERIFY_INSTANCE;
+    obj->allowSleep = value;
+}
+
+bool b2BodyDef_get_awake(b2BodyDef* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->awake;
+}
+
+void b2BodyDef_set_awake(b2BodyDef* obj, bool value)
+{
+    VERIFY_INSTANCE;
+    obj->awake = value;
+}
+
+bool b2BodyDef_get_fixedRotation(b2BodyDef* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->fixedRotation;
+}
+
+void b2BodyDef_set_fixedRotation(b2BodyDef* obj, bool value)
+{
+    VERIFY_INSTANCE;
+    obj->fixedRotation = value;
+}
+
+bool b2BodyDef_get_bullet(b2BodyDef* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->bullet;
+}
+
+void b2BodyDef_set_bullet(b2BodyDef* obj, bool value)
+{
+    VERIFY_INSTANCE;
+    obj->bullet = value;
+}
+
+bool b2BodyDef_get_enabled(b2BodyDef* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->enabled;
+}
+
+void b2BodyDef_set_enabled(b2BodyDef* obj, bool value)
+{
+    VERIFY_INSTANCE;
+    obj->enabled = value;
+}
+
+uintptr_t b2BodyDef_get_userData(b2BodyDef* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->userData.pointer;
+}
+
+void b2BodyDef_set_userData(b2BodyDef* obj, uintptr_t value)
+{
+    VERIFY_INSTANCE;
+    obj->userData.pointer = value;
+}
+
+float b2BodyDef_get_gravityScale(b2BodyDef* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->gravityScale;
+}
+
+void b2BodyDef_set_gravityScale(b2BodyDef* obj, float value)
+{
+    VERIFY_INSTANCE;
+    obj->gravityScale = value;
+}
+
+void b2BodyDef_delete(b2BodyDef* obj)
+{
+    VERIFY_INSTANCE;
+    delete obj;
+}
+
+/*
+ * b2Body
+ */
+
 b2Fixture* b2Body_CreateFixture(b2Body* obj, b2FixtureDef* def)
 {
     VERIFY_INSTANCE;

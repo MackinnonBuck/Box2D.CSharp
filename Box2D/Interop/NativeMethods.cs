@@ -21,7 +21,7 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_SetDebugDraw(IntPtr obj, IntPtr debugDraw);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern IntPtr b2World_CreateBody(IntPtr obj, [In] ref BodyDefInternal def);
+    public static extern IntPtr b2World_CreateBody(IntPtr obj, IntPtr def);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_DestroyBody(IntPtr obj, IntPtr body);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -218,6 +218,75 @@ internal static class NativeMethods
     public static extern void b2DrawWrapper_SetFlags(IntPtr obj, uint flags);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2DrawWrapper_delete(IntPtr obj);
+
+    /*
+     * b2BodyDef
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2BodyDef_new();
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern BodyType b2BodyDef_get_type(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2BodyDef_set_type(IntPtr obj, BodyType value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2BodyDef_get_position(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2BodyDef_set_position(IntPtr obj, [In] ref Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2BodyDef_get_angle(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2BodyDef_set_angle(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2BodyDef_get_linearVelocity(IntPtr obj, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2BodyDef_set_linearVelocity(IntPtr obj, [In] ref Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2BodyDef_get_angularVelocity(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2BodyDef_set_angularVelocity(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2BodyDef_get_linearDamping(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2BodyDef_set_linearDamping(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2BodyDef_get_angularDamping(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2BodyDef_set_angularDamping(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static extern bool b2BodyDef_get_allowSleep(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2BodyDef_set_allowSleep(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static extern bool b2BodyDef_get_awake(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2BodyDef_set_awake(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static extern bool b2BodyDef_get_fixedRotation(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2BodyDef_set_fixedRotation(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static extern bool b2BodyDef_get_bullet(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2BodyDef_set_bullet(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static extern bool b2BodyDef_get_enabled(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2BodyDef_set_enabled(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2BodyDef_get_userData(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2BodyDef_set_userData(IntPtr obj, IntPtr value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2BodyDef_get_gravityScale(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2BodyDef_set_gravityScale(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2BodyDef_delete(IntPtr obj);
 
     /*
      * b2Body

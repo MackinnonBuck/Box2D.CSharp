@@ -6,7 +6,11 @@ namespace Box2D;
 [StructLayout(LayoutKind.Sequential)]
 public struct Vec2 : IEquatable<Vec2>
 {
-    public static Vec2 Zero { get; } = new(0f, 0f);
+    public static readonly Vec2 Zero = new(0f, 0f);
+
+    public static readonly Vec2 UnitX = new(1f, 0f);
+
+    public static readonly Vec2 UnitY = new(0f, 1f);
 
     public float X { get; set; }
 
@@ -19,6 +23,22 @@ public struct Vec2 : IEquatable<Vec2>
     public bool IsValid => float.IsFinite(X) && float.IsFinite(Y);
 
     public Vec2 Skew => new(-Y, X);
+
+    public Vec2 Normalized
+    {
+        get
+        {
+            var length = Length;
+
+            if (length < float.Epsilon)
+            {
+                return Zero;
+            }
+
+            var invLength = 1f / length;
+            return new(X * invLength, Y * invLength);
+        }
+    }
 
     public float this[int i]
     {
@@ -48,34 +68,6 @@ public struct Vec2 : IEquatable<Vec2>
     {
         X = x;
         Y = y;
-    }
-
-    public void SetZero()
-    {
-        X = 0f;
-        Y = 0f;
-    }
-
-    public void Set(float x, float y)
-    {
-        X = x;
-        Y = y;
-    }
-
-    public float Normalize()
-    {
-        var length = Length;
-
-        if (length < float.Epsilon)
-        {
-            return 0f;
-        }
-
-        var invLength = 1f / length;
-        X *= invLength;
-        Y *= invLength;
-
-        return length;
     }
 
     public float Dot(Vec2 other)

@@ -21,13 +21,14 @@ internal class AddPair : Test
             var minY = 4f;
             var maxY = 6f;
 
+            using var bd = new BodyDef
+            {
+                Type = BodyType.Dynamic,
+            };
+
             for (var i = 0; i < 400; i++)
             {
-                var bd = new BodyDef
-                {
-                    Type = BodyType.Dynamic,
-                    Position = new(MathUtils.RandomFloat(minX, maxX), MathUtils.RandomFloat(minY, maxY)),
-                };
+                bd.Position = new(MathUtils.RandomFloat(minX, maxX), MathUtils.RandomFloat(minY, maxY));
                 var body = World.CreateBody(bd);
                 body.CreateFixture(shape, 0.01f);
             }
@@ -36,7 +37,7 @@ internal class AddPair : Test
         {
             using var shape = new PolygonShape();
             shape.SetAsBox(1.5f, 1.5f);
-            var bd = new BodyDef
+            using var bd = new BodyDef
             {
                 Type = BodyType.Dynamic,
                 Position = new(-40f, 5f),

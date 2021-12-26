@@ -6,25 +6,22 @@ namespace Box2D;
 [StructLayout(LayoutKind.Sequential)]
 public struct Transform : IEquatable<Transform>
 {
+    public static readonly Transform Identity = new(Vec2.Zero, Rot.Identity);
+
     public Vec2 P { get; set; }
+
     public Rot Q { get; set; }
 
-    public Transform(ref Vec2 position, ref Rot rotation)
+    public Transform(Vec2 position, Rot rotation)
     {
         P = position;
         Q = rotation;
     }
 
-    public void Set(ref Vec2 position, float angle)
+    public Transform(Vec2 position, float angle)
     {
         P = position;
-        Q.Set(angle);
-    }
-
-    public void SetIdentity()
-    {
-        P.SetZero();
-        Q.SetIdentity();
+        Q = new(angle);
     }
 
     public bool Equals(Transform other)

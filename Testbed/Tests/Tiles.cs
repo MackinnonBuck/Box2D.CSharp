@@ -15,7 +15,7 @@ internal class Tiles : Test
 
         {
             var a = 0.5f;
-            var bd = new BodyDef
+            using var bd = new BodyDef
             {
                 Position = new(0f, -a),
             };
@@ -49,17 +49,18 @@ internal class Tiles : Test
             var deltaX = new Vec2(0.5625f, 1.25f);
             var deltaY = new Vec2(1.125f, 0f);
 
+            using var bd = new BodyDef
+            {
+                Type = BodyType.Dynamic,
+            };
+
             for (var i = 0; i < 20; i++)
             {
                 y = x;
 
                 for (var j = i; j < 20; j++)
                 {
-                    var bd = new BodyDef
-                    {
-                        Type = BodyType.Dynamic,
-                        Position = y,
-                    };
+                    bd.Position = y;
                     var body = World.CreateBody(bd);
                     body.CreateFixture(shape, 5f);
                     _fixtureCount++;

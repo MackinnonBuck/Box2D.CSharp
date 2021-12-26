@@ -129,7 +129,7 @@ internal class Test : ContactListener
         World.SetDestructionListener(DestructionListener);
         World.SetContactListener(this);
 
-        var bodyDef = new BodyDef();
+        using var bodyDef = new BodyDef();
         GroundBody = World.CreateBody(bodyDef);
     }
 
@@ -504,7 +504,7 @@ internal class Test : ContactListener
             Bomb = null;
         }
 
-        var bd = new BodyDef
+        using var bd = new BodyDef
         {
             Type = BodyType.Dynamic,
             Position = position,

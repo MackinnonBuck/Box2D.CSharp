@@ -114,7 +114,7 @@ internal class DebugDraw : Draw
             v1 = v2;
         }
 
-        r1.Set(1f, 0f);
+        r1 = new(1f, 0f);
         v1 = center + radius * r1;
         for (var i = 0; i < CircleSegments; i++)
         {

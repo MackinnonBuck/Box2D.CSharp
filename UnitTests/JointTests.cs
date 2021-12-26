@@ -12,7 +12,7 @@ public class JointTests
         var gravity = new Vec2(0f, -10f);
         using var world = new World(gravity);
 
-        var bodyDef = new BodyDef
+        using var bodyDef = new BodyDef
         {
             Type = BodyType.Dynamic,
             Position = new(-2f, 3f),

@@ -86,8 +86,8 @@ public class World : Box2DDisposableObject
         b2World_SetDebugDraw(Native, _debugDraw.Native);
     }
 
-    public Body CreateBody(in BodyDef def)
-        => new(this, in def);
+    public Body CreateBody(BodyDef def)
+        => new(this, def);
 
     public void DestroyBody(Body body)
     {

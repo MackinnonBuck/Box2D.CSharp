@@ -15,7 +15,7 @@ public class HelloWorld
         using var world = new World(gravity);
 
         // Define the ground body.
-        var groundBodyDef = new BodyDef
+        using var groundBodyDef = new BodyDef
         {
             Position = new(0f, -10f),
         };
@@ -33,7 +33,7 @@ public class HelloWorld
         groundBody.CreateFixture(groundBox, 0.0f);
 
         // Define the dynamic body. We set its position and call the body factory.
-        var bodyDef = new BodyDef
+        using var bodyDef = new BodyDef
         {
             Type = BodyType.Dynamic,
             Position = new(0f, 4f),

@@ -17,7 +17,8 @@ internal class Car : Test
 
     public Car()
     {
-        var ground = World.CreateBody(new());
+        using var groundBd = new BodyDef();
+        var ground = World.CreateBody(groundBd);
 
         {
             using var shape = new EdgeShape();
@@ -77,7 +78,7 @@ internal class Car : Test
 
         // Teeter
         {
-            var bd = new BodyDef
+            using var bd = new BodyDef
             {
                 Position = new(140f, 1f),
                 Type = BodyType.Dynamic,
@@ -117,7 +118,7 @@ internal class Car : Test
             var prevBody = ground;
             for (var i = 0; i < n; i++)
             {
-                var bd = new BodyDef
+                using var bd = new BodyDef
                 {
                     Type = BodyType.Dynamic,
                     Position = new(161f + 2f * i, -0.125f),
@@ -142,24 +143,29 @@ internal class Car : Test
             using var box = new PolygonShape();
             box.SetAsBox(0.5f, 0.5f);
 
-            var bd = new BodyDef
+            using var bd = new BodyDef
             {
                 Type = BodyType.Dynamic,
             };
 
-            var body = World.CreateBody(bd with { Position = new(230f, 0.5f) });
+            bd.Position = new(230f, 0.5f);
+            var body = World.CreateBody(bd);
             body.CreateFixture(box, 0.5f);
 
-            body = World.CreateBody(bd with { Position = new(230f, 1.5f) });
+            bd.Position = new(230f, 1.5f);
+            body = World.CreateBody(bd);
             body.CreateFixture(box, 0.5f);
 
-            body = World.CreateBody(bd with { Position = new(230f, 2.5f) });
+            bd.Position = new(230f, 2.5f);
+            body = World.CreateBody(bd);
             body.CreateFixture(box, 0.5f);
 
-            body = World.CreateBody(bd with { Position = new(230f, 3.5f) });
+            bd.Position = new(230f, 3.5f);
+            body = World.CreateBody(bd);
             body.CreateFixture(box, 0.5f);
 
-            body = World.CreateBody(bd with { Position = new(230f, 4.5f) });
+            bd.Position = new(230f, 4.5f);
+            body = World.CreateBody(bd);
             body.CreateFixture(box, 0.5f);
         }
 
@@ -182,7 +188,7 @@ internal class Car : Test
                 Radius = 0.4f,
             };
 
-            var bd = new BodyDef
+            using var bd = new BodyDef
             {
                 Type = BodyType.Dynamic,
                 Position = new(0f, 1f),
@@ -197,10 +203,12 @@ internal class Car : Test
                 Friction = 0.9f,
             };
 
-            _wheel1 = World.CreateBody(bd with { Position = new(-1f, 0.35f) });
+            bd.Position = new(-1f, 0.35f);
+            _wheel1 = World.CreateBody(bd);
             _wheel1.CreateFixture(fd);
 
-            _wheel2 = World.CreateBody(bd with { Position = new(1f, 0.4f) });
+            bd.Position = new(1f, 0.4f);
+            _wheel2 = World.CreateBody(bd);
             _wheel2.CreateFixture(fd);
 
             using var jd = new WheelJointDef();
