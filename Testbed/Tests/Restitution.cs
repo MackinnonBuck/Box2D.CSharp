@@ -18,7 +18,7 @@ internal class Restitution : Test
             using var shape = new EdgeShape();
             shape.SetTwoSided(new(-40f, 0f), new(40f, 0f));
 
-            var fd = new FixtureDef
+            using var fd = new FixtureDef
             {
                 Shape = shape,
                 RestitutionThreshold = Threshold,
@@ -30,10 +30,11 @@ internal class Restitution : Test
             using var shape = new CircleShape();
             shape.Radius = 1f;
 
-            var fd = new FixtureDef
+            using var fd = new FixtureDef
             {
                 Shape = shape,
                 Density = 1f,
+                RestitutionThreshold = Threshold,
             };
 
             using var bd = new BodyDef
@@ -46,12 +47,9 @@ internal class Restitution : Test
                 bd.Position = new(-10f + 3f * i, 20f);
 
                 var body = World.CreateBody(bd);
+                fd.Restitution = _restitution[i];
 
-                body.CreateFixture(fd with
-                {
-                    Restitution = _restitution[i],
-                    RestitutionThreshold = Threshold,
-                });
+                body.CreateFixture(fd);
             }
         }
     }

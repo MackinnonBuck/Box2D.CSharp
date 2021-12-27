@@ -513,7 +513,7 @@ internal class Test : ContactListener
         Bomb = World.CreateBody(bd);
         Bomb.LinearVelocity = velocity;
 
-        var fd = new FixtureDef
+        using var fd = new FixtureDef
         {
             Shape = _bombShape,
             Density = 20f,

@@ -7,6 +7,16 @@ public class World : Box2DDisposableObject
     private ContactListener? _contactListener;
     private DestructionListener? _destructionListener;
     private Draw? _debugDraw;
+    private FixtureDef? _sharedFixtureDef;
+
+    internal FixtureDef SharedFixtureDef
+    {
+        get
+        {
+            _sharedFixtureDef ??= new();
+            return _sharedFixtureDef;
+        }
+    }
 
     public Body? BodyList => Body.FromIntPtr.Get(b2World_GetBodyList(Native));
 
@@ -153,6 +163,8 @@ public class World : Box2DDisposableObject
         {
             joint.FreeHandle();
         }
+
+        _sharedFixtureDef?.Dispose();
 
         b2World_delete(Native);
     }

@@ -33,11 +33,11 @@ using var bodyDef = new BodyDef
 var body = world.CreateBody(bodyDef);
 
 // Define another box shape for our dynamic body.
-var dynamicBox = new PolygonShape();
+using var dynamicBox = new PolygonShape();
 dynamicBox.SetAsBox(1f, 1f);
 
 // Define the dynamic body fixture.
-var fixtureDef = new FixtureDef
+using var fixtureDef = new FixtureDef
 {
     Shape = dynamicBox,
     Density = 1f,       // Non-zero density so it will be dynamic.

@@ -15,37 +15,76 @@ public struct Filter
     public short GroupIndex { get; set; } = 0;
 }
 
-public readonly struct FixtureDef
+public sealed class FixtureDef : Box2DDisposableObject
 {
-    public Shape? Shape { get; init; } = default;
+    private Shape? _shape;
 
-    public object? UserData { get; init; } = default;
+    public object? UserData { get; set; }
 
-    public float Friction { get; init; } = 0.2f;
+    public Shape? Shape
+    {
+        get => _shape;
+        set
+        {
+            _shape = value;
+            b2FixtureDef_set_shape(Native, value?.Native ?? IntPtr.Zero);
+        }
+    }
 
-    public float Restitution { get; init; } = 0f;
+    internal IntPtr InternalUserData
+    {
+        get => b2FixtureDef_get_userData(Native);
+        set => b2FixtureDef_set_userData(Native, value);
+    }
 
-    public float RestitutionThreshold { get; init; } = 1f;
+    public float Friction
+    {
+        get => b2FixtureDef_get_friction(Native);
+        set => b2FixtureDef_set_friction(Native, value);
+    }
 
-    public float Density { get; init; } = 0f;
+    public float Restitution
+    {
+        get => b2FixtureDef_get_restitution(Native);
+        set => b2FixtureDef_set_restitution(Native, value);
+    }
 
-    public bool IsSensor { get; init; } = false;
+    public float RestitutionThreshold
+    {
+        get => b2FixtureDef_get_restitutionThreshold(Native);
+        set => b2FixtureDef_set_restitutionThreshold(Native, value);
+    }
 
-    public Filter Filter { get; init; } = new();
-}
+    public float Density
+    {
+        get => b2FixtureDef_get_density(Native);
+        set => b2FixtureDef_set_density(Native, value);
+    }
 
-[StructLayout(LayoutKind.Sequential)]
-internal struct FixtureDefInternal
-{
-    public IntPtr shape;
-    public IntPtr userData;
-    public float friction;
-    public float restitution;
-    public float restitutionThreshold;
-    public float density;
-    [MarshalAs(UnmanagedType.U1)]
-    public bool isSensor;
-    public Filter filter;
+    public bool IsSensor
+    {
+        get => b2FixtureDef_get_isSensor(Native);
+        set => b2FixtureDef_set_isSensor(Native, value);
+    }
+
+    public Filter Filter
+    {
+        get
+        {
+            b2FixtureDef_get_filter(Native, out var value);
+            return value;
+        }
+        set => b2FixtureDef_set_filter(Native, ref value);
+    }
+
+    public FixtureDef() : base(isUserOwned: true)
+    {
+        var native = b2FixtureDef_new();
+        Initialize(native);
+    }
+
+    protected override void Dispose(bool disposing)
+        => b2FixtureDef_delete(Native);
 }
 
 public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
@@ -70,6 +109,9 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
     {
         get
         {
+            // We can't simply cache the shape instance provided by the FixtureDef
+            // because each fixture allocates its own copy of the specified shape.
+
             if (_shape is null || !_shape.IsValid)
             {
                 var shapeNative = b2Fixture_GetShape(Native);
@@ -92,19 +134,10 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
         Type = def.Shape.Type;
         Body = body;
         UserData = def.UserData;
-        var defInternal = def.ToInternalFormat(Handle);
-        var native = b2Body_CreateFixture(body.Native, ref defInternal);
 
+        def.InternalUserData = Handle;
+        var native = b2Body_CreateFixture(body.Native, def.Native);
         Initialize(native);
-    }
-
-    internal Fixture(Body body, Shape shape, float density)
-        : this(body, new()
-        {
-            Shape = shape,
-            Density = density
-        })
-    {
     }
 
     public bool TestPoint(Vec2 p)
@@ -116,20 +149,3 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
         _shape?.Dispose();
     }
 }
-
-public static class FixtureDefExtensions
-{
-    internal static FixtureDefInternal ToInternalFormat(this in FixtureDef def, IntPtr userData)
-        => new()
-        {
-            shape = def.Shape?.Native ?? IntPtr.Zero,
-            userData = userData,
-            friction = def.Friction,
-            restitution = def.Restitution,
-            restitutionThreshold = def.RestitutionThreshold,
-            density = def.Density,
-            isSensor = def.IsSensor,
-            filter = def.Filter,
-        };
-}
-

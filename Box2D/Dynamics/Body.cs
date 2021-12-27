@@ -11,14 +11,8 @@ public enum BodyType
     Dynamic,
 }
 
-public class BodyDef : Box2DDisposableObject
+public sealed class BodyDef : Box2DDisposableObject
 {
-    internal IntPtr InternalUserData
-    {
-        get => b2BodyDef_get_userData(Native);
-        set => b2BodyDef_set_userData(Native, value);
-    }
-
     public object? UserData { get; set; }
 
     public BodyType Type
@@ -99,6 +93,12 @@ public class BodyDef : Box2DDisposableObject
     {
         get => b2BodyDef_get_enabled(Native);
         set => b2BodyDef_set_enabled(Native, value);
+    }
+
+    internal IntPtr InternalUserData
+    {
+        get => b2BodyDef_get_userData(Native);
+        set => b2BodyDef_set_userData(Native, value);
     }
 
     public float GravityScale
@@ -198,7 +198,12 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
         => new(this, in def);
 
     public Fixture CreateFixture(Shape shape, float density)
-        => new(this, shape, density);
+    {
+        var fixtureDef = World.SharedFixtureDef;
+        fixtureDef.Shape = shape;
+        fixtureDef.Density = density;
+        return new(this, fixtureDef);
+    }
 
     public void SetTransform(Vec2 position, float angle)
         => b2Body_SetTransform(Native, ref position, angle);

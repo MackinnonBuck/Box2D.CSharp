@@ -45,7 +45,7 @@ public class HelloWorld
         dynamicBox.SetAsBox(1f, 1f);
 
         // Define the dynamic body fixture.
-        var fixtureDef = new FixtureDef
+        using var fixtureDef = new FixtureDef
         {
             Shape = dynamicBox,
             Density = 1f,       // Non-zero density so it will be dynamic.

@@ -292,7 +292,7 @@ internal static class NativeMethods
      * b2Body
      */
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern IntPtr b2Body_CreateFixture(IntPtr obj, [In] ref FixtureDefInternal def);
+    public static extern IntPtr b2Body_CreateFixture(IntPtr obj, IntPtr def);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Body_GetTransform(IntPtr obj, out Transform transform);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -336,6 +336,47 @@ internal static class NativeMethods
     public static extern IntPtr b2Body_GetNext(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Body_GetUserData(IntPtr obj);
+
+    /*
+     * b2FixtureDef
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2FixtureDef_new();
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2FixtureDef_get_shape(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FixtureDef_set_shape(IntPtr obj, IntPtr value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2FixtureDef_get_userData(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FixtureDef_set_userData(IntPtr obj, IntPtr value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2FixtureDef_get_friction(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FixtureDef_set_friction(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2FixtureDef_get_restitution(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FixtureDef_set_restitution(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2FixtureDef_get_restitutionThreshold(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FixtureDef_set_restitutionThreshold(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2FixtureDef_get_density(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FixtureDef_set_density(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static extern bool b2FixtureDef_get_isSensor(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FixtureDef_set_isSensor(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FixtureDef_get_filter(IntPtr obj, out Filter filter);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FixtureDef_set_filter(IntPtr obj, [In] ref Filter filter);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FixtureDef_delete(IntPtr obj);
 
     /*
      * b2Fixture

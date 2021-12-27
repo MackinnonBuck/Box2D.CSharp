@@ -24,7 +24,7 @@ public class JointTests
             Radius = 1f,
         };
 
-        var fixtureDef = new FixtureDef
+        using var fixtureDef = new FixtureDef
         {
             Filter = new()
             {

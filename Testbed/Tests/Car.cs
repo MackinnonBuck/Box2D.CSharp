@@ -23,7 +23,7 @@ internal class Car : Test
         {
             using var shape = new EdgeShape();
 
-            var fd = new FixtureDef
+            using var fd = new FixtureDef
             {
                 Shape = shape,
                 Density = 0f,
@@ -105,7 +105,7 @@ internal class Car : Test
             using var shape = new PolygonShape();
             shape.SetAsBox(1f, 0.125f);
 
-            var fd = new FixtureDef
+            using var fd = new FixtureDef
             {
                 Shape = shape,
                 Density = 1f,
@@ -115,14 +115,15 @@ internal class Car : Test
             using var jd = new RevoluteJointDef();
             Vec2 anchor;
 
+            using var bd = new BodyDef
+            {
+                Type = BodyType.Dynamic,
+            };
+
             var prevBody = ground;
             for (var i = 0; i < n; i++)
             {
-                using var bd = new BodyDef
-                {
-                    Type = BodyType.Dynamic,
-                    Position = new(161f + 2f * i, -0.125f),
-                };
+                bd.Position = new(161f + 2f * i, -0.125f);
                 var body = World.CreateBody(bd);
                 body.CreateFixture(fd);
 
@@ -196,7 +197,7 @@ internal class Car : Test
             _car = World.CreateBody(bd);
             _car.CreateFixture(chassis, 1f);
 
-            var fd = new FixtureDef
+            using var fd = new FixtureDef
             {
                 Shape = circle,
                 Density = 1f,
