@@ -31,7 +31,7 @@ internal class Program
     private static IMouse _mouse = default!;
     private static IKeyboard _keyboard = default!;
     private static bool _rightMouseDown;
-    private static B2.Vec2 _clickPointWorldSpace;
+    private static B2.Math.Vec2 _clickPointWorldSpace;
 
     private static TimeSpan _t1 = TimeSpan.Zero;
     private static TimeSpan _frameTime = TimeSpan.Zero;
@@ -312,7 +312,7 @@ internal class Program
 
     private static void OnMouseMove(IMouse mouse, Vector2 position)
     {
-        var ps = new B2.Vec2(position.X, position.Y);
+        var ps = new B2.Math.Vec2(position.X, position.Y);
         var pw = _camera.ConvertScreenToWorld(ps);
         _test.MouseMove(pw);
 
@@ -395,48 +395,48 @@ internal class Program
             case Key.Left:
                 if (controlPressed)
                 {
-                    var newOrigin = new B2.Vec2(2f, 0f);
+                    var newOrigin = new B2.Math.Vec2(2f, 0f);
                     _test.ShiftOrigin(newOrigin);
                 }
                 else
                 {
-                    _camera.Center += new B2.Vec2(-0.5f, 0f);
+                    _camera.Center += new B2.Math.Vec2(-0.5f, 0f);
                 }
                 break;
 
             case Key.Right:
                 if (controlPressed)
                 {
-                    var newOrigin = new B2.Vec2(-2f, 0f);
+                    var newOrigin = new B2.Math.Vec2(-2f, 0f);
                     _test.ShiftOrigin(newOrigin);
                 }
                 else
                 {
-                    _camera.Center += new B2.Vec2(0.5f, 0f);
+                    _camera.Center += new B2.Math.Vec2(0.5f, 0f);
                 }
                 break;
 
             case Key.Down:
                 if (controlPressed)
                 {
-                    var newOrigin = new B2.Vec2(0f, 2f);
+                    var newOrigin = new B2.Math.Vec2(0f, 2f);
                     _test.ShiftOrigin(newOrigin);
                 }
                 else
                 {
-                    _camera.Center += new B2.Vec2(0f, -0.5f);
+                    _camera.Center += new B2.Math.Vec2(0f, -0.5f);
                 }
                 break;
 
             case Key.Up:
                 if (controlPressed)
                 {
-                    var newOrigin = new B2.Vec2(0f, -2f);
+                    var newOrigin = new B2.Math.Vec2(0f, -2f);
                     _test.ShiftOrigin(newOrigin);
                 }
                 else
                 {
-                    _camera.Center += new B2.Vec2(0f, 0.5f);
+                    _camera.Center += new B2.Math.Vec2(0f, 0.5f);
                 }
                 break;
 

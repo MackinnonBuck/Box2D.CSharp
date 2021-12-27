@@ -1,4 +1,4 @@
-﻿namespace Box2D;
+﻿namespace Box2D.Core;
 
 internal interface IBox2DList<T> where T : class, IBox2DList<T>
 {

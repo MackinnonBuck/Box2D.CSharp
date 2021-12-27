@@ -1,6 +1,8 @@
-﻿namespace Box2D;
+﻿using Box2D.Math;
 
-using static NativeMethods;
+namespace Box2D.Dynamics.Joints;
+
+using static Interop.NativeMethods;
 
 public sealed class DistanceJointDef : JointDef
 {

@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Box2D.Collections;
+using Box2D.Core;
+using Box2D.Math;
+using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace Box2D;
+namespace Box2D.Drawing;
 
-using static NativeMethods;
+using static Interop.NativeMethods;
 
 [Flags]
 public enum DrawFlags : uint
@@ -89,11 +92,11 @@ public class Draw : Box2DDisposableObject
     private void DrawPointUnmanaged(ref Vec2 p, float size, ref Color color)
         => DrawPoint(p, size, color);
 
-    public virtual void DrawPolygon(in Box2DArrayRef<Vec2> vertices, Color color)
+    public virtual void DrawPolygon(in ArrayRef<Vec2> vertices, Color color)
     {
     }
 
-    public virtual void DrawSolidPolygon(in Box2DArrayRef<Vec2> vertices, Color color)
+    public virtual void DrawSolidPolygon(in ArrayRef<Vec2> vertices, Color color)
     {
     }
 

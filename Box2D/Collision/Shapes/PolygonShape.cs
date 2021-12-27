@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Box2D.Math;
+using System;
 using System.Runtime.InteropServices;
 
-namespace Box2D;
+namespace Box2D.Collision.Shapes;
 
-using static NativeMethods;
+using static Interop.NativeMethods;
 
 public class PolygonShape : Shape
 {

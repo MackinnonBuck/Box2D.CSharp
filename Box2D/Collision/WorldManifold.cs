@@ -1,6 +1,10 @@
-﻿namespace Box2D;
+﻿using Box2D.Collections;
+using Box2D.Core;
+using Box2D.Math;
 
-using static NativeMethods;
+namespace Box2D.Collision;
+
+using static Interop.NativeMethods;
 
 public class WorldManifold : Box2DDisposableObject
 {
@@ -14,9 +18,9 @@ public class WorldManifold : Box2DDisposableObject
         set => b2WorldManifold_set_normal(Native, ref value);
     }
 
-    public Box2DSubArray<Vec2> Points { get; }
+    public ArrayMember<Vec2> Points { get; }
 
-    public Box2DSubArray<float> Separations { get; }
+    public ArrayMember<float> Separations { get; }
 
     public WorldManifold() : base(isUserOwned: true)
     {

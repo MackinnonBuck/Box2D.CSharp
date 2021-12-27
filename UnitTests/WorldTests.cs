@@ -1,11 +1,16 @@
-using Box2D;
+using Box2D.Collections;
+using Box2D.Collision;
+using Box2D.Collision.Shapes;
+using Box2D.Drawing;
+using Box2D.Dynamics;
+using Box2D.Dynamics.Callbacks;
+using Box2D.Math;
 using Xunit;
 
 namespace UnitTests;
 
 public class WorldTests
 {
-
     [Fact]
     public void WorldTest_Works()
     {
@@ -105,7 +110,7 @@ public class WorldTests
 
         public int PolygonDrawCount { get; private set; }
 
-        public override void DrawPolygon(in Box2DArrayRef<Vec2> vertices, Color color)
+        public override void DrawPolygon(in ArrayRef<Vec2> vertices, Color color)
         {
             PolygonDrawCount++;
         }

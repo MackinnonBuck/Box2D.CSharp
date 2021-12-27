@@ -1,6 +1,7 @@
-﻿using System.Runtime.InteropServices;
+﻿using Box2D.Math;
+using System.Runtime.InteropServices;
 
-namespace Box2D;
+namespace Box2D.Collision;
 
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct RayCastInput

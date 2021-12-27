@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Box2D;
+namespace Box2D.Core;
 
 public abstract class Box2DObject
 {

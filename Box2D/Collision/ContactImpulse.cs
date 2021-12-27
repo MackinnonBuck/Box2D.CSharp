@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Box2D.Collections;
+using System;
 
-namespace Box2D;
+namespace Box2D.Collision;
 
-using static NativeMethods;
+using static Interop.NativeMethods;
 
 public readonly ref struct ContactImpulse
 {
@@ -10,9 +11,9 @@ public readonly ref struct ContactImpulse
 
     public bool IsValid => _native != IntPtr.Zero;
 
-    public Box2DArrayRef<float> NormalImpulses { get; }
+    public ArrayRef<float> NormalImpulses { get; }
 
-    public Box2DArrayRef<float> TangentImpulses { get; }
+    public ArrayRef<float> TangentImpulses { get; }
 
     internal static ContactImpulse Create(IntPtr native)
     {
@@ -25,7 +26,7 @@ public readonly ref struct ContactImpulse
         return new(native, new(normalImpulses, count), new(tangentImpulses, count));
     }
 
-    private ContactImpulse(IntPtr native, in Box2DArrayRef<float> normalImpulses, in Box2DArrayRef<float> tangentImpulses)
+    private ContactImpulse(IntPtr native, in ArrayRef<float> normalImpulses, in ArrayRef<float> tangentImpulses)
     {
         _native = native;
         NormalImpulses = normalImpulses;

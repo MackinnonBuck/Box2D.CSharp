@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Box2D.Math;
+using System;
 
-namespace Box2D;
+namespace Box2D.Collision.Shapes;
 
-using static NativeMethods;
+using static Interop.NativeMethods;
 
 public class EdgeShape : Shape
 {

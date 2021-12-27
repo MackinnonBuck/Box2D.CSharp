@@ -1,4 +1,6 @@
-﻿using Box2D;
+﻿using Box2D.Collision.Shapes;
+using Box2D.Dynamics;
+using Box2D.Math;
 using System.Diagnostics;
 
 namespace Testbed.Tests;
