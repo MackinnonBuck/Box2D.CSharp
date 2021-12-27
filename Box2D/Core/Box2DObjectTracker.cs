@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Box2D;
+namespace Box2D.Core;
 
-using static Conditionals;
+using static Config.Conditionals;
 
 public sealed class Box2DObjectTracker
 {

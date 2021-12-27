@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Box2D;
+namespace Box2D.Drawing;
 
 [StructLayout(LayoutKind.Sequential)]
 public struct Color

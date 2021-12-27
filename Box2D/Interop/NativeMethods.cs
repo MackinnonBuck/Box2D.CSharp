@@ -1,8 +1,12 @@
-﻿using System;
+﻿using Box2D.Collision;
+using Box2D.Dynamics;
+using Box2D.Math;
+using Box2D.Profiling;
+using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace Box2D;
+namespace Box2D.Interop;
 
 [SuppressUnmanagedCodeSecurity]
 internal static class NativeMethods

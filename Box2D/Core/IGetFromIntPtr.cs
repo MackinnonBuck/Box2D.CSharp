@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Box2D;
+namespace Box2D.Core;
 
 internal interface IGetFromIntPtr<T>
 {

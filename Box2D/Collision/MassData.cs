@@ -1,4 +1,6 @@
-﻿namespace Box2D;
+﻿using Box2D.Math;
+
+namespace Box2D.Collision;
 
 public struct MassData
 {

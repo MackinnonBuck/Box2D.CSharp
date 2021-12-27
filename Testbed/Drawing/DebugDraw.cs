@@ -1,4 +1,6 @@
-﻿using Box2D;
+﻿using Box2D.Collections;
+using Box2D.Drawing;
+using Box2D.Math;
 using ImGuiNET;
 using Silk.NET.OpenGL;
 using System.Numerics;
@@ -35,7 +37,7 @@ internal class DebugDraw : Draw
         _triangles.Flush();
     }
 
-    public override void DrawPolygon(in Box2DArrayRef<Vec2> vertices, Color color)
+    public override void DrawPolygon(in ArrayRef<Vec2> vertices, Color color)
     {
         var p1 = vertices[^1];
 
@@ -48,7 +50,7 @@ internal class DebugDraw : Draw
         }
     }
 
-    public override void DrawSolidPolygon(in Box2DArrayRef<Vec2> vertices, Color color)
+    public override void DrawSolidPolygon(in ArrayRef<Vec2> vertices, Color color)
     {
         var fillColor = new Color(0.5f * color.R, 0.5f * color.G, 0.5f * color.B, 0.5f);
 

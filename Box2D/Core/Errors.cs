@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace Box2D;
+namespace Box2D.Core;
 
-using static Conditionals;
+using static Config.Conditionals;
 
 internal static class Errors
 {

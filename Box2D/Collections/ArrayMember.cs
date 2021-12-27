@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Box2D.Core;
+using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace Box2D;
+namespace Box2D.Collections;
 
-public class Box2DSubArray<T> : Box2DObject where T : struct
+public class ArrayMember<T> : Box2DObject where T : struct
 {
     private static readonly int _elementSize = Marshal.SizeOf<T>();
 
@@ -24,7 +25,7 @@ public class Box2DSubArray<T> : Box2DObject where T : struct
         }
     }
 
-    internal Box2DSubArray(IntPtr native, int length)
+    internal ArrayMember(IntPtr native, int length)
     {
         Length = length;
         Initialize(native);
@@ -47,12 +48,12 @@ public class Box2DSubArray<T> : Box2DObject where T : struct
 
     public struct Enumerator
     {
-        private readonly Box2DSubArray<T> _source;
+        private readonly ArrayMember<T> _source;
         private int _index = -1;
 
         public T Current => _source[_index];
 
-        public Enumerator(Box2DSubArray<T> source)
+        public Enumerator(ArrayMember<T> source)
         {
             _source = source;
         }

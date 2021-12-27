@@ -1,4 +1,4 @@
-﻿namespace Box2D;
+﻿namespace Box2D.Collision;
 
 public enum PointState
 {

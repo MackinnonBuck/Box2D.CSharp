@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace Box2D;
+namespace Box2D.Math;
 
 [StructLayout(LayoutKind.Sequential)]
 public struct Transform : IEquatable<Transform>

@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Box2D.Core;
+using Box2D.Math;
+using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace Box2D;
+namespace Box2D.Dynamics.Callbacks;
 
-using static NativeMethods;
+using static Interop.NativeMethods;
 
 public abstract class RayCastCallback : Box2DDisposableObject
 {

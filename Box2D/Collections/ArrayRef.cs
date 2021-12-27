@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Box2D.Core;
+using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace Box2D;
+namespace Box2D.Collections;
 
-public readonly ref struct Box2DArrayRef<T> where T : struct
+public readonly ref struct ArrayRef<T> where T : struct
 {
     private static readonly int _elementSize = Marshal.SizeOf<T>();
 
@@ -28,7 +29,7 @@ public readonly ref struct Box2DArrayRef<T> where T : struct
         }
     }
 
-    internal Box2DArrayRef(IntPtr native, int length)
+    internal ArrayRef(IntPtr native, int length)
     {
         _native = native;
         Length = length;
@@ -50,12 +51,12 @@ public readonly ref struct Box2DArrayRef<T> where T : struct
 
     public ref struct Enumerator
     {
-        private readonly Box2DArrayRef<T> _source;
+        private readonly ArrayRef<T> _source;
         private int _index = -1;
 
         public T Current => _source[_index];
 
-        public Enumerator(in Box2DArrayRef<T> source)
+        public Enumerator(in ArrayRef<T> source)
         {
             _source = source;
         }

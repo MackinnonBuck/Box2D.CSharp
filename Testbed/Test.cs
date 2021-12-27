@@ -1,4 +1,12 @@
-﻿using Box2D;
+﻿using Box2D.Collision;
+using Box2D.Collision.Shapes;
+using Box2D.Core;
+using Box2D.Drawing;
+using Box2D.Dynamics;
+using Box2D.Dynamics.Callbacks;
+using Box2D.Dynamics.Joints;
+using Box2D.Math;
+using Box2D.Profiling;
 using Silk.NET.Input;
 using Testbed.Drawing;
 
@@ -370,7 +378,7 @@ internal class Test : ContactListener
         Span<PointState> state1 = stackalloc PointState[2];
         Span<PointState> state2 = stackalloc PointState[2];
 
-        Collision.GetPointStates(state1, state2, oldManifold, manifold);
+        Manifold.GetPointStates(state1, state2, oldManifold, manifold);
 
         contact.GetWorldManifold(_worldManifold);
 

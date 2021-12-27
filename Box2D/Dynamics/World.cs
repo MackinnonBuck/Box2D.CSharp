@@ -1,6 +1,13 @@
-﻿namespace Box2D;
+﻿using Box2D.Collision;
+using Box2D.Core;
+using Box2D.Drawing;
+using Box2D.Dynamics.Callbacks;
+using Box2D.Math;
+using Box2D.Profiling;
 
-using static NativeMethods;
+namespace Box2D.Dynamics;
+
+using static Interop.NativeMethods;
 
 public class World : Box2DDisposableObject
 {

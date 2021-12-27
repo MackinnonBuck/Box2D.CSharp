@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Box2D.Collision;
+using Box2D.Core;
+using Box2D.Math;
+using System;
 using System.Runtime.InteropServices;
 
-namespace Box2D;
+namespace Box2D.Dynamics;
 
-using static NativeMethods;
+using static Interop.NativeMethods;
 
 [StructLayout(LayoutKind.Sequential)]
 public struct Filter
