@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace Box2D;
@@ -6,7 +7,9 @@ namespace Box2D;
 [StructLayout(LayoutKind.Sequential)]
 public struct Rot : IEquatable<Rot>
 {
-    public static readonly Rot Identity = new() { S = 0, C = 1 };
+    private static readonly Rot _identity = new() { S = 0, C = 1 };
+
+    public static ref readonly Rot Identity => ref _identity;
 
     public float S { get; set; }
 
@@ -24,9 +27,25 @@ public struct Rot : IEquatable<Rot>
         C = MathF.Cos(angle);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool operator ==(Rot a, Rot b)
+        => a.Equals(b);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool operator !=(Rot a, Rot b)
+        => !a.Equals(b);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public override bool Equals(object obj)
+        => obj is Rot a && Equals(a);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Equals(Rot other)
         => S == other.S && C == other.C;
 
     public override int GetHashCode()
         => HashCode.Combine(S, C);
+
+    public override string ToString()
+        => $"{Angle}rad";
 }
