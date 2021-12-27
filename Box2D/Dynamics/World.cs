@@ -104,17 +104,17 @@ public class World : Box2DDisposableObject
         foreach (var joint in body.JointList)
         {
             _destructionListener?.SayGoodbye(joint);
-            joint.FreeHandle();
+            joint.Invalidate();
         }
 
         foreach (var fixture in body.FixtureList)
         {
             _destructionListener?.SayGoodbye(fixture);
-            fixture.FreeHandle();
+            fixture.Invalidate();
         }
 
         b2World_DestroyBody(Native, body.Native);
-        body.FreeHandle();
+        body.Invalidate();
     }
 
     public Joint CreateJoint(JointDef def)
@@ -123,7 +123,7 @@ public class World : Box2DDisposableObject
     public void DestroyJoint(Joint joint)
     {
         b2World_DestroyJoint(Native, joint.Native);
-        joint.FreeHandle();
+        joint.Invalidate();
     }
 
     public void Step(float timeStep, int velocityIterations, int positionIterations)
@@ -153,15 +153,15 @@ public class World : Box2DDisposableObject
         {
             foreach (var fixture in body.FixtureList)
             {
-                fixture.FreeHandle();
+                fixture.Invalidate();
             }
 
-            body.FreeHandle();
+            body.Invalidate();
         }
 
         foreach (var joint in JointList)
         {
-            joint.FreeHandle();
+            joint.Invalidate();
         }
 
         _sharedFixtureDef?.Dispose();

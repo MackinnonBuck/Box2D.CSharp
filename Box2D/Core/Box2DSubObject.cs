@@ -12,16 +12,11 @@ public abstract class Box2DSubObject : Box2DObject
         Handle = GCHandle.ToIntPtr(GCHandle.Alloc(this, GCHandleType.Normal));
     }
 
-    internal void FreeHandle()
+    internal virtual void Invalidate()
     {
-        OnFreeingHandle();
         Uninitialize();
 
         GCHandle.FromIntPtr(Handle).Free();
         Handle = IntPtr.Zero;
-    }
-
-    private protected virtual void OnFreeingHandle()
-    {
     }
 }

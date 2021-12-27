@@ -143,9 +143,11 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
     public bool TestPoint(Vec2 p)
         => b2Fixture_TestPoint(Native, ref p);
 
-    private protected override void OnFreeingHandle()
+    internal override void Invalidate()
     {
         // This shape is not user-owned, so disposing it is safe.
         _shape?.Dispose();
+
+        base.Invalidate();
     }
 }
