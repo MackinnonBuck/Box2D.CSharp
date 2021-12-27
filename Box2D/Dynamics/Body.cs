@@ -198,12 +198,7 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
         => new(this, in def);
 
     public Fixture CreateFixture(Shape shape, float density)
-    {
-        var fixtureDef = World.SharedFixtureDef;
-        fixtureDef.Shape = shape;
-        fixtureDef.Density = density;
-        return new(this, fixtureDef);
-    }
+        => new(this, shape, density);
 
     public void SetTransform(Vec2 position, float angle)
         => b2Body_SetTransform(Native, ref position, angle);

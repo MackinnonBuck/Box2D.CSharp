@@ -294,6 +294,8 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Body_CreateFixture(IntPtr obj, IntPtr def);
     [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2Body_CreateFixture2(IntPtr obj, IntPtr shape, float density, IntPtr userData);
+    [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Body_GetTransform(IntPtr obj, out Transform transform);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Body_SetTransform(IntPtr obj, [In] ref Vec2 position, float angle);

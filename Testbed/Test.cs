@@ -204,6 +204,9 @@ internal class Test : ContactListener
 
         if (Settings.drawStats)
         {
+            DebugDraw.DrawString(5, TextLine, $"step count = {StepCount}");
+            TextLine += TextIncrement;
+
             var bodyCount = World.BodyCount;
             var contactCount = World.ContactCount;
             var jointCount = World.JointCount;

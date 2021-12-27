@@ -140,6 +140,15 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
         Initialize(native);
     }
 
+    internal Fixture(Body body, Shape shape, float density)
+    {
+        Type = shape.Type;
+        Body = body;
+
+        var native = b2Body_CreateFixture2(body.Native, shape.Native, density, Handle);
+        Initialize(native);
+    }
+
     public bool TestPoint(Vec2 p)
         => b2Fixture_TestPoint(Native, ref p);
 
