@@ -17,13 +17,11 @@ public class WorldTests
         using var world = new World(new Vec2(0f, -10f));
         var destructionListener = new MyDestructionListener();
         var contactListener = new MyContactListener();
-        var draw = new MyDraw
-        {
-            Flags = DrawFlags.ShapeBit | DrawFlags.AabbBit
-        };
+        var draw = new MyDraw();
         world.SetDestructionListener(destructionListener);
         world.SetContactListener(contactListener);
         world.SetDebugDraw(draw);
+        world.DrawFlags = DrawFlags.ShapeBit | DrawFlags.AabbBit;
 
         using var circle = new CircleShape
         {
@@ -77,47 +75,79 @@ public class WorldTests
         Assert.Equal(2, destructionListener.SayGoodbyeFixtureCount);
     }
 
-    private class MyDestructionListener : DestructionListener
+    private class MyDestructionListener : IDestructionListener
     {
         public int SayGoodbyeJointCount { get; private set; }
 
         public int SayGoodbyeFixtureCount { get; private set; }
 
-        protected override void SayGoodbye(Joint joint)
+        void IDestructionListener.SayGoodbye(Joint joint)
         {
             SayGoodbyeJointCount++;
         }
 
-        protected override void SayGoodbye(Fixture fixture)
+        void IDestructionListener.SayGoodbye(Fixture fixture)
         {
             SayGoodbyeFixtureCount++;
         }
     }
 
-    private class MyContactListener : ContactListener
+    private class MyContactListener : IContactListener
     {
         public bool DidBeginContact { get; private set; }
 
-        protected override void BeginContact(in Contact contact)
+        void IContactListener.BeginContact(in Contact contact)
         {
             DidBeginContact = true;
         }
+
+        void IContactListener.EndContact(in Contact contact)
+        {
+        }
+
+        void IContactListener.PostSolve(in Contact contact, in ContactImpulse impulse)
+        {
+        }
+
+        void IContactListener.PreSolve(in Contact contact, in Manifold oldManifold)
+        {
+        }
     }
 
-    private class MyDraw : Draw
+    private class MyDraw : IDraw
     {
         public int SolidCircleDrawCount { get; private set; }
 
         public int PolygonDrawCount { get; private set; }
 
-        public override void DrawPolygon(in ArrayRef<Vec2> vertices, Color color)
+        void IDraw.DrawCircle(Vec2 center, float radius, Color color)
+        {
+        }
+
+        void IDraw.DrawPoint(Vec2 p, float size, Color color)
+        {
+        }
+
+        void IDraw.DrawPolygon(in ArrayRef<Vec2> vertices, Color color)
         {
             PolygonDrawCount++;
         }
 
-        public override void DrawSolidCircle(Vec2 center, float radius, Vec2 axis, Color color)
+        void IDraw.DrawSegment(Vec2 p1, Vec2 p2, Color color)
+        {
+        }
+
+        void IDraw.DrawSolidCircle(Vec2 center, float radius, Vec2 axis, Color color)
         {
             SolidCircleDrawCount++;
+        }
+
+        void IDraw.DrawSolidPolygon(in ArrayRef<Vec2> vertices, Color color)
+        {
+        }
+
+        void IDraw.DrawTransform(Transform xf)
+        {
         }
     }
 }

@@ -53,6 +53,12 @@ extern "C"
     BOX2D_API void b2Body_ApplyLinearImpulse(b2Body* obj, b2Vec2* impulse, b2Vec2* point, bool wake);
     BOX2D_API void b2Body_ApplyLinearImpulseToCenter(b2Body* obj, b2Vec2* impulse, bool wake);
     BOX2D_API void b2Body_ApplyAngularImpulse(b2Body* obj, float impulse, bool wake);
+    BOX2D_API void b2Body_GetWorldPoint(b2Body* obj, b2Vec2* localPoint, b2Vec2* value);
+    BOX2D_API void b2Body_GetWorldVector(b2Body* obj, b2Vec2* localVector, b2Vec2* value);
+    BOX2D_API void b2Body_GetLocalPoint(b2Body* obj, b2Vec2* worldPoint, b2Vec2* value);
+    BOX2D_API void b2Body_GetLocalVector(b2Body* obj, b2Vec2* worldVector, b2Vec2* value);
+    BOX2D_API void b2Body_GetLinearVelocityFromWorldPoint(b2Body* obj, b2Vec2* worldPoint, b2Vec2* value);
+    BOX2D_API void b2Body_GetLinearVelocityFromLocalPoint(b2Body* obj, b2Vec2* localPoint, b2Vec2* value);
     BOX2D_API void b2Body_GetPosition(b2Body* obj, b2Vec2* v);
     BOX2D_API float b2Body_GetAngle(b2Body* obj);
     BOX2D_API void b2Body_GetLinearVelocity(b2Body* obj, b2Vec2* value);

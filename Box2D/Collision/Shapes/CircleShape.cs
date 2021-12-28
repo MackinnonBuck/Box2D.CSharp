@@ -9,7 +9,7 @@ public class CircleShape : Shape
 {
     public override ShapeType Type => ShapeType.Circle;
 
-    public Vec2 P
+    public Vec2 Position
     {
         get
         {

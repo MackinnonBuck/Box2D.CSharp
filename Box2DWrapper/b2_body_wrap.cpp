@@ -256,6 +256,42 @@ void b2Body_ApplyAngularImpulse(b2Body* obj, float impulse, bool wake)
     obj->ApplyAngularImpulse(impulse, wake);
 }
 
+void b2Body_GetWorldPoint(b2Body* obj, b2Vec2* localPoint, b2Vec2* value)
+{
+    VERIFY_INSTANCE;
+    *value = obj->GetWorldPoint(*localPoint);
+}
+
+void b2Body_GetWorldVector(b2Body* obj, b2Vec2* localVector, b2Vec2* value)
+{
+    VERIFY_INSTANCE;
+    *value = obj->GetWorldVector(*localVector);
+}
+
+void b2Body_GetLocalPoint(b2Body* obj, b2Vec2* worldPoint, b2Vec2* value)
+{
+    VERIFY_INSTANCE;
+    *value = obj->GetLocalPoint(*worldPoint);
+}
+
+void b2Body_GetLocalVector(b2Body* obj, b2Vec2* worldVector, b2Vec2* value)
+{
+    VERIFY_INSTANCE;
+    *value = obj->GetLocalVector(*worldVector);
+}
+
+void b2Body_GetLinearVelocityFromWorldPoint(b2Body* obj, b2Vec2* worldPoint, b2Vec2* value)
+{
+    VERIFY_INSTANCE;
+    *value = obj->GetLinearVelocityFromWorldPoint(*worldPoint);
+}
+
+void b2Body_GetLinearVelocityFromLocalPoint(b2Body* obj, b2Vec2* localPoint, b2Vec2* value)
+{
+    VERIFY_INSTANCE;
+    *value = obj->GetLinearVelocityFromLocalPoint(*localPoint);
+}
+
 void b2Body_GetPosition(b2Body* obj, b2Vec2* v)
 {
     VERIFY_INSTANCE;

@@ -8,14 +8,16 @@ namespace Box2D.Dynamics.Callbacks;
 
 using static Interop.NativeMethods;
 
-public abstract class RayCastCallback : Box2DDisposableObject
+internal sealed class InternalRayCastCallback : Box2DDisposableObject
 {
     [UnmanagedFunctionPointer(Conv), SuppressUnmanagedCodeSecurity]
     private delegate float ReportFixtureUnmanagedDelegate(IntPtr fixture, [In] ref Vec2 point, [In] ref Vec2 normal, float fraction);
 
     private readonly ReportFixtureUnmanagedDelegate _reportFixture;
 
-    protected RayCastCallback() : base(isUserOwned: true)
+    private IRayCastCallback? _userCallback;
+
+    public InternalRayCastCallback() : base(isUserOwned: true)
     {
         _reportFixture = ReportFixtureUnmanaged;
 
@@ -24,13 +26,16 @@ public abstract class RayCastCallback : Box2DDisposableObject
         Initialize(native);
     }
 
-    private float ReportFixtureUnmanaged(IntPtr fixture, ref Vec2 point, ref Vec2 normal, float fraction)
-        => ReportFixture(Fixture.FromIntPtr.Get(fixture)!, point, normal, fraction);
+    public void RayCast(IntPtr world, IRayCastCallback userCallback, ref Vec2 point1, ref Vec2 point2)
+    {
+        _userCallback = userCallback;
+        b2World_RayCast(world, Native, ref point1, ref point2);
+        _userCallback = null;
+    }
 
-    protected abstract float ReportFixture(Fixture fixture, Vec2 point, Vec2 normal, float fraction);
+    private float ReportFixtureUnmanaged(IntPtr fixture, ref Vec2 point, ref Vec2 normal, float fraction)
+        => _userCallback!.ReportFixture(Fixture.FromIntPtr.Get(fixture)!, point, normal, fraction);
 
     protected override void Dispose(bool disposing)
-    {
-        b2RayCastCallbackWrapper_delete(Native);
-    }
+        => b2RayCastCallbackWrapper_delete(Native);
 }

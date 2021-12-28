@@ -21,6 +21,8 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2World_new([In] ref Vec2 gravity);
     [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2World_SetDestructionListener(IntPtr obj, IntPtr listener);
+    [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_SetContactListener(IntPtr obj, IntPtr listener);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_SetDebugDraw(IntPtr obj, IntPtr debugDraw);
@@ -182,6 +184,14 @@ internal static class NativeMethods
     public static extern void b2WorldManifold_delete(IntPtr obj);
 
     /*
+     * b2DestructionListenerWrapper
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2DestructionListenerWrapper_new(IntPtr sayGoodbyeJoint, IntPtr sayGoodbyeFixture);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2DestructionListenerWrapper_delete(IntPtr obj);
+
+    /*
      * b2ContactImpulse
      */
     [DllImport(Dll, CallingConvention = Conv)]
@@ -315,6 +325,18 @@ internal static class NativeMethods
     public static extern void b2Body_ApplyLinearImpulseToCenter(IntPtr obj, [In] ref Vec2 impulse, bool wake);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Body_ApplyAngularImpulse(IntPtr obj, float impulse, bool wake);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_GetWorldPoint(IntPtr obj, [In] ref Vec2 localPoint, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_GetWorldVector(IntPtr obj, [In] ref Vec2 localVector, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_GetLocalPoint(IntPtr obj, [In] ref Vec2 worldPoint, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_GetLocalVector(IntPtr obj, [In] ref Vec2 worldVector, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_GetLinearVelocityFromWorldPoint(IntPtr obj, [In] ref Vec2 worldPoint, out Vec2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_GetLinearVelocityFromLocalPoint(IntPtr obj, [In] ref Vec2 localPoint, out Vec2 value);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Body_GetPosition(IntPtr obj, out Vec2 value);
     [DllImport(Dll, CallingConvention = Conv)]

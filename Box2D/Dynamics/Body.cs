@@ -223,4 +223,40 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
 
     public void ApplyAngularImpulse(float impulse, bool wake)
         => b2Body_ApplyAngularImpulse(Native, impulse, wake);
+
+    public Vec2 GetWorldPoint(Vec2 localPoint)
+    {
+        b2Body_GetWorldPoint(Native, ref localPoint, out var value);
+        return value;
+    }
+
+    public Vec2 GetWorldVector(Vec2 localVector)
+    {
+        b2Body_GetWorldVector(Native, ref localVector, out var value);
+        return value;
+    }
+
+    public Vec2 GetLocalPoint(Vec2 worldPoint)
+    {
+        b2Body_GetLocalPoint(Native, ref worldPoint, out var value);
+        return value;
+    }
+
+    public Vec2 GetLocalVector(Vec2 worldVector)
+    {
+        b2Body_GetLocalVector(Native, ref worldVector, out var value);
+        return value;
+    }
+
+    public Vec2 GetLinearVelocityFromWorldPoint(Vec2 worldPoint)
+    {
+        b2Body_GetLinearVelocityFromWorldPoint(Native, ref worldPoint, out var value);
+        return value;
+    }
+
+    public Vec2 GetLinearVelocityFromLocalPoint(Vec2 localPoint)
+    {
+        b2Body_GetLinearVelocityFromLocalPoint(Native, ref localPoint, out var value);
+        return value;
+    }
 }

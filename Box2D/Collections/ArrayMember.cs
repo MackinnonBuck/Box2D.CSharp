@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace Box2D.Collections;
 
-public class ArrayMember<T> : Box2DObject where T : struct
+public sealed class ArrayMember<T> : Box2DObject where T : struct
 {
     private static readonly int _elementSize = Marshal.SizeOf<T>();
 

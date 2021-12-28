@@ -9,11 +9,22 @@ namespace Box2D.Dynamics;
 
 using static Interop.NativeMethods;
 
-public class World : Box2DDisposableObject
+public sealed class World : Box2DDisposableObject
 {
-    private ContactListener? _contactListener;
-    private DestructionListener? _destructionListener;
-    private Draw? _debugDraw;
+    // Eagerly-initialized callbacks.
+    // The overhead for initialization is better spent during the world's initialization
+    // rather than when the callbacks are invoked for the first time.
+    private readonly InternalDestructionListener _internalDestructionListener;
+    private readonly InternalQueryCallback _internalQueryCallback;
+    private readonly InternalRayCastCallback _internalRayCastCallback;
+
+    // Lazily-initialized callbacks.
+    // We don't want to add unnecessary overhead for managed debug drawing or contact listening
+    // when the user has not provided custom callbacks.
+    private InternalContactListener? _internalContactListener;
+    private InternalDraw? _internalDraw;
+
+    private DrawFlags _drawFlags;
 
     public Body? BodyList => Body.FromIntPtr.Get(b2World_GetBodyList(Native));
 
@@ -69,28 +80,55 @@ public class World : Box2DDisposableObject
         set => b2World_SetGravity(Native, ref value);
     }
 
+    public DrawFlags DrawFlags
+    {
+        get => _drawFlags;
+        set
+        {
+            _drawFlags = value;
+            _internalDraw?.SetFlags(value);
+        }
+    }
+
     public World(Vec2 gravity) : base(isUserOwned: true)
     {
         var native = b2World_new(ref gravity);
-
         Initialize(native);
+
+        _internalDestructionListener = new();
+        _internalQueryCallback = new();
+        _internalRayCastCallback = new();
+
+        b2World_SetDestructionListener(Native, _internalDestructionListener.Native);
     }
 
-    public void SetDestructionListener(DestructionListener listener)
+    public void SetDestructionListener(IDestructionListener listener)
+        => _internalDestructionListener.SetUserListener(listener);
+
+    public void SetContactListener(IContactListener listener)
     {
-        _destructionListener = listener;
+        if (_internalContactListener is null)
+        {
+            _internalContactListener = new(listener);
+            b2World_SetContactListener(Native, _internalContactListener.Native);
+        }
+        else
+        {
+            _internalContactListener.SetUserListener(listener);
+        }
     }
 
-    public void SetContactListener(ContactListener listener)
+    public void SetDebugDraw(IDraw debugDraw)
     {
-        _contactListener = listener;
-        b2World_SetContactListener(Native, _contactListener.Native);
-    }
-
-    public void SetDebugDraw(Draw debugDraw)
-    {
-        _debugDraw = debugDraw;
-        b2World_SetDebugDraw(Native, _debugDraw.Native);
+        if (_internalDraw is null)
+        {
+            _internalDraw = new(debugDraw, _drawFlags);
+            b2World_SetDebugDraw(Native, _internalDraw.Native);
+        }
+        else
+        {
+            _internalDraw.SetUserDraw(debugDraw);
+        }
     }
 
     public Body CreateBody(BodyDef def)
@@ -98,18 +136,6 @@ public class World : Box2DDisposableObject
 
     public void DestroyBody(Body body)
     {
-        foreach (var joint in body.JointList)
-        {
-            _destructionListener?.SayGoodbye(joint);
-            joint.Invalidate();
-        }
-
-        foreach (var fixture in body.FixtureList)
-        {
-            _destructionListener?.SayGoodbye(fixture);
-            fixture.Invalidate();
-        }
-
         b2World_DestroyBody(Native, body.Native);
         body.Invalidate();
     }
@@ -132,11 +158,11 @@ public class World : Box2DDisposableObject
     public void DebugDraw()
         => b2World_DebugDraw(Native);
 
-    public void QueryAABB(QueryCallback callback, AABB aabb)
-        => b2World_QueryAABB(Native, callback.Native, ref aabb);
+    public void QueryAABB(IQueryCallback callback, AABB aabb)
+        => _internalQueryCallback.QueryAABB(Native, callback, ref aabb);
 
-    public void RayCast(RayCastCallback callback, Vec2 point1, Vec2 point2)
-        => b2World_RayCast(Native, callback.Native, ref point1, ref point2);
+    public void RayCast(IRayCastCallback callback, Vec2 point1, Vec2 point2)
+        => _internalRayCastCallback.RayCast(Native, callback, ref point1, ref point2);
 
     public void ShiftOrigin(Vec2 newOrigin)
         => b2World_ShiftOrigin(Native, ref newOrigin);
@@ -162,5 +188,11 @@ public class World : Box2DDisposableObject
         }
 
         b2World_delete(Native);
+
+        _internalDestructionListener.Dispose();
+        _internalQueryCallback.Dispose();
+        _internalRayCastCallback.Dispose();
+        _internalContactListener?.Dispose();
+        _internalDraw?.Dispose();
     }
 }

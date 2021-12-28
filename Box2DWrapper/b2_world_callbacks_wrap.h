@@ -5,6 +5,27 @@
 #include <box2d/b2_world.h>
 
 /*
+ * b2DestructionListenerWrapper
+ */
+typedef void (*b2DestructionListener_callback_SayGoodbye_b2Joint)(b2Joint* joint);
+typedef void (*b2DestructionListener_callback_SayGoodbye_b2Fixture)(b2Fixture* fixture);
+
+class b2DestructionListenerWrapper : public b2DestructionListener
+{
+public:
+    b2DestructionListenerWrapper(
+        b2DestructionListener_callback_SayGoodbye_b2Joint sayGoodbyeJoint,
+        b2DestructionListener_callback_SayGoodbye_b2Fixture sayGoodbyeFixture);
+
+    void SayGoodbye(b2Joint* joint) override;
+    void SayGoodbye(b2Fixture* fixture) override;
+
+private:
+    b2DestructionListener_callback_SayGoodbye_b2Joint m_sayGoodbyeJoint;
+    b2DestructionListener_callback_SayGoodbye_b2Fixture m_sayGoodbyeFixture;
+};
+
+/*
  * b2ContactListenerWrapper
  */
 typedef void (*b2ContactListener_callback_BeginContact)(b2Contact* contact);
@@ -69,6 +90,14 @@ private:
 
 extern "C"
 {
+    /*
+     * b2DestructionListenerWrapper
+     */
+    BOX2D_API b2DestructionListenerWrapper* b2DestructionListenerWrapper_new(
+        b2DestructionListener_callback_SayGoodbye_b2Joint sayGoodbyeJoint,
+        b2DestructionListener_callback_SayGoodbye_b2Fixture sayGoodbyeFixture);
+    BOX2D_API void b2DestructionListenerWrapper_delete(b2DestructionListenerWrapper* obj);
+
     /*
      * b2ContactImpulse
      */

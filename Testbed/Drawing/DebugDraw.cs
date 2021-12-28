@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace Testbed.Drawing;
 
-internal class DebugDraw : Draw
+internal class DebugDraw : IDraw, IDisposable
 {
     private const float CircleSegments = 16f;
     private const float CircleIncrement = 2f * MathF.PI / CircleSegments;
@@ -37,7 +37,7 @@ internal class DebugDraw : Draw
         _triangles.Flush();
     }
 
-    public override void DrawPolygon(in ArrayRef<Vec2> vertices, Color color)
+    public void DrawPolygon(in ArrayRef<Vec2> vertices, Color color)
     {
         var p1 = vertices[^1];
 
@@ -50,7 +50,7 @@ internal class DebugDraw : Draw
         }
     }
 
-    public override void DrawSolidPolygon(in ArrayRef<Vec2> vertices, Color color)
+    public void DrawSolidPolygon(in ArrayRef<Vec2> vertices, Color color)
     {
         var fillColor = new Color(0.5f * color.R, 0.5f * color.G, 0.5f * color.B, 0.5f);
 
@@ -72,7 +72,7 @@ internal class DebugDraw : Draw
         }
     }
 
-    public override void DrawCircle(Vec2 center, float radius, Color color)
+    public void DrawCircle(Vec2 center, float radius, Color color)
     {
         var sinInc = MathF.Sin(CircleIncrement);
         var cosInc = MathF.Cos(CircleIncrement);
@@ -93,7 +93,7 @@ internal class DebugDraw : Draw
         }
     }
 
-    public override void DrawSolidCircle(Vec2 center, float radius, Vec2 axis, Color color)
+    public void DrawSolidCircle(Vec2 center, float radius, Vec2 axis, Color color)
     {
         var sinInc = MathF.Sin(CircleIncrement);
         var cosInc = MathF.Cos(CircleIncrement);
@@ -135,13 +135,13 @@ internal class DebugDraw : Draw
         _lines.Vertex(p, color);
     }
 
-    public override void DrawSegment(Vec2 p1, Vec2 p2, Color color)
+    public void DrawSegment(Vec2 p1, Vec2 p2, Color color)
     {
         _lines.Vertex(p1, color);
         _lines.Vertex(p2, color);
     }
 
-    public override void DrawTransform(Transform xf)
+    public void DrawTransform(Transform xf)
     {
         var p1 = xf.P;
 
@@ -154,7 +154,7 @@ internal class DebugDraw : Draw
         _lines.Vertex(p2, _green);
     }
 
-    public override void DrawPoint(Vec2 p, float size, Color color)
+    public void DrawPoint(Vec2 p, float size, Color color)
     {
         _points.Vertex(p, color, size);
     }
@@ -172,12 +172,10 @@ internal class DebugDraw : Draw
         ImGui.End();
     }
 
-    protected override void Dispose(bool disposing)
+    public void Dispose()
     {
         _points.Dispose();
         _lines.Dispose();
         _triangles.Dispose();
-
-        base.Dispose(disposing);
     }
 }

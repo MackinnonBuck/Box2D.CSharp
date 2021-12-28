@@ -8,7 +8,7 @@ namespace Box2D.Dynamics.Callbacks;
 
 using static Interop.NativeMethods;
 
-public abstract class ContactListener : Box2DDisposableObject
+internal sealed class InternalContactListener : Box2DDisposableObject
 {
     [UnmanagedFunctionPointer(Conv), SuppressUnmanagedCodeSecurity]
     private delegate void BeginContactUnmanagedDelegate(IntPtr contact);
@@ -24,8 +24,12 @@ public abstract class ContactListener : Box2DDisposableObject
     private readonly PreSolveUnmanagedDelegate _preSolve;
     private readonly PostSolveUnmanagedDelegate _postSolve;
 
-    protected ContactListener() : base(isUserOwned: true)
+    private IContactListener _userListener;
+
+    public InternalContactListener(IContactListener userListener) : base(isUserOwned: true)
     {
+        _userListener = userListener;
+
         _beginContact = BeginContactUnmanaged;
         _endContact = EndContactUnmanaged;
         _preSolve = PreSolveUnmanaged;
@@ -39,36 +43,21 @@ public abstract class ContactListener : Box2DDisposableObject
         Initialize(native);
     }
 
+    public void SetUserListener(IContactListener listener)
+        => _userListener = listener;
+
     private void BeginContactUnmanaged(IntPtr contact)
-        => BeginContact(new(contact));
+        => _userListener.BeginContact(new(contact));
 
     private void EndContactUnmanaged(IntPtr contact)
-        => EndContact(new(contact));
+        => _userListener.EndContact(new(contact));
 
     private void PreSolveUnmanaged(IntPtr contact, IntPtr oldManifold)
-        => PreSolve(new(contact), Manifold.Create(oldManifold));
+        => _userListener.PreSolve(new(contact), Manifold.Create(oldManifold));
 
     private void PostSolveUnmanaged(IntPtr contact, IntPtr impulse)
-        => PostSolve(new(contact), ContactImpulse.Create(impulse));
-
-    protected virtual void BeginContact(in Contact contact)
-    {
-    }
-
-    protected virtual void EndContact(in Contact contact)
-    {
-    }
-
-    protected virtual void PreSolve(in Contact contact, in Manifold oldManifold)
-    {
-    }
-
-    protected virtual void PostSolve(in Contact contact, in ContactImpulse impulse)
-    {
-    }
+        => _userListener.PostSolve(new(contact), ContactImpulse.Create(impulse));
 
     protected override void Dispose(bool disposing)
-    {
-        b2ContactListenerWrapper_delete(Native);
-    }
+        => b2ContactListenerWrapper_delete(Native);
 }

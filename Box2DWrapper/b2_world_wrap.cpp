@@ -7,6 +7,12 @@ b2World* b2World_new(b2Vec2* gravity)
     return new b2World(*gravity);
 }
 
+void b2World_SetDestructionListener(b2World* obj, b2DestructionListener* listener)
+{
+    VERIFY_INSTANCE;
+    obj->SetDestructionListener(listener);
+}
+
 void b2World_SetContactListener(b2World* obj, b2ContactListener* listener)
 {
     VERIFY_INSTANCE;

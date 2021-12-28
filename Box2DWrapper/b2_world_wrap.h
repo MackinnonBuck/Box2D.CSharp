@@ -7,6 +7,7 @@
 extern "C"
 {
     BOX2D_API b2World* b2World_new(b2Vec2* gravity);
+    BOX2D_API void b2World_SetDestructionListener(b2World* obj, b2DestructionListener* listener);
     BOX2D_API void b2World_SetContactListener(b2World* obj, b2ContactListener* listener);
     BOX2D_API void b2World_SetDebugDraw(b2World* obj, b2Draw* debugDraw);
     BOX2D_API b2Body* b2World_CreateBody(b2World* obj, b2BodyDef* def);

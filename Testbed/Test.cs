@@ -12,7 +12,7 @@ using Testbed.Drawing;
 
 namespace Testbed;
 
-internal class TestDestructionListener : DestructionListener
+internal class TestDestructionListener : IDestructionListener
 {
     private readonly Test _test;
 
@@ -21,7 +21,7 @@ internal class TestDestructionListener : DestructionListener
         _test = test;
     }
 
-    protected override void SayGoodbye(Joint joint)
+    void IDestructionListener.SayGoodbye(Joint joint)
     {
         if (_test.MouseJoint == joint)
         {
@@ -32,9 +32,13 @@ internal class TestDestructionListener : DestructionListener
             _test.JointDestroyed(joint);
         }
     }
+
+    void IDestructionListener.SayGoodbye(Fixture fixture)
+    {
+    }
 }
 
-internal class TestQueryCallback : QueryCallback
+internal class TestQueryCallback : IQueryCallback
 {
     public Vec2 Point { get; private set; }
 
@@ -46,7 +50,7 @@ internal class TestQueryCallback : QueryCallback
         Fixture = null;
     }
 
-    protected override bool ReportFixture(Fixture fixture)
+    bool IQueryCallback.ReportFixture(Fixture fixture)
     {
         var body = fixture.Body;
         if (body.Type == BodyType.Dynamic)
@@ -82,7 +86,7 @@ struct ContactPoint
     public float Separation { get; set; }
 }
 
-internal class Test : ContactListener
+internal class Test : IContactListener, IDisposable
 {
     protected const int TextIncrement = 13;
 
@@ -191,8 +195,7 @@ internal class Test : ContactListener
             flags += (uint)DrawFlags.CenterOfMassBit;
         }
 
-        DebugDraw.Flags = (DrawFlags)flags;
-
+        World.DrawFlags = (DrawFlags)flags;
         World.AllowSleeping = Settings.enableSleep;
         World.WarmStarting = Settings.enableWarmStarting;
         World.ContinuousPhysics = Settings.enableContinuous;
@@ -363,7 +366,15 @@ internal class Test : ContactListener
         TextLine = 26;
     }
 
-    protected override void PreSolve(in Contact contact, in Manifold oldManifold)
+    public virtual void BeginContact(in Contact contact)
+    {
+    }
+
+    public virtual void EndContact(in Contact contact)
+    {
+    }
+
+    public virtual void PreSolve(in Contact contact, in Manifold oldManifold)
     {
         var manifold = contact.Manifold;
 
@@ -398,6 +409,10 @@ internal class Test : ContactListener
                 Separation = _worldManifold.Separations[i],
             };
         }
+    }
+
+    public virtual void PostSolve(in Contact contact, in ContactImpulse impulse)
+    {
     }
 
     public virtual void Keyboard(Key key)
@@ -534,14 +549,17 @@ internal class Test : ContactListener
         Bomb.CreateFixture(fd);
     }
 
-    protected override void Dispose(bool disposing)
+    public void Dispose()
     {
         World.Dispose();
         _worldManifold.Dispose();
-        _queryCallback.Dispose();
         _mouseJointDef.Dispose();
         _bombShape.Dispose();
 
-        base.Dispose(disposing);
+        Dispose(true);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
     }
 }

@@ -13,7 +13,7 @@ internal class AddPair : Test
         {
             using var shape = new CircleShape
             {
-                P = new(0f, 0f),
+                Position = new(0f, 0f),
                 Radius = 0.1f,
             };
 

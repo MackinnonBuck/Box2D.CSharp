@@ -1,5 +1,4 @@
-﻿using Box2D.Collections;
-using Box2D.Core;
+﻿using Box2D.Core;
 using Box2D.Math;
 using System;
 using System.Runtime.InteropServices;
@@ -9,17 +8,7 @@ namespace Box2D.Drawing;
 
 using static Interop.NativeMethods;
 
-[Flags]
-public enum DrawFlags : uint
-{
-    ShapeBit        = 0x0001,
-    JointBit        = 0x0002,
-    AabbBit         = 0x0004,
-    PairBit         = 0x0008,
-    CenterOfMassBit = 0x0010,
-}
-
-public class Draw : Box2DDisposableObject
+internal sealed class InternalDraw : Box2DDisposableObject
 {
     [UnmanagedFunctionPointer(Conv), SuppressUnmanagedCodeSecurity]
     private delegate void DrawPolygonUnmanagedDelegate(IntPtr vertices, int vertexCount, [In] ref Color color);
@@ -36,12 +25,6 @@ public class Draw : Box2DDisposableObject
     [UnmanagedFunctionPointer(Conv), SuppressUnmanagedCodeSecurity]
     private delegate void DrawPointUnmanagedDelegate([In] ref Vec2 p, float size, [In] ref Color color);
 
-    public DrawFlags Flags
-    {
-        get => (DrawFlags)b2DrawWrapper_GetFlags(Native);
-        set => b2DrawWrapper_SetFlags(Native, (uint)value);
-    }
-
     private readonly DrawPolygonUnmanagedDelegate _drawPolygon;
     private readonly DrawSolidPolygonUnmanagedDelegate _drawSolidPolygon;
     private readonly DrawCircleUnmanagedDelegate _drawCircle;
@@ -50,8 +33,11 @@ public class Draw : Box2DDisposableObject
     private readonly DrawTransformUnmanagedDelegate _drawTransform;
     private readonly DrawPointUnmanagedDelegate _drawPoint;
 
-    public Draw() : base(isUserOwned: true)
+    private IDraw _userDraw;
+
+    public InternalDraw(IDraw userDraw, DrawFlags flags) : base(isUserOwned: true)
     {
+        _userDraw = userDraw;
         _drawPolygon = DrawPolygonUnmanaged;
         _drawSolidPolygon = DrawSolidPolygonUnmanaged;
         _drawCircle = DrawCircleUnmanaged;
@@ -69,56 +55,36 @@ public class Draw : Box2DDisposableObject
             Marshal.GetFunctionPointerForDelegate(_drawTransform),
             Marshal.GetFunctionPointerForDelegate(_drawPoint));
         Initialize(native);
+
+        SetFlags(flags);
     }
+
+    public void SetFlags(DrawFlags flags)
+        => b2DrawWrapper_SetFlags(Native, (uint)flags);
+
+    public void SetUserDraw(IDraw draw)
+        => _userDraw = draw;
 
     private void DrawPolygonUnmanaged(IntPtr vertices, int vertexCount, ref Color color)
-        => DrawPolygon(new(vertices, vertexCount), color);
+        => _userDraw.DrawPolygon(new(vertices, vertexCount), color);
 
     private void DrawSolidPolygonUnmanaged(IntPtr vertices, int vertexCount, ref Color color)
-        => DrawSolidPolygon(new(vertices, vertexCount), color);
+        => _userDraw.DrawSolidPolygon(new(vertices, vertexCount), color);
 
     private void DrawCircleUnmanaged(ref Vec2 center, float radius, ref Color color)
-        => DrawCircle(center, radius, color);
+        => _userDraw.DrawCircle(center, radius, color);
 
     private void DrawSolidCircleUnmanaged(ref Vec2 center, float radius, ref Vec2 axis, ref Color color)
-        => DrawSolidCircle(center, radius, axis, color);
+        => _userDraw.DrawSolidCircle(center, radius, axis, color);
 
     private void DrawSegmentUnmanaged(ref Vec2 p1, ref Vec2 p2, ref Color color)
-        => DrawSegment(p1, p2, color);
+        => _userDraw.DrawSegment(p1, p2, color);
 
     private void DrawTransformUnmanaged(ref Transform xf)
-        => DrawTransform(xf);
+        => _userDraw.DrawTransform(xf);
 
     private void DrawPointUnmanaged(ref Vec2 p, float size, ref Color color)
-        => DrawPoint(p, size, color);
-
-    public virtual void DrawPolygon(in ArrayRef<Vec2> vertices, Color color)
-    {
-    }
-
-    public virtual void DrawSolidPolygon(in ArrayRef<Vec2> vertices, Color color)
-    {
-    }
-
-    public virtual void DrawCircle(Vec2 center, float radius, Color color)
-    {
-    }
-
-    public virtual void DrawSolidCircle(Vec2 center, float radius, Vec2 axis, Color color)
-    {
-    }
-
-    public virtual void DrawSegment(Vec2 p1, Vec2 p2, Color color)
-    {
-    }
-
-    public virtual void DrawTransform(Transform xf)
-    {
-    }
-
-    public virtual void DrawPoint(Vec2 p, float size, Color color)
-    {
-    }
+        => _userDraw.DrawPoint(p, size, color);
 
     protected override void Dispose(bool disposing)
     {

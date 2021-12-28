@@ -1,4 +1,5 @@
-﻿using Box2D.Core;
+﻿using Box2D.Collision;
+using Box2D.Core;
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -7,7 +8,7 @@ namespace Box2D.Dynamics.Callbacks;
 
 using static Interop.NativeMethods;
 
-public abstract class QueryCallback : Box2DDisposableObject
+internal sealed class InternalQueryCallback : Box2DDisposableObject
 {
     [UnmanagedFunctionPointer(Conv), SuppressUnmanagedCodeSecurity]
     [return: MarshalAs(UnmanagedType.U1)]
@@ -15,7 +16,9 @@ public abstract class QueryCallback : Box2DDisposableObject
 
     private readonly ReportFixtureUnmanagedDelegate _reportFixture;
 
-    protected QueryCallback() : base(isUserOwned: true)
+    private IQueryCallback? _userCallback;
+
+    public InternalQueryCallback() : base(isUserOwned: true)
     {
         _reportFixture = ReportFixtureUnmanaged;
 
@@ -24,13 +27,16 @@ public abstract class QueryCallback : Box2DDisposableObject
         Initialize(native);
     }
 
-    private bool ReportFixtureUnmanaged(IntPtr fixture)
-        => ReportFixture(Fixture.FromIntPtr.Get(fixture)!);
+    public void QueryAABB(IntPtr world, IQueryCallback userCallback, ref AABB aabb)
+    {
+        _userCallback = userCallback;
+        b2World_QueryAABB(world, Native, ref aabb);
+        _userCallback = null;
+    }
 
-    protected abstract bool ReportFixture(Fixture fixture);
+    private bool ReportFixtureUnmanaged(IntPtr fixture)
+        => _userCallback!.ReportFixture(Fixture.FromIntPtr.Get(fixture)!);
 
     protected override void Dispose(bool disposing)
-    {
-        b2QueryCallbackWrapper_delete(Native);
-    }
+        => b2QueryCallbackWrapper_delete(Native);
 }

@@ -3,6 +3,28 @@
 #include "b2_world_callbacks_wrap.h"
 
 /*
+ * b2DestructionListenerWrapper
+ */
+
+b2DestructionListenerWrapper::b2DestructionListenerWrapper(
+    b2DestructionListener_callback_SayGoodbye_b2Joint sayGoodbyeJoint,
+    b2DestructionListener_callback_SayGoodbye_b2Fixture sayGoodbyeFixture)
+    : m_sayGoodbyeJoint(sayGoodbyeJoint)
+    , m_sayGoodbyeFixture(sayGoodbyeFixture)
+{
+}
+
+void b2DestructionListenerWrapper::SayGoodbye(b2Joint* joint)
+{
+    m_sayGoodbyeJoint(joint);
+}
+
+void b2DestructionListenerWrapper::SayGoodbye(b2Fixture* fixture)
+{
+    m_sayGoodbyeFixture(fixture);
+}
+
+/*
  * b2ContactListenerWrapper
  */
 
@@ -52,6 +74,7 @@ bool b2QueryCallbackWrapper::ReportFixture(b2Fixture* fixture)
 {
     return m_reportFixture(fixture);
 }
+
 /*
  * b2RayCastCallbackWrapper
  */
@@ -65,6 +88,23 @@ b2RayCastCallbackWrapper::b2RayCastCallbackWrapper(
 float b2RayCastCallbackWrapper::ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction)
 {
     return m_reportFixture(fixture, &point, &normal, fraction);
+}
+
+/*
+ * b2DestructionListenerWrapper
+ */
+
+b2DestructionListenerWrapper* b2DestructionListenerWrapper_new(
+    b2DestructionListener_callback_SayGoodbye_b2Joint sayGoodbyeJoint,
+    b2DestructionListener_callback_SayGoodbye_b2Fixture sayGoodbyeFixture)
+{
+    return new b2DestructionListenerWrapper(sayGoodbyeJoint, sayGoodbyeFixture);
+}
+
+void b2DestructionListenerWrapper_delete(b2DestructionListenerWrapper* obj)
+{
+    VERIFY_INSTANCE;
+    delete obj;
 }
 
 /*
