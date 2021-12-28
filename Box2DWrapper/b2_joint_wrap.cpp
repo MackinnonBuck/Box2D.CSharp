@@ -3,6 +3,20 @@
 #include "b2_joint_wrap.h"
 
 /*
+ * Top-level functions
+ */
+
+void b2LinearStiffness_wrap(float* stiffness, float* damping, float frequencyHertz, float dampingRatio, b2Body* bodyA, b2Body* bodyB)
+{
+    b2LinearStiffness(*stiffness, *damping, frequencyHertz, dampingRatio, bodyA, bodyB);
+}
+
+void b2AngularStiffness_wrap(float* stiffness, float* damping, float frequencyHertz, float dampingRatio, b2Body* bodyA, b2Body* bodyB)
+{
+    b2AngularStiffness(*stiffness, *damping, frequencyHertz, dampingRatio, bodyA, bodyB);
+}
+
+/*
  * b2JointDef
  */
 

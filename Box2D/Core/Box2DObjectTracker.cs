@@ -9,10 +9,25 @@ using static Config.Conditionals;
 
 public sealed class Box2DObjectTracker
 {
-    public static Box2DObjectTracker Instance { get; } = new();
+#if BOX2D_OBJECT_TRACKING
+    public static Box2DObjectTracker? Instance { get; } = new();
+#else
+    public static Box2DObjectTracker? Instance { get; } = null;
+#endif
 
     private readonly object _box2DObjectsLock = new();
     private readonly HashSet<Box2DObject> _box2DObjects = new();
+
+    public int ObjectCount
+    {
+        get
+        {
+            lock (_box2DObjectsLock)
+            {
+                return _box2DObjects.Count;
+            }
+        }
+    }
 
     public IList<Box2DObject> GetObjects()
     {

@@ -7,13 +7,15 @@ public abstract class Box2DSubObject : Box2DObject
 {
     private protected IntPtr Handle { get; private set; }
 
-    private protected Box2DSubObject() : base(isUserOwned: false)
+    private protected Box2DSubObject()
     {
-        Handle = GCHandle.ToIntPtr(GCHandle.Alloc(this, GCHandleType.Weak));
+        Handle = GCHandle.ToIntPtr(GCHandle.Alloc(this, GCHandleType.Normal));
     }
 
-    private protected override void Dispose(bool disposing)
+    internal virtual void Invalidate()
     {
+        Uninitialize();
+
         GCHandle.FromIntPtr(Handle).Free();
         Handle = IntPtr.Zero;
     }

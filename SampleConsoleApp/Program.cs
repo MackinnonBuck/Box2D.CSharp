@@ -1,4 +1,5 @@
-﻿using Box2D;
+﻿using Box2D.Collision.Shapes;
+using Box2D.Dynamics;
 using Box2D.Math;
 
 // Define the gravity vector.
@@ -8,7 +9,7 @@ var gravity = new Vec2(0f, -10f);
 var world = new World(gravity);
 
 // Define the ground body.
-var groundBodyDef = new BodyDef
+using var groundBodyDef = new BodyDef
 {
     Position = new(0f, -10f),
 };
@@ -26,19 +27,19 @@ groundBox.SetAsBox(50f, 10f);
 groundBody.CreateFixture(groundBox, 0.0f);
 
 // Define the dynamic body. We set its position and call the body factory.
-var bodyDef = new BodyDef
+using var bodyDef = new BodyDef
 {
-    Type = BodyType.Dyanmic,
+    Type = BodyType.Dynamic,
     Position = new(0f, 4f),
 };
 var body = world.CreateBody(bodyDef);
 
 // Define another box shape for our dynamic body.
-var dynamicBox = new PolygonShape();
+using var dynamicBox = new PolygonShape();
 dynamicBox.SetAsBox(1f, 1f);
 
 // Define the dynamic body fixture.
-var fixtureDef = new FixtureDef
+using var fixtureDef = new FixtureDef
 {
     Shape = dynamicBox,
     Density = 1f,       // Non-zero density so it will be dynamic.

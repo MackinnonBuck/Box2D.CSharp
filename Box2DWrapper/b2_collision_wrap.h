@@ -7,6 +7,11 @@
 extern "C"
 {
     /*
+     * Top-level functions
+     */
+    BOX2D_API void b2GetPointStates_wrap(b2PointState* state1, b2PointState* state2, b2Manifold* manifold1, b2Manifold* manifold2);
+
+    /*
      * b2Manifold
      */
     BOX2D_API b2ManifoldPoint* b2Manifold_get_points(b2Manifold* obj, int32* pointCount);

@@ -1,44 +1,27 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
 
 namespace Box2D.Core;
 
-using static Config.Conditionals;
-
-public abstract class Box2DObject : IDisposable
+public abstract class Box2DObject
 {
-    internal IntPtr Native { get; private set; }
+    private IntPtr _native;
 
-    internal bool IsDisposed { get; private set; }
-
-    internal bool IsUserOwned { get; }
-
-    internal Box2DObject(bool isUserOwned)
+    internal IntPtr Native
     {
-        IsUserOwned = isUserOwned;
-
-        if (!IsUserOwned)
+        get
         {
-            GC.SuppressFinalize(this);
+            Errors.ThrowIfInvalidAccess(this, _native);
+            return _native;
         }
     }
 
-    [Conditional(BOX2D_VALID_ACCESS_CHECKING)]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal void ThrowIfDisposed()
-    {
-        if (IsDisposed)
-        {
-            throw new ObjectDisposedException(null, $"Cannot access a disposed object of type '{GetType()}'.");
-        }
-    }
+    internal bool IsValid => _native != IntPtr.Zero;
 
     private protected void Initialize(IntPtr native)
     {
-        if (Native != IntPtr.Zero)
+        if (_native != IntPtr.Zero)
         {
-            throw new InvalidOperationException($"The {nameof(Box2DObject)} was already initialized.");
+            throw new InvalidOperationException($"Cannot initialize an already-initialized {GetType()}.");
         }
 
         if (native == IntPtr.Zero)
@@ -46,36 +29,18 @@ public abstract class Box2DObject : IDisposable
             throw new ArgumentException($"Cannot initialize {nameof(Box2DObject)} instances with null.", nameof(native));
         }
 
-        Native = native;
+        _native = native;
         Box2DObjectTracker.Add(this);
     }
 
-    public void Dispose()
+    private protected void Uninitialize()
     {
-        if (!IsDisposed)
+        if (Native == IntPtr.Zero)
         {
-            Dispose(true);
-            HandleDispose();
-
-            GC.SuppressFinalize(this);
+            throw new InvalidOperationException($"Cannot uninitialize an already-uinitialized {GetType()}.");
         }
-    }
 
-    ~Box2DObject()
-    {
-        if (!IsDisposed)
-        {
-            Dispose(false);
-            HandleDispose();
-        }
-    }
-
-    private protected abstract void Dispose(bool disposing);
-
-    private void HandleDispose()
-    {
-        Native = IntPtr.Zero;
-        IsDisposed = true;
+        _native = IntPtr.Zero;
         Box2DObjectTracker.Remove(this);
     }
 }

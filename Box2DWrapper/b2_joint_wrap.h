@@ -7,6 +7,12 @@
 extern "C"
 {
     /*
+     * Top-level functions
+     */
+    BOX2D_API void b2LinearStiffness_wrap(float* stiffness, float* damping, float frequencyHertz, float dampingRatio, b2Body* bodyA, b2Body* bodyB);
+    BOX2D_API void b2AngularStiffness_wrap(float* stiffness, float* damping, float frequencyHertz, float dampingRatio, b2Body* bodyA, b2Body* bodyB);
+
+    /*
      * b2JointDef
      */
     BOX2D_API b2JointType b2JointDef_get_type(b2JointDef* obj);
