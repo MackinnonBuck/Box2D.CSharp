@@ -37,7 +37,7 @@ internal class DebugDraw : IDraw, IDisposable
         _triangles.Flush();
     }
 
-    public void DrawPolygon(in ArrayRef<Vec2> vertices, Color color)
+    public void DrawPolygon(in ArrayRef<Vector2> vertices, Color color)
     {
         var p1 = vertices[^1];
 
@@ -50,7 +50,7 @@ internal class DebugDraw : IDraw, IDisposable
         }
     }
 
-    public void DrawSolidPolygon(in ArrayRef<Vec2> vertices, Color color)
+    public void DrawSolidPolygon(in ArrayRef<Vector2> vertices, Color color)
     {
         var fillColor = new Color(0.5f * color.R, 0.5f * color.G, 0.5f * color.B, 0.5f);
 
@@ -72,17 +72,17 @@ internal class DebugDraw : IDraw, IDisposable
         }
     }
 
-    public void DrawCircle(Vec2 center, float radius, Color color)
+    public void DrawCircle(Vector2 center, float radius, Color color)
     {
         var sinInc = MathF.Sin(CircleIncrement);
         var cosInc = MathF.Cos(CircleIncrement);
 
-        var r1 = new Vec2(1f, 0f);
+        var r1 = new Vector2(1f, 0f);
         var v1 = center + radius * r1;
 
         for (var i = 0; i < CircleSegments; i++)
         {
-            var r2 = new Vec2(
+            var r2 = new Vector2(
                 cosInc * r1.X - sinInc * r1.Y,
                 sinInc * r1.X + cosInc * r1.Y);
             var v2 = center + radius * r2;
@@ -93,19 +93,19 @@ internal class DebugDraw : IDraw, IDisposable
         }
     }
 
-    public void DrawSolidCircle(Vec2 center, float radius, Vec2 axis, Color color)
+    public void DrawSolidCircle(Vector2 center, float radius, Vector2 axis, Color color)
     {
         var sinInc = MathF.Sin(CircleIncrement);
         var cosInc = MathF.Cos(CircleIncrement);
 
         var v0 = center;
-        var r1 = new Vec2(cosInc, sinInc);
+        var r1 = new Vector2(cosInc, sinInc);
         var v1 = center + radius * r1;
         var fillColor = new Color(0.5f * color.R, 0.5f * color.G, 0.5f * color.B, 0.5f);
 
         for (var i = 0; i < CircleSegments; i++)
         {
-            var r2 = new Vec2(
+            var r2 = new Vector2(
                 cosInc * r1.X - sinInc * r1.Y,
                 sinInc * r1.X + cosInc * r1.Y);
             var v2 = center + radius * r2;
@@ -120,7 +120,7 @@ internal class DebugDraw : IDraw, IDisposable
         v1 = center + radius * r1;
         for (var i = 0; i < CircleSegments; i++)
         {
-            var r2 = new Vec2(
+            var r2 = new Vector2(
                 cosInc * r1.X - sinInc * r1.Y,
                 sinInc * r1.X + cosInc * r1.Y);
             var v2 = center + radius * r2;
@@ -135,7 +135,7 @@ internal class DebugDraw : IDraw, IDisposable
         _lines.Vertex(p, color);
     }
 
-    public void DrawSegment(Vec2 p1, Vec2 p2, Color color)
+    public void DrawSegment(Vector2 p1, Vector2 p2, Color color)
     {
         _lines.Vertex(p1, color);
         _lines.Vertex(p2, color);
@@ -154,7 +154,7 @@ internal class DebugDraw : IDraw, IDisposable
         _lines.Vertex(p2, _green);
     }
 
-    public void DrawPoint(Vec2 p, float size, Color color)
+    public void DrawPoint(Vector2 p, float size, Color color)
     {
         _points.Vertex(p, color, size);
     }

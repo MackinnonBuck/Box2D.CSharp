@@ -1,7 +1,7 @@
 ﻿using Box2D.Collections;
 using Box2D.Core;
-using Box2D.Math;
 using System;
+using System.Numerics;
 
 namespace Box2D.Collision;
 
@@ -31,7 +31,7 @@ public readonly ref struct Manifold
 
     public ArrayRef<ManifoldPoint> Points { get; }
 
-    public Vec2 LocalNormal
+    public Vector2 LocalNormal
     {
         get
         {
@@ -41,7 +41,7 @@ public readonly ref struct Manifold
         set => b2Manifold_set_localNormal(Native, ref value);
     }
 
-    public Vec2 LocalPoint
+    public Vector2 LocalPoint
     {
         get
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -15,16 +16,16 @@ public struct Rot : IEquatable<Rot>
 
     public float C { get; set; }
 
-    public float Angle => MathF.Atan2(S, C);
+    public float Angle => (float)System.Math.Atan2(S, C);
 
-    public Vec2 XAxis => new(C, S);
+    public Vector2 XAxis => new(C, S);
 
-    public Vec2 YAxis => new(-S, C);
+    public Vector2 YAxis => new(-S, C);
 
     public Rot(float angle)
     {
-        S = MathF.Sin(angle);
-        C = MathF.Cos(angle);
+        S = (float)System.Math.Sin(angle);
+        C = (float)System.Math.Cos(angle);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

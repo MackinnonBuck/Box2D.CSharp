@@ -1,7 +1,7 @@
 ﻿using Box2D.Core;
 using Box2D.Dynamics.Joints;
-using Box2D.Math;
 using System;
+using System.Numerics;
 
 namespace Box2D.Dynamics;
 
@@ -155,7 +155,7 @@ public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
 
     public Body BodyB => Body.FromIntPtr.Get(b2Joint_GetBodyB(Native))!;
 
-    public Vec2 AnchorA
+    public Vector2 AnchorA
     {
         get
         {
@@ -164,7 +164,7 @@ public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
         }
     }
 
-    public Vec2 AnchorB
+    public Vector2 AnchorB
     {
         get
         {
@@ -217,7 +217,7 @@ public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
         UserData = userData;
     }
 
-    public Vec2 GetReactionForce(float invDt)
+    public Vector2 GetReactionForce(float invDt)
     {
         b2Joint_GetReactionForce(Native, invDt, out var value);
         return value;
@@ -226,6 +226,6 @@ public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
     public float GetReactionTorque(float invDt)
         => b2Joint_GetReactionTorque(Native, invDt);
 
-    public void ShiftOrigin(Vec2 newOrigin)
+    public void ShiftOrigin(Vector2 newOrigin)
         => b2Joint_ShiftOrigin(Native, ref newOrigin);
 }

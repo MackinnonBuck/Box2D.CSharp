@@ -1,4 +1,4 @@
-﻿using Box2D.Math;
+﻿using System.Numerics;
 
 namespace Box2D.Dynamics.Joints;
 
@@ -6,7 +6,7 @@ using static Interop.NativeMethods;
 
 public sealed class WheelJointDef : JointDef
 {
-    public Vec2 LocalAnchorA
+    public Vector2 LocalAnchorA
     {
         get
         {
@@ -16,7 +16,7 @@ public sealed class WheelJointDef : JointDef
         set => b2WheelJointDef_set_localAnchorA(Native, ref value);
     }
 
-    public Vec2 LocalAnchorB
+    public Vector2 LocalAnchorB
     {
         get
         {
@@ -26,7 +26,7 @@ public sealed class WheelJointDef : JointDef
         set => b2WheelJointDef_set_localAnchorB(Native, ref value);
     }
 
-    public Vec2 LocalAxisA
+    public Vector2 LocalAxisA
     {
         get
         {
@@ -90,7 +90,7 @@ public sealed class WheelJointDef : JointDef
         Initialize(native);
     }
 
-    public void Initialize(Body bodyA, Body bodyB, Vec2 anchor, Vec2 axis)
+    public void Initialize(Body bodyA, Body bodyB, Vector2 anchor, Vector2 axis)
         => b2WheelJointDef_Initialize(Native, bodyA.Native, bodyB.Native, ref anchor, ref axis);
 
     protected override void Dispose(bool disposing)
@@ -101,7 +101,7 @@ public sealed class WheelJoint : Joint
 {
     public override JointType Type => JointType.Wheel;
 
-    public Vec2 LocalAnchorA
+    public Vector2 LocalAnchorA
     {
         get
         {
@@ -110,7 +110,7 @@ public sealed class WheelJoint : Joint
         }
     }
 
-    public Vec2 LocalAnchorB
+    public Vector2 LocalAnchorB
     {
         get
         {
@@ -119,7 +119,7 @@ public sealed class WheelJoint : Joint
         }
     }
 
-    public Vec2 LocalAxisA
+    public Vector2 LocalAxisA
     {
         get
         {

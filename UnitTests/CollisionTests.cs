@@ -1,6 +1,6 @@
 ﻿using Box2D.Collision.Shapes;
-using Box2D.Math;
 using System;
+using System.Numerics;
 using Xunit;
 
 namespace UnitTests;
@@ -10,7 +10,7 @@ public class CollisionTests
     [Fact]
     public void CollisionTest_Works()
     {
-        var center = new Vec2(100f, -50f);
+        var center = new Vector2(100f, -50f);
         var hx = 0.5f;
         var hy = 1.5f;
         var angle1 = 0.25f;
@@ -25,12 +25,12 @@ public class CollisionTests
         Assert.True(MathF.Abs(polygon1.Centroid.X - center.X) < absTol + relTol * MathF.Abs(center.X));
         Assert.True(MathF.Abs(polygon1.Centroid.Y - center.Y) < absTol + relTol * MathF.Abs(center.Y));
 
-        Span<Vec2> vertices = stackalloc Vec2[]
+        Span<Vector2> vertices = stackalloc Vector2[]
         {
-            new Vec2(center.X - hx, center.Y - hy),
-            new Vec2(center.X + hx, center.Y - hy),
-            new Vec2(center.X - hx, center.Y + hy),
-            new Vec2(center.X + hx, center.Y + hy),
+            new Vector2(center.X - hx, center.Y - hy),
+            new Vector2(center.X + hx, center.Y - hy),
+            new Vector2(center.X - hx, center.Y + hy),
+            new Vector2(center.X + hx, center.Y + hy),
         };
 
         using var polygon2 = new PolygonShape();
@@ -40,7 +40,7 @@ public class CollisionTests
         Assert.True(MathF.Abs(polygon2.Centroid.Y - center.Y) < absTol + relTol * MathF.Abs(center.Y));
 
         var mass = 4f * hx * hy;
-        var inertia = (mass / 3f) * (hx * hx + hy * hy) + mass * center.Dot(center);
+        var inertia = (mass / 3f) * (hx * hx + hy * hy) + mass * Vector2.Dot(center, center);
 
         polygon1.ComputeMass(out var massData1, 1f);
 

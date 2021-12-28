@@ -5,6 +5,7 @@ using Box2D.Drawing;
 using Box2D.Dynamics;
 using Box2D.Dynamics.Callbacks;
 using Box2D.Math;
+using System.Numerics;
 using Xunit;
 
 namespace UnitTests;
@@ -14,7 +15,7 @@ public class WorldTests
     [Fact]
     public void WorldTest_Works()
     {
-        using var world = new World(new Vec2(0f, -10f));
+        using var world = new World(new Vector2(0f, -10f));
         var destructionListener = new MyDestructionListener();
         var contactListener = new MyContactListener();
         var draw = new MyDraw();
@@ -38,8 +39,8 @@ public class WorldTests
         bodyA.CreateFixture(circle, 0f);
         bodyB.CreateFixture(circle, 0f);
 
-        bodyA.SetTransform(new Vec2(0f, 0f), 0f);
-        bodyB.SetTransform(new Vec2(100f, 0f), 0f);
+        bodyA.SetTransform(new Vector2(0f, 0f), 0f);
+        bodyB.SetTransform(new Vector2(100f, 0f), 0f);
 
         var timeStep = 1f / 60f;
         var velocityIterations = 6;
@@ -50,7 +51,7 @@ public class WorldTests
         Assert.False(world.ContactList.IsValid);
         Assert.False(contactListener.DidBeginContact);
 
-        bodyB.SetTransform(new Vec2(1f, 0f), 0f);
+        bodyB.SetTransform(new Vector2(1f, 0f), 0f);
 
         world.Step(timeStep, velocityIterations, positionIterations);
 
@@ -120,29 +121,29 @@ public class WorldTests
 
         public int PolygonDrawCount { get; private set; }
 
-        void IDraw.DrawCircle(Vec2 center, float radius, Color color)
+        void IDraw.DrawCircle(Vector2 center, float radius, Color color)
         {
         }
 
-        void IDraw.DrawPoint(Vec2 p, float size, Color color)
+        void IDraw.DrawPoint(Vector2 p, float size, Color color)
         {
         }
 
-        void IDraw.DrawPolygon(in ArrayRef<Vec2> vertices, Color color)
+        void IDraw.DrawPolygon(in ArrayRef<Vector2> vertices, Color color)
         {
             PolygonDrawCount++;
         }
 
-        void IDraw.DrawSegment(Vec2 p1, Vec2 p2, Color color)
+        void IDraw.DrawSegment(Vector2 p1, Vector2 p2, Color color)
         {
         }
 
-        void IDraw.DrawSolidCircle(Vec2 center, float radius, Vec2 axis, Color color)
+        void IDraw.DrawSolidCircle(Vector2 center, float radius, Vector2 axis, Color color)
         {
             SolidCircleDrawCount++;
         }
 
-        void IDraw.DrawSolidPolygon(in ArrayRef<Vec2> vertices, Color color)
+        void IDraw.DrawSolidPolygon(in ArrayRef<Vector2> vertices, Color color)
         {
         }
 

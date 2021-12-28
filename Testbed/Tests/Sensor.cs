@@ -2,6 +2,7 @@
 using Box2D.Collision.Shapes;
 using Box2D.Dynamics;
 using ImGuiNET;
+using System.Numerics;
 
 namespace Testbed.Tests;
 
@@ -139,12 +140,12 @@ internal class Sensor : Test
             var position = body.Position;
             var d = center - position;
 
-            if (d.LengthSquared < float.Epsilon * float.Epsilon)
+            if (d.LengthSquared() < float.Epsilon * float.Epsilon)
             {
                 continue;
             }
 
-            d = d.Normalized;
+            d = Vector2.Normalize(d);
             var f = _force * d;
             body.ApplyForce(f, position, false);
         }

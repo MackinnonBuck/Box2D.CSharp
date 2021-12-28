@@ -1,7 +1,7 @@
 ﻿using Box2D.Collision.Shapes;
 using Box2D.Dynamics;
-using Box2D.Math;
 using System.Diagnostics;
+using System.Numerics;
 
 namespace Testbed.Tests;
 
@@ -25,7 +25,7 @@ internal class Tiles : Test
 
             var n = 200;
             var m = 10;
-            var position = Vec2.Zero;
+            var position = Vector2.Zero;
             using var shape = new PolygonShape();
             for (var j = 0; j < m; j++)
             {
@@ -46,10 +46,10 @@ internal class Tiles : Test
             using var shape = new PolygonShape();
             shape.SetAsBox(a, a);
 
-            var x = new Vec2(-7f, 0.75f);
-            var y = Vec2.Zero;
-            var deltaX = new Vec2(0.5625f, 1.25f);
-            var deltaY = new Vec2(1.125f, 0f);
+            var x = new Vector2(-7f, 0.75f);
+            var y = Vector2.Zero;
+            var deltaX = new Vector2(0.5625f, 1.25f);
+            var deltaY = new Vector2(1.125f, 0f);
 
             using var bd = new BodyDef
             {

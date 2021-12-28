@@ -1,11 +1,11 @@
-﻿using Box2D.Math;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using System.Numerics;
 
 namespace Testbed.Drawing;
 
 internal class Camera
 {
-    public Vec2 Center { get; set; } = new(0f, 20f);
+    public Vector2 Center { get; set; } = new(0f, 20f);
 
     public float Zoom { get; set; } = 1f;
 
@@ -13,7 +13,7 @@ internal class Camera
 
     public int Height { get; set; } = 800;
 
-    public Vec2 ConvertScreenToWorld(Vec2 screenPoint)
+    public Vector2 ConvertScreenToWorld(Vector2 screenPoint)
     {
         var w = (float)Width;
         var h = (float)Height;
@@ -21,7 +21,7 @@ internal class Camera
         var v = (h - screenPoint.Y) / h;
 
         var ratio = w / h;
-        var extents = new Vec2(ratio * 25f, 25f);
+        var extents = new Vector2(ratio * 25f, 25f);
         extents *= Zoom;
 
         var lower = Center - extents;
@@ -32,13 +32,13 @@ internal class Camera
             (1f - v) * lower.Y + v * upper.Y);
     }
 
-    public Vec2 ConvertWorldToScreen(Vec2 worldPoint)
+    public Vector2 ConvertWorldToScreen(Vector2 worldPoint)
     {
         var w = (float)Width;
         var h = (float)Height;
 
         var ratio = w / h;
-        var extents = new Vec2(ratio * 25f, 25f);
+        var extents = new Vector2(ratio * 25f, 25f);
         extents *= Zoom;
 
         var lower = Center - extents;
@@ -58,7 +58,7 @@ internal class Camera
         var h = (float)Height;
 
         var ratio = w / h;
-        var extents = new Vec2(ratio * 25f, 25f);
+        var extents = new Vector2(ratio * 25f, 25f);
         extents *= Zoom;
 
         var lower = Center - extents;

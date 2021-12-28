@@ -1,15 +1,16 @@
 ﻿using Box2D.Collections;
 using Box2D.Math;
+using System.Numerics;
 
 namespace Box2D.Drawing;
 
 public interface IDraw
 {
-    void DrawPolygon(in ArrayRef<Vec2> vertices, Color color);
-    void DrawSolidPolygon(in ArrayRef<Vec2> vertices, Color color);
-    void DrawCircle(Vec2 center, float radius, Color color);
-    void DrawSolidCircle(Vec2 center, float radius, Vec2 axis, Color color);
-    void DrawSegment(Vec2 p1, Vec2 p2, Color color);
+    void DrawPolygon(in ArrayRef<Vector2> vertices, Color color);
+    void DrawSolidPolygon(in ArrayRef<Vector2> vertices, Color color);
+    void DrawCircle(Vector2 center, float radius, Color color);
+    void DrawSolidCircle(Vector2 center, float radius, Vector2 axis, Color color);
+    void DrawSegment(Vector2 p1, Vector2 p2, Color color);
     void DrawTransform(Transform xf);
-    void DrawPoint(Vec2 p, float size, Color color);
+    void DrawPoint(Vector2 p, float size, Color color);
 }

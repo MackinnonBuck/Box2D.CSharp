@@ -2,8 +2,8 @@
 using Box2D.Core;
 using Box2D.Drawing;
 using Box2D.Dynamics.Callbacks;
-using Box2D.Math;
 using Box2D.Profiling;
+using System.Numerics;
 
 namespace Box2D.Dynamics;
 
@@ -70,7 +70,7 @@ public sealed class World : Box2DDisposableObject
 
     public float TreeQuality => b2World_GetTreeQuality(Native);
 
-    public Vec2 Gravity
+    public Vector2 Gravity
     {
         get
         {
@@ -90,7 +90,7 @@ public sealed class World : Box2DDisposableObject
         }
     }
 
-    public World(Vec2 gravity) : base(isUserOwned: true)
+    public World(Vector2 gravity) : base(isUserOwned: true)
     {
         var native = b2World_new(ref gravity);
         Initialize(native);
@@ -161,10 +161,10 @@ public sealed class World : Box2DDisposableObject
     public void QueryAABB(IQueryCallback callback, AABB aabb)
         => _internalQueryCallback.QueryAABB(Native, callback, ref aabb);
 
-    public void RayCast(IRayCastCallback callback, Vec2 point1, Vec2 point2)
+    public void RayCast(IRayCastCallback callback, Vector2 point1, Vector2 point2)
         => _internalRayCastCallback.RayCast(Native, callback, ref point1, ref point2);
 
-    public void ShiftOrigin(Vec2 newOrigin)
+    public void ShiftOrigin(Vector2 newOrigin)
         => b2World_ShiftOrigin(Native, ref newOrigin);
 
     public void GetProfile(out Profile profile)

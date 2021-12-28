@@ -1,7 +1,7 @@
 ﻿using Box2D.Collision;
 using Box2D.Core;
-using Box2D.Math;
 using System;
+using System.Numerics;
 using System.Runtime.InteropServices;
 
 namespace Box2D.Dynamics;
@@ -152,7 +152,7 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
         Initialize(native);
     }
 
-    public bool TestPoint(Vec2 p)
+    public bool TestPoint(Vector2 p)
         => b2Fixture_TestPoint(Native, ref p);
 
     internal override void Invalidate()
