@@ -191,9 +191,10 @@ void b2BodyDef_delete(b2BodyDef* obj)
  * b2Body
  */
 
-b2Fixture* b2Body_CreateFixture(b2Body* obj, b2FixtureDef* def)
+b2Fixture* b2Body_CreateFixture(b2Body* obj, b2FixtureDef* def, uintptr_t userData)
 {
     VERIFY_INSTANCE;
+    def->userData.pointer = userData;
     return obj->CreateFixture(def);
 }
 

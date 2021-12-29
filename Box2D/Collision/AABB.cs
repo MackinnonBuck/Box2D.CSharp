@@ -1,15 +1,28 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using System.Runtime.InteropServices;
 
 namespace Box2D.Collision;
 
+/// <summary>
+/// An axis-aligned bounding box.
+/// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public struct AABB
+public struct AABB : IEquatable<AABB>
 {
+    /// <summary>
+    /// Gets or sets the lower vertex.
+    /// </summary>
     public Vector2 LowerBound { get; set; }
 
+    /// <summary>
+    /// Gets or sets the upper vertex.
+    /// </summary>
     public Vector2 UpperBound { get; set; }
 
+    /// <summary>
+    /// Gets whether the bounds are sorted.
+    /// </summary>
     public bool IsValid
     {
         get
@@ -21,10 +34,19 @@ public struct AABB
         }
     }
 
+    /// <summary>
+    /// Gets the center of the AABB.
+    /// </summary>
     public Vector2 Center => 0.5f * (LowerBound + UpperBound);
 
+    /// <summary>
+    /// Gets the extends of the AABB (half-widths).
+    /// </summary>
     public Vector2 Extents => 0.5f * (UpperBound - LowerBound);
 
+    /// <summary>
+    /// Gets the perimeter length.
+    /// </summary>
     public float Perimeter
     {
         get
@@ -35,18 +57,19 @@ public struct AABB
         }
     }
 
-    public void Combine(AABB other)
-    {
-        LowerBound = Vector2.Min(LowerBound, other.LowerBound);
-        UpperBound = Vector2.Max(UpperBound, other.UpperBound);
-    }
+    /// <summary>
+    /// Combines two AABBs.
+    /// </summary>
+    public static AABB Combine(AABB aabb1, AABB aabb2)
+        => new()
+        {
+            LowerBound = Vector2.Min(aabb1.LowerBound, aabb2.LowerBound),
+            UpperBound = Vector2.Max(aabb1.UpperBound, aabb2.UpperBound),
+        };
 
-    public void Combine(AABB aabb1, AABB aabb2)
-    {
-        LowerBound = Vector2.Min(aabb1.LowerBound, aabb2.LowerBound);
-        UpperBound = Vector2.Max(aabb1.UpperBound, aabb2.UpperBound);
-    }
-
+    /// <summary>
+    /// Returns whether this AABB contains the provided AABB.
+    /// </summary>
     public bool Contains(AABB other)
     {
         var result = true;
@@ -56,4 +79,22 @@ public struct AABB
         result = result && other.UpperBound.Y <= UpperBound.Y;
         return result;
     }
+
+    public static bool operator ==(AABB a, AABB b)
+        => a.Equals(b);
+
+    public static bool operator !=(AABB a, AABB b)
+        => !a.Equals(b);
+
+    /// <inheritdoc/>
+    public bool Equals(AABB other)
+        => LowerBound.Equals(other.LowerBound) && UpperBound.Equals(other.UpperBound);
+
+    /// <inheritdoc/>
+    public override bool Equals(object obj)
+        => obj is AABB aabb && Equals(aabb);
+
+    /// <inheritdoc/>
+    public override int GetHashCode()
+        => HashCode.Combine(LowerBound, UpperBound);
 }

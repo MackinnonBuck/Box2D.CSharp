@@ -47,13 +47,13 @@ public class CollisionTests
         Assert.True(MathF.Abs(massData1.Center.X - center.X) < absTol + relTol * MathF.Abs(center.X));
         Assert.True(MathF.Abs(massData1.Center.Y - center.Y) < absTol + relTol * MathF.Abs(center.Y));
         Assert.True(MathF.Abs(massData1.Mass - mass) < 20f * (absTol + relTol * mass));
-        Assert.True(MathF.Abs(massData1.I - inertia) < 40f * (absTol + relTol * inertia));
+        Assert.True(MathF.Abs(massData1.Inertia - inertia) < 40f * (absTol + relTol * inertia));
 
         polygon2.ComputeMass(out var massData2, 1f);
 
         Assert.True(MathF.Abs(massData2.Center.X - center.X) < absTol + relTol * MathF.Abs(center.X));
         Assert.True(MathF.Abs(massData2.Center.Y - center.Y) < absTol + relTol * MathF.Abs(center.Y));
         Assert.True(MathF.Abs(massData2.Mass - mass) < 20f * (absTol + relTol * mass));
-        Assert.True(MathF.Abs(massData2.I - inertia) < 40f * (absTol + relTol * inertia));
+        Assert.True(MathF.Abs(massData2.Inertia - inertia) < 40f * (absTol + relTol * inertia));
     }
 }

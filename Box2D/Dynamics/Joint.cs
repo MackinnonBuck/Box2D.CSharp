@@ -7,6 +7,10 @@ namespace Box2D.Dynamics;
 
 using static Interop.NativeMethods;
 
+/// <summary>
+/// The base joint class. Joints are used to constrain two bodies together in
+/// various fashions. Some joints also feature limits and motors.
+/// </summary>
 public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
 {
     internal static JointFromIntPtr FromIntPtr { get; } = new();
@@ -17,14 +21,29 @@ public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
             => b2Joint_GetUserData(obj);
     }
 
+    /// <summary>
+    /// Gets or sets the user data object.
+    /// </summary>
     public object? UserData { get; set; }
 
+    /// <summary>
+    /// Gets the type of the concrete joint.
+    /// </summary>
     public abstract JointType Type { get; }
 
+    /// <summary>
+    /// Gets the first body attached to this joint.
+    /// </summary>
     public Body BodyA => Body.FromIntPtr.Get(b2Joint_GetBodyA(Native))!;
 
+    /// <summary>
+    /// Gets the second body attached to this joint.
+    /// </summary>
     public Body BodyB => Body.FromIntPtr.Get(b2Joint_GetBodyB(Native))!;
 
+    /// <summary>
+    /// Gets the anchor point on <see cref="BodyA"/> in world coordinates.
+    /// </summary>
     public Vector2 AnchorA
     {
         get
@@ -34,6 +53,9 @@ public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
         }
     }
 
+    /// <summary>
+    /// Gets the anchor point on <see cref="BodyB"/> in world coordinates.
+    /// </summary>
     public Vector2 AnchorB
     {
         get
@@ -43,10 +65,23 @@ public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
         }
     }
 
+    /// <summary>
+    /// Gets the next joint in the world joint list.
+    /// </summary>
     public Joint? Next => FromIntPtr.Get(b2Joint_GetNext(Native));
 
+    /// <summary>
+    /// Gets whether either body is enabled.
+    /// </summary>
     public bool IsEnabled => b2Joint_IsEnabled(Native);
 
+    /// <summary>
+    /// Gets whether the two connected bodies should collide.
+    /// </summary>
+    /// <remarks>
+    /// Note: modifying the collide connect flag won't work correctly because
+    /// the flag is only checked when fixture AABBs begin to overlap.
+    /// </remarks>
     public bool CollideConnected => b2Joint_GetCollideConnected(Native);
 
     internal static Joint Create(IntPtr worldNative, JointDef def)
@@ -69,16 +104,21 @@ public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
             var x => throw new InvalidOperationException($"Invalid joint type '{x}'."),
         };
 
-        def.InternalUserData = joint.Handle;
-        var native = b2World_CreateJoint(worldNative, def.Native);
+        var native = b2World_CreateJoint(worldNative, def.Native, joint.Handle);
         joint.Initialize(native);
 
         return joint;
     }
 
+    /// <summary>
+    /// Utility to compute linear stiffness values from frequency and damping ratio.
+    /// </summary>
     public static void LinearStiffness(out float stiffness, out float damping, float frequencyHertz, float dampingRatio, Body bodyA, Body bodyB)
         => b2LinearStiffness_wrap(out stiffness, out damping, frequencyHertz, dampingRatio, bodyA.Native, bodyB.Native);
 
+    /// <summary>
+    /// Utility to compute rotational stiffness values from frequency and damping ratio.
+    /// </summary>
     public static void AngularStiffness(out float stiffness, out float damping, float frequencyHertz, float dampingRatio, Body bodyA, Body bodyB)
         => b2AngularStiffness_wrap(out stiffness, out damping, frequencyHertz, dampingRatio, bodyA.Native, bodyB.Native);
 
@@ -87,15 +127,24 @@ public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
         UserData = userData;
     }
 
+    /// <summary>
+    /// Gets the reaction force on <see cref="BodyB"/> at the joint anchor in Newtons.
+    /// </summary>
     public Vector2 GetReactionForce(float invDt)
     {
         b2Joint_GetReactionForce(Native, invDt, out var value);
         return value;
     }
 
+    /// <summary>
+    /// Gets the reaction torque on <see cref="BodyB"/> in N*m.
+    /// </summary>
     public float GetReactionTorque(float invDt)
         => b2Joint_GetReactionTorque(Native, invDt);
 
+    /// <summary>
+    /// Shifts the origin for any points stored in world coordinates.
+    /// </summary>
     public void ShiftOrigin(Vector2 newOrigin)
         => b2Joint_ShiftOrigin(Native, ref newOrigin);
 }

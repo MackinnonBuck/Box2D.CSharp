@@ -3,6 +3,7 @@
 #include "b2_world_wrap.h"
 
 #include <box2d/b2_body.h>
+#include <box2d/b2_joint.h>
 
 b2World* b2World_new(b2Vec2* gravity)
 {
@@ -48,9 +49,10 @@ void b2World_DestroyBody(b2World* obj, b2Body* body)
     obj->DestroyBody(body);
 }
 
-b2Joint* b2World_CreateJoint(b2World* obj, b2JointDef* def)
+b2Joint* b2World_CreateJoint(b2World* obj, b2JointDef* def, uintptr_t userData)
 {
     VERIFY_INSTANCE;
+    def->userData.pointer = userData;
     return obj->CreateJoint(def);
 }
 

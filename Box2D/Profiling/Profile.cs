@@ -2,6 +2,9 @@
 
 namespace Box2D.Profiling;
 
+/// <summary>
+/// Profiling data. Times are in milliseconds.
+/// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public struct Profile
 {

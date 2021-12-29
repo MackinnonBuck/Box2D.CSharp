@@ -7,6 +7,15 @@ namespace Box2D.Dynamics;
 
 using static Interop.NativeMethods;
 
+/// <summary>
+/// Used to attach a shape to a body for collision detection. A fixture
+/// inherits its transform from its parent. Fixtures hold additional non-gemoetric data
+/// such as friction, collision filters, etc.
+/// Fixtures are created via <see cref="Body.CreateFixture(in FixtureDef)"/>.
+/// </summary>
+/// <remarks>
+/// Warning: You cannot reuse fixtures.
+/// </remarks>
 public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
 {
     internal static FixtureFromIntPtr FromIntPtr { get; } = new();
@@ -19,12 +28,26 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
 
     private Shape? _shape;
 
+    /// <summary>
+    /// Gets the type of the child shape. You can use this to down cast to the concrete shape.
+    /// </summary>
     public ShapeType Type { get; }
 
+    /// <summary>
+    /// Gets the parent body of this fixture. This is <c>null</c> if the fixture is not attached.
+    /// </summary>
     public Body Body { get; }
 
+    /// <summary>
+    /// Gets or sets the user data of the fixture. Use this to store your application-specific data.
+    /// </summary>
     public object? UserData { get; set; }
 
+    /// <summary>
+    /// Gets or sets the child shape. You can modify the child shape, however you should not
+    /// change the number of vertices because this will crash some collision caching mechanisms.
+    /// Manipulating the shape may lead to non-physical behavior.
+    /// </summary>
     public Shape Shape
     {
         get
@@ -42,12 +65,18 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
         }
     }
 
+    /// <summary>
+    /// Gets or sets if the fixture is a sensor.
+    /// </summary>
     public bool IsSensor
     {
         get => b2Fixture_IsSensor(Native);
         set => b2Fixture_SetSensor(Native, value);
     }
 
+    /// <summary>
+    /// Gets the next fixture in the parent body's fixture list.
+    /// </summary>
     public Fixture? Next => FromIntPtr.Get(b2Fixture_GetNext(Native));
 
     internal Fixture(Body body, in FixtureDef def)
@@ -61,8 +90,7 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
         Body = body;
         UserData = def.UserData;
 
-        def.InternalUserData = Handle;
-        var native = b2Body_CreateFixture(body.Native, def.Native);
+        var native = b2Body_CreateFixture(body.Native, def.Native, Handle);
         Initialize(native);
     }
 
@@ -75,6 +103,10 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
         Initialize(native);
     }
 
+    /// <summary>
+    /// Test a point for containment in this fixture.
+    /// </summary>
+    /// <param name="p">A point in world coordinates.</param>
     public bool TestPoint(Vector2 p)
         => b2Fixture_TestPoint(Native, ref p);
 

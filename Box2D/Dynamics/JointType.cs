@@ -1,5 +1,8 @@
 ﻿namespace Box2D.Dynamics;
 
+/// <summary>
+/// Represents a concrete joint type.
+/// </summary>
 public enum JointType
 {
     Unknown,

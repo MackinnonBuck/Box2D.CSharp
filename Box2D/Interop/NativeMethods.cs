@@ -34,7 +34,7 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_DestroyBody(IntPtr obj, IntPtr body);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern IntPtr b2World_CreateJoint(IntPtr obj, IntPtr def);
+    public static extern IntPtr b2World_CreateJoint(IntPtr obj, IntPtr def, IntPtr userData);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_DestroyJoint(IntPtr obj, IntPtr joint);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -309,7 +309,7 @@ internal static class NativeMethods
      * b2Body
      */
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern IntPtr b2Body_CreateFixture(IntPtr obj, IntPtr def);
+    public static extern IntPtr b2Body_CreateFixture(IntPtr obj, IntPtr def, IntPtr userData);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Body_CreateFixture2(IntPtr obj, IntPtr shape, float density, IntPtr userData);
     [DllImport(Dll, CallingConvention = Conv)]

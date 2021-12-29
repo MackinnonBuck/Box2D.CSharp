@@ -43,7 +43,7 @@ extern "C"
     /*
      * b2Body
      */
-    BOX2D_API b2Fixture* b2Body_CreateFixture(b2Body* obj, b2FixtureDef* def);
+    BOX2D_API b2Fixture* b2Body_CreateFixture(b2Body* obj, b2FixtureDef* def, uintptr_t userData);
     BOX2D_API b2Fixture* b2Body_CreateFixture2(b2Body* obj, b2Shape* shape, float density, uintptr_t userData);
     BOX2D_API void b2Body_DestroyFixture(b2Body* obj, b2Fixture* fixture);
     BOX2D_API void b2Body_GetTransform(b2Body* obj, b2Transform* transform);

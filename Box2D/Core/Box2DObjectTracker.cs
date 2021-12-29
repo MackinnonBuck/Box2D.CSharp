@@ -7,6 +7,10 @@ namespace Box2D.Core;
 
 using static Config.Conditionals;
 
+/// <summary>
+/// Tracks <see cref="Box2DObject"/> instances. Used to determine
+/// whether objects get disposed properly and track down memory leaks.
+/// </summary>
 public sealed class Box2DObjectTracker
 {
 #if BOX2D_OBJECT_TRACKING
@@ -18,6 +22,9 @@ public sealed class Box2DObjectTracker
     private readonly object _box2DObjectsLock = new();
     private readonly HashSet<Box2DObject> _box2DObjects = new();
 
+    /// <summary>
+    /// Gets the number of <see cref="Box2DObject"/> instances.
+    /// </summary>
     public int ObjectCount
     {
         get
@@ -29,6 +36,9 @@ public sealed class Box2DObjectTracker
         }
     }
 
+    /// <summary>
+    /// Gets a list of all <see cref="Box2DObject"/> instances.
+    /// </summary>
     public IList<Box2DObject> GetObjects()
     {
         lock (_box2DObjectsLock)

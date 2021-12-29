@@ -143,14 +143,14 @@ internal class DebugDraw : IDraw, IDisposable
 
     public void DrawTransform(Transform xf)
     {
-        var p1 = xf.P;
+        var p1 = xf.Position;
 
         _lines.Vertex(p1, _red);
-        var p2 = p1 + AxisScale * xf.Q.XAxis;
+        var p2 = p1 + AxisScale * xf.Rotation.XAxis;
         _lines.Vertex(p2, _red);
 
         _lines.Vertex(p1, _green);
-        p2 = p1 + AxisScale * xf.Q.YAxis;
+        p2 = p1 + AxisScale * xf.Rotation.YAxis;
         _lines.Vertex(p2, _green);
     }
 
