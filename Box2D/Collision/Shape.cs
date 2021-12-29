@@ -2,6 +2,7 @@
 using Box2D.Core;
 using Box2D.Math;
 using System;
+using System.Numerics;
 
 namespace Box2D.Collision;
 
@@ -62,7 +63,7 @@ public abstract class Shape : Box2DDisposableObject
     public bool RayCast(out RayCastOutput output, in RayCastInput input, Transform transform, int childIndex)
         => b2Shape_RayCast(Native, out output, in input, ref transform, childIndex);
 
-    public bool TestPoint(Transform transform, Vec2 p)
+    public bool TestPoint(Transform transform, Vector2 p)
         => b2Shape_TestPoint(Native, ref transform, ref p);
 
     protected override void Dispose(bool disposing)

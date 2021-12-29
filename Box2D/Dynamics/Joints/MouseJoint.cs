@@ -1,4 +1,4 @@
-﻿using Box2D.Math;
+﻿using System.Numerics;
 
 namespace Box2D.Dynamics.Joints;
 
@@ -6,7 +6,7 @@ using static Interop.NativeMethods;
 
 public sealed class MouseJointDef : JointDef
 {
-    public Vec2 Target
+    public Vector2 Target
     {
         get
         {
@@ -50,7 +50,7 @@ public sealed class MouseJoint : Joint
 {
     public override JointType Type => JointType.Mouse;
 
-    public Vec2 Target
+    public Vector2 Target
     {
         get
         {

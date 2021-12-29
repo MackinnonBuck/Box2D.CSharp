@@ -1,4 +1,4 @@
-﻿using Box2D.Math;
+﻿using System.Numerics;
 
 namespace Box2D.Dynamics.Joints;
 
@@ -6,7 +6,7 @@ using static Interop.NativeMethods;
 
 public sealed class DistanceJointDef : JointDef
 {
-    public Vec2 LocalAnchorA
+    public Vector2 LocalAnchorA
     {
         get
         {
@@ -16,7 +16,7 @@ public sealed class DistanceJointDef : JointDef
         set => b2DistanceJointDef_set_localAnchorA(Native, ref value);
     }
 
-    public Vec2 LocalAnchorB
+    public Vector2 LocalAnchorB
     {
         get
         {
@@ -62,7 +62,7 @@ public sealed class DistanceJointDef : JointDef
         Initialize(native);
     }
 
-    public void Initialize(Body bodyA, Body bodyB, Vec2 anchorA, Vec2 anchorB)
+    public void Initialize(Body bodyA, Body bodyB, Vector2 anchorA, Vector2 anchorB)
         => b2DistanceJointDef_Initialize(Native, bodyA.Native, bodyB.Native, anchorA, anchorB);
 
     protected override void Dispose(bool disposing)
@@ -73,7 +73,7 @@ public sealed class DistanceJoint : Joint
 {
     public override JointType Type => JointType.Distance;
 
-    public Vec2 LocalAnchorA
+    public Vector2 LocalAnchorA
     {
         get
         {
@@ -82,7 +82,7 @@ public sealed class DistanceJoint : Joint
         }
     }
 
-    public Vec2 LocalAnchorB
+    public Vector2 LocalAnchorB
     {
         get
         {

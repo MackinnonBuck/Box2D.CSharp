@@ -1,5 +1,5 @@
-﻿using Box2D.Math;
-using System;
+﻿using System;
+using System.Numerics;
 using System.Runtime.InteropServices;
 
 namespace Box2D.Collision.Shapes;
@@ -10,7 +10,7 @@ public class PolygonShape : Shape
 {
     public override ShapeType Type => ShapeType.Polygon;
 
-    public Vec2 Centroid
+    public Vector2 Centroid
     {
         get
         {
@@ -30,12 +30,12 @@ public class PolygonShape : Shape
         Initialize(native);
     }
 
-    public void Set(Span<Vec2> points)
+    public void Set(Span<Vector2> points)
         => b2PolygonShape_Set(Native, ref MemoryMarshal.GetReference(points), points.Length);
 
     public void SetAsBox(float hx, float hy)
         => b2PolygonShape_SetAsBox(Native, hx, hy);
 
-    public void SetAsBox(float hx, float hy, Vec2 center, float angle)
+    public void SetAsBox(float hx, float hy, Vector2 center, float angle)
         => b2PolygonShape_SetAsBox2(Native, hx, hy, ref center, angle);
 }

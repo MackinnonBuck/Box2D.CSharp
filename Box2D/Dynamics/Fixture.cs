@@ -1,7 +1,7 @@
 ﻿using Box2D.Collision;
 using Box2D.Core;
-using Box2D.Math;
 using System;
+using System.Numerics;
 using System.Runtime.InteropServices;
 
 namespace Box2D.Dynamics;
@@ -125,6 +125,12 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
         }
     }
 
+    public bool IsSensor
+    {
+        get => b2Fixture_IsSensor(Native);
+        set => b2Fixture_SetSensor(Native, value);
+    }
+
     public Fixture? Next => FromIntPtr.Get(b2Fixture_GetNext(Native));
 
     internal Fixture(Body body, in FixtureDef def)
@@ -152,7 +158,7 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
         Initialize(native);
     }
 
-    public bool TestPoint(Vec2 p)
+    public bool TestPoint(Vector2 p)
         => b2Fixture_TestPoint(Native, ref p);
 
     internal override void Invalidate()

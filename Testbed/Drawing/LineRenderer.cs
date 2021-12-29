@@ -1,6 +1,6 @@
 ﻿using Box2D.Drawing;
-using Box2D.Math;
 using Silk.NET.OpenGL;
+using System.Numerics;
 
 namespace Testbed.Drawing;
 
@@ -79,7 +79,7 @@ void main(void)
         _count = 0;
     }
 
-    public void Vertex(Vec2 v, Color c)
+    public void Vertex(Vector2 v, Color c)
     {
         if (_count == MaxVertices)
         {

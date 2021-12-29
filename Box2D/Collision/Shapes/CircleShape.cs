@@ -1,5 +1,5 @@
-﻿using Box2D.Math;
-using System;
+﻿using System;
+using System.Numerics;
 
 namespace Box2D.Collision.Shapes;
 
@@ -9,7 +9,7 @@ public class CircleShape : Shape
 {
     public override ShapeType Type => ShapeType.Circle;
 
-    public Vec2 Position
+    public Vector2 Position
     {
         get
         {

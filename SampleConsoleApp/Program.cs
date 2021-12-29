@@ -1,9 +1,9 @@
 ﻿using Box2D.Collision.Shapes;
 using Box2D.Dynamics;
-using Box2D.Math;
+using System.Numerics;
 
 // Define the gravity vector.
-var gravity = new Vec2(0f, -10f);
+var gravity = new Vector2(0f, -10f);
 
 // Construct a world object, which will hold and simulate the rigid bodies.
 var world = new World(gravity);

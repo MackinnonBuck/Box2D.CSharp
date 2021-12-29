@@ -3,6 +3,7 @@ using Box2D.Dynamics;
 using Box2D.Math;
 using Box2D.Profiling;
 using System;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Security;
 
@@ -19,7 +20,7 @@ internal static class NativeMethods
      * b2World
      */
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern IntPtr b2World_new([In] ref Vec2 gravity);
+    public static extern IntPtr b2World_new([In] ref Vector2 gravity);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_SetDestructionListener(IntPtr obj, IntPtr listener);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -27,7 +28,9 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_SetDebugDraw(IntPtr obj, IntPtr debugDraw);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern IntPtr b2World_CreateBody(IntPtr obj, IntPtr def);
+    public static extern IntPtr b2World_CreateBody(IntPtr obj, IntPtr def, IntPtr userData);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2World_CreateBody2(IntPtr obj, IntPtr userData);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_DestroyBody(IntPtr obj, IntPtr body);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -43,7 +46,7 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_QueryAABB(IntPtr obj, IntPtr callback, [In] ref AABB aabb);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2World_RayCast(IntPtr obj, IntPtr callback, [In] ref Vec2 point1, [In] ref Vec2 point2);
+    public static extern void b2World_RayCast(IntPtr obj, IntPtr callback, [In] ref Vector2 point1, [In] ref Vector2 point2);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2World_GetBodyList(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -85,11 +88,11 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2World_GetTreeQuality(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2World_GetGravity(IntPtr obj, out Vec2 value);
+    public static extern void b2World_GetGravity(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2World_SetGravity(IntPtr obj, [In] ref Vec2 gravity);
+    public static extern void b2World_SetGravity(IntPtr obj, [In] ref Vector2 gravity);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2World_ShiftOrigin(IntPtr obj, [In] ref Vec2 newOrigin);
+    public static extern void b2World_ShiftOrigin(IntPtr obj, [In] ref Vector2 newOrigin);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_GetProfile(IntPtr obj, out Profile value);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -157,13 +160,13 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Manifold_get_points(IntPtr obj, out int pointCount);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Manifold_get_localNormal(IntPtr obj, out Vec2 value);
+    public static extern void b2Manifold_get_localNormal(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Manifold_set_localNormal(IntPtr obj, [In] ref Vec2 value);
+    public static extern void b2Manifold_set_localNormal(IntPtr obj, [In] ref Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Manifold_get_localPoint(IntPtr obj, out Vec2 value);
+    public static extern void b2Manifold_get_localPoint(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Manifold_set_localPoint(IntPtr obj, [In] ref Vec2 value);
+    public static extern void b2Manifold_set_localPoint(IntPtr obj, [In] ref Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern ManifoldType b2Manifold_get_type(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -177,9 +180,9 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2WorldManifold_Initialize(IntPtr obj, IntPtr manifold, [In] ref Transform xfA, float radiusA, [In] ref Transform xfB, float radiusB);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2WorldManifold_get_normal(IntPtr obj, out Vec2 value);
+    public static extern void b2WorldManifold_get_normal(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2WorldManifold_set_normal(IntPtr obj, [In] ref Vec2 value);
+    public static extern void b2WorldManifold_set_normal(IntPtr obj, [In] ref Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2WorldManifold_delete(IntPtr obj);
 
@@ -243,17 +246,17 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2BodyDef_set_type(IntPtr obj, BodyType value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2BodyDef_get_position(IntPtr obj, out Vec2 value);
+    public static extern void b2BodyDef_get_position(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2BodyDef_set_position(IntPtr obj, [In] ref Vec2 value);
+    public static extern void b2BodyDef_set_position(IntPtr obj, [In] ref Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2BodyDef_get_angle(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2BodyDef_set_angle(IntPtr obj, float value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2BodyDef_get_linearVelocity(IntPtr obj, out Vec2 value);
+    public static extern void b2BodyDef_get_linearVelocity(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2BodyDef_set_linearVelocity(IntPtr obj, [In] ref Vec2 value);
+    public static extern void b2BodyDef_set_linearVelocity(IntPtr obj, [In] ref Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2BodyDef_get_angularVelocity(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -310,47 +313,61 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Body_CreateFixture2(IntPtr obj, IntPtr shape, float density, IntPtr userData);
     [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_DestroyFixture(IntPtr obj, IntPtr fixture);
+    [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Body_GetTransform(IntPtr obj, out Transform transform);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Body_SetTransform(IntPtr obj, [In] ref Vec2 position, float angle);
+    public static extern void b2Body_SetTransform(IntPtr obj, [In] ref Vector2 position, float angle);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Body_ApplyForce(IntPtr obj, [In] ref Vec2 force, [In] ref Vec2 point, bool wake);
+    public static extern void b2Body_ApplyForce(IntPtr obj, [In] ref Vector2 force, [In] ref Vector2 point, bool wake);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Body_ApplyForceToCenter(IntPtr obj, [In] ref Vec2 force, bool wake);
+    public static extern void b2Body_ApplyForceToCenter(IntPtr obj, [In] ref Vector2 force, bool wake);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Body_ApplyTorque(IntPtr obj, float torque, bool wake);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Body_ApplyLinearImpulse(IntPtr obj, [In] ref Vec2 impulse, [In] ref Vec2 point, bool wake);
+    public static extern void b2Body_ApplyLinearImpulse(IntPtr obj, [In] ref Vector2 impulse, [In] ref Vector2 point, bool wake);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Body_ApplyLinearImpulseToCenter(IntPtr obj, [In] ref Vec2 impulse, bool wake);
+    public static extern void b2Body_ApplyLinearImpulseToCenter(IntPtr obj, [In] ref Vector2 impulse, bool wake);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Body_ApplyAngularImpulse(IntPtr obj, float impulse, bool wake);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Body_GetWorldPoint(IntPtr obj, [In] ref Vec2 localPoint, out Vec2 value);
+    public static extern void b2Body_GetWorldPoint(IntPtr obj, [In] ref Vector2 localPoint, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Body_GetWorldVector(IntPtr obj, [In] ref Vec2 localVector, out Vec2 value);
+    public static extern void b2Body_GetWorldVector(IntPtr obj, [In] ref Vector2 localVector, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Body_GetLocalPoint(IntPtr obj, [In] ref Vec2 worldPoint, out Vec2 value);
+    public static extern void b2Body_GetLocalPoint(IntPtr obj, [In] ref Vector2 worldPoint, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Body_GetLocalVector(IntPtr obj, [In] ref Vec2 worldVector, out Vec2 value);
+    public static extern void b2Body_GetLocalVector(IntPtr obj, [In] ref Vector2 worldVector, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Body_GetLinearVelocityFromWorldPoint(IntPtr obj, [In] ref Vec2 worldPoint, out Vec2 value);
+    public static extern void b2Body_GetLinearVelocityFromWorldPoint(IntPtr obj, [In] ref Vector2 worldPoint, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Body_GetLinearVelocityFromLocalPoint(IntPtr obj, [In] ref Vec2 localPoint, out Vec2 value);
+    public static extern void b2Body_GetLinearVelocityFromLocalPoint(IntPtr obj, [In] ref Vector2 localPoint, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Body_GetPosition(IntPtr obj, out Vec2 value);
+    public static extern void b2Body_GetPosition(IntPtr obj, out Vector2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_SetPosition(IntPtr obj, [In] ref Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2Body_GetAngle(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Body_GetLinearVelocity(IntPtr obj, out Vec2 value);
+    public static extern void b2Body_SetAngle(IntPtr obj, float value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Body_SetLinearVelocity(IntPtr obj, [In] ref Vec2 v);
+    public static extern float b2Body_GetGravityScale(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_SetGravityScale(IntPtr obj, float scale);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_GetLinearVelocity(IntPtr obj, out Vector2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_SetLinearVelocity(IntPtr obj, [In] ref Vector2 v);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2Body_GetAngularVelocity(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Body_SetAngularVelocity(IntPtr obj, float omega);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2Body_GetMass(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern BodyType b2Body_GetType(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_SetType(IntPtr obj, BodyType type);
     [DllImport(Dll, CallingConvention = Conv)]
     [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2Body_IsAwake(IntPtr obj);
@@ -412,12 +429,17 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Fixture_GetShape(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static extern bool b2Fixture_IsSensor(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Fixture_SetSensor(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool sensor);
+    [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Fixture_GetNext(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Fixture_GetUserData(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     [return: MarshalAs(UnmanagedType.U1)]
-    public static extern bool b2Fixture_TestPoint(IntPtr obj, [In] ref Vec2 p);
+    public static extern bool b2Fixture_TestPoint(IntPtr obj, [In] ref Vector2 p);
 
     /*
      * b2Shape
@@ -426,7 +448,7 @@ internal static class NativeMethods
     public static extern int b2Shape_GetChildCount(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     [return: MarshalAs(UnmanagedType.U1)]
-    public static extern bool b2Shape_TestPoint(IntPtr obj, [In] ref Transform transform, [In] ref Vec2 p);
+    public static extern bool b2Shape_TestPoint(IntPtr obj, [In] ref Transform transform, [In] ref Vector2 p);
     [DllImport(Dll, CallingConvention = Conv)]
     [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2Shape_RayCast(IntPtr obj, out RayCastOutput output, in RayCastInput input, [In] ref Transform transform, int childIndex);
@@ -447,9 +469,9 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2CircleShape_new();
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2CircleShape_get_m_p(IntPtr obj, out Vec2 value);
+    public static extern void b2CircleShape_get_m_p(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2CircleShape_set_m_p(IntPtr obj, [In] ref Vec2 value);
+    public static extern void b2CircleShape_set_m_p(IntPtr obj, [In] ref Vector2 value);
 
     /*
      * b2EdgeShape
@@ -457,17 +479,17 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2EdgeShape_new();
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2EdgeShape_SetOneSided(IntPtr obj, [In] ref Vec2 v0, [In] ref Vec2 v1, [In] ref Vec2 v2, [In] ref Vec2 v3);
+    public static extern void b2EdgeShape_SetOneSided(IntPtr obj, [In] ref Vector2 v0, [In] ref Vector2 v1, [In] ref Vector2 v2, [In] ref Vector2 v3);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2EdgeShape_SetTwoSided(IntPtr obj, [In] ref Vec2 v1, [In] ref Vec2 v2);
+    public static extern void b2EdgeShape_SetTwoSided(IntPtr obj, [In] ref Vector2 v1, [In] ref Vector2 v2);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2EdgeShape_get_m_vertex0(IntPtr obj, out Vec2 value);
+    public static extern void b2EdgeShape_get_m_vertex0(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2EdgeShape_get_m_vertex1(IntPtr obj, out Vec2 value);
+    public static extern void b2EdgeShape_get_m_vertex1(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2EdgeShape_get_m_vertex2(IntPtr obj, out Vec2 value);
+    public static extern void b2EdgeShape_get_m_vertex2(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2EdgeShape_get_m_vertex3(IntPtr obj, out Vec2 value);
+    public static extern void b2EdgeShape_get_m_vertex3(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
     [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2EdgeShape_get_m_oneSided(IntPtr obj);
@@ -478,13 +500,13 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2PolygonShape_new();
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern int b2PolygonShape_Set(IntPtr obj, [In] ref Vec2 points, int count);
+    public static extern int b2PolygonShape_Set(IntPtr obj, [In] ref Vector2 points, int count);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern int b2PolygonShape_SetAsBox(IntPtr obj, float hx, float hy);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern int b2PolygonShape_SetAsBox2(IntPtr obj, float hx, float hy, [In] ref Vec2 center, float angle);
+    public static extern int b2PolygonShape_SetAsBox2(IntPtr obj, float hx, float hy, [In] ref Vector2 center, float angle);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2PolygonShape_get_m_centroid(IntPtr obj, out Vec2 value);
+    public static extern void b2PolygonShape_get_m_centroid(IntPtr obj, out Vector2 value);
 
     /*
      * b2_joint_wrap top-level functions
@@ -527,11 +549,11 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Joint_GetBodyB(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Joint_GetAnchorA(IntPtr obj, out Vec2 value);
+    public static extern void b2Joint_GetAnchorA(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Joint_GetAnchorB(IntPtr obj, out Vec2 value);
+    public static extern void b2Joint_GetAnchorB(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Joint_GetReactionForce(IntPtr obj, float inv_dt, out Vec2 value);
+    public static extern void b2Joint_GetReactionForce(IntPtr obj, float inv_dt, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2Joint_GetReactionTorque(IntPtr obj, float inv_dt);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -545,7 +567,7 @@ internal static class NativeMethods
     [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2Joint_GetCollideConnected(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2Joint_ShiftOrigin(IntPtr obj, [In] ref Vec2 newOrigin);
+    public static extern void b2Joint_ShiftOrigin(IntPtr obj, [In] ref Vector2 newOrigin);
 
     /*
      * b2JointEdge
@@ -573,15 +595,15 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2DistanceJointDef_new();
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2DistanceJointDef_Initialize(IntPtr obj, IntPtr bodyA, IntPtr bodyB, Vec2 anchorA, Vec2 anchorB);
+    public static extern void b2DistanceJointDef_Initialize(IntPtr obj, IntPtr bodyA, IntPtr bodyB, Vector2 anchorA, Vector2 anchorB);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2DistanceJointDef_get_localAnchorA(IntPtr obj, out Vec2 value);
+    public static extern void b2DistanceJointDef_get_localAnchorA(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2DistanceJointDef_set_localAnchorA(IntPtr obj, [In] ref Vec2 value);
+    public static extern void b2DistanceJointDef_set_localAnchorA(IntPtr obj, [In] ref Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2DistanceJointDef_get_localAnchorB(IntPtr obj, out Vec2 value);
+    public static extern void b2DistanceJointDef_get_localAnchorB(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2DistanceJointDef_set_localAnchorB(IntPtr obj, [In] ref Vec2 value);
+    public static extern void b2DistanceJointDef_set_localAnchorB(IntPtr obj, [In] ref Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2DistanceJointDef_get_length(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -609,9 +631,9 @@ internal static class NativeMethods
      * b2DistanceJoint
      */
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2DistanceJoint_GetLocalAnchorA(IntPtr obj, out Vec2 value);
+    public static extern void b2DistanceJoint_GetLocalAnchorA(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2DistanceJoint_GetLocalAnchorB(IntPtr obj, out Vec2 value);
+    public static extern void b2DistanceJoint_GetLocalAnchorB(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2DistanceJoint_GetLength(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -641,19 +663,19 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2PrismaticJointDef_new();
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2PrismaticJointDef_Initialize(IntPtr obj, IntPtr bodyA, IntPtr bodyB, [In] ref Vec2 anchor, [In] ref Vec2 axis);
+    public static extern void b2PrismaticJointDef_Initialize(IntPtr obj, IntPtr bodyA, IntPtr bodyB, [In] ref Vector2 anchor, [In] ref Vector2 axis);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2PrismaticJointDef_get_localAnchorA(IntPtr obj, out Vec2 value);
+    public static extern void b2PrismaticJointDef_get_localAnchorA(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2PrismaticJointDef_set_localAnchorA(IntPtr obj, [In] ref Vec2 value);
+    public static extern void b2PrismaticJointDef_set_localAnchorA(IntPtr obj, [In] ref Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2PrismaticJointDef_get_localAnchorB(IntPtr obj, out Vec2 value);
+    public static extern void b2PrismaticJointDef_get_localAnchorB(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2PrismaticJointDef_set_localAnchorB(IntPtr obj, [In] ref Vec2 value);
+    public static extern void b2PrismaticJointDef_set_localAnchorB(IntPtr obj, [In] ref Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2PrismaticJointDef_get_localAxisA(IntPtr obj, out Vec2 value);
+    public static extern void b2PrismaticJointDef_get_localAxisA(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2PrismaticJointDef_set_localAxisA(IntPtr obj, [In] ref Vec2 value);
+    public static extern void b2PrismaticJointDef_set_localAxisA(IntPtr obj, [In] ref Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2PrismaticJointDef_get_referenceAngle(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -691,11 +713,11 @@ internal static class NativeMethods
      * b2PrismaticJoint
      */
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2PrismaticJoint_GetLocalAnchorA(IntPtr obj, out Vec2 value);
+    public static extern void b2PrismaticJoint_GetLocalAnchorA(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2PrismaticJoint_GetLocalAnchorB(IntPtr obj, out Vec2 value);
+    public static extern void b2PrismaticJoint_GetLocalAnchorB(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2PrismaticJoint_GetLocalAxisA(IntPtr obj, out Vec2 value);
+    public static extern void b2PrismaticJoint_GetLocalAxisA(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2PrismaticJoint_GetReferenceAngle(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -735,15 +757,15 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2RevoluteJointDef_new();
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2RevoluteJointDef_Initialize(IntPtr obj, IntPtr bodyA, IntPtr bodyB, [In] ref Vec2 anchor);
+    public static extern void b2RevoluteJointDef_Initialize(IntPtr obj, IntPtr bodyA, IntPtr bodyB, [In] ref Vector2 anchor);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2RevoluteJointDef_get_localAnchorA(IntPtr obj, out Vec2 value);
+    public static extern void b2RevoluteJointDef_get_localAnchorA(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2RevoluteJointDef_set_localAnchorA(IntPtr obj, [In] ref Vec2 value);
+    public static extern void b2RevoluteJointDef_set_localAnchorA(IntPtr obj, [In] ref Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2RevoluteJointDef_get_localAnchorB(IntPtr obj, out Vec2 value);
+    public static extern void b2RevoluteJointDef_get_localAnchorB(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2RevoluteJointDef_set_localAnchorB(IntPtr obj, [In] ref Vec2 value);
+    public static extern void b2RevoluteJointDef_set_localAnchorB(IntPtr obj, [In] ref Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2RevoluteJointDef_get_referenceAngle(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -781,9 +803,9 @@ internal static class NativeMethods
      * b2RevoluteJoint
      */
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2RevoluteJoint_GetLocalAnchorA(IntPtr obj, out Vec2 value);
+    public static extern void b2RevoluteJoint_GetLocalAnchorA(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2RevoluteJoint_GetLocalAnchorB(IntPtr obj, out Vec2 value);
+    public static extern void b2RevoluteJoint_GetLocalAnchorB(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2RevoluteJoint_GetReferenceAngle(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -823,9 +845,9 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2MouseJointDef_new();
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2MouseJointDef_get_target(IntPtr obj, out Vec2 value);
+    public static extern void b2MouseJointDef_get_target(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2MouseJointDef_set_target(IntPtr obj, [In] ref Vec2 value);
+    public static extern void b2MouseJointDef_set_target(IntPtr obj, [In] ref Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2MouseJointDef_get_maxForce(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -845,9 +867,9 @@ internal static class NativeMethods
      * b2MouseJoint
      */
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2MouseJoint_GetTarget(IntPtr obj, out Vec2 value);
+    public static extern void b2MouseJoint_GetTarget(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2MouseJoint_SetTarget(IntPtr obj, [In] ref Vec2 target);
+    public static extern void b2MouseJoint_SetTarget(IntPtr obj, [In] ref Vector2 target);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2MouseJoint_GetMaxForce(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -867,19 +889,19 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2WheelJointDef_new();
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2WheelJointDef_Initialize(IntPtr obj, IntPtr bodyA, IntPtr bodyB, [In] ref Vec2 anchor, [In] ref Vec2 axis);
+    public static extern void b2WheelJointDef_Initialize(IntPtr obj, IntPtr bodyA, IntPtr bodyB, [In] ref Vector2 anchor, [In] ref Vector2 axis);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2WheelJointDef_get_localAnchorA(IntPtr obj, out Vec2 value);
+    public static extern void b2WheelJointDef_get_localAnchorA(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2WheelJointDef_set_localAnchorA(IntPtr obj, [In] ref Vec2 value);
+    public static extern void b2WheelJointDef_set_localAnchorA(IntPtr obj, [In] ref Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2WheelJointDef_get_localAnchorB(IntPtr obj, out Vec2 value);
+    public static extern void b2WheelJointDef_get_localAnchorB(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2WheelJointDef_set_localAnchorB(IntPtr obj, [In] ref Vec2 value);
+    public static extern void b2WheelJointDef_set_localAnchorB(IntPtr obj, [In] ref Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2WheelJointDef_get_localAxisA(IntPtr obj, out Vec2 value);
+    public static extern void b2WheelJointDef_get_localAxisA(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2WheelJointDef_set_localAxisA(IntPtr obj, [In] ref Vec2 value);
+    public static extern void b2WheelJointDef_set_localAxisA(IntPtr obj, [In] ref Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
     [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2WheelJointDef_get_enableLimit(IntPtr obj);
@@ -921,11 +943,11 @@ internal static class NativeMethods
      * b2WheelJoint
      */
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2WheelJoint_GetLocalAnchorA(IntPtr obj, out Vec2 value);
+    public static extern void b2WheelJoint_GetLocalAnchorA(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2WheelJoint_GetLocalAnchorB(IntPtr obj, out Vec2 value);
+    public static extern void b2WheelJoint_GetLocalAnchorB(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern void b2WheelJoint_GetLocalAxisA(IntPtr obj, out Vec2 value);
+    public static extern void b2WheelJoint_GetLocalAxisA(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2WheelJoint_GetJointTranslation(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]

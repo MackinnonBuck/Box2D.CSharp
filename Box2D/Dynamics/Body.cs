@@ -2,6 +2,7 @@
 using Box2D.Core;
 using Box2D.Math;
 using System;
+using System.Numerics;
 
 namespace Box2D.Dynamics;
 
@@ -24,7 +25,7 @@ public sealed class BodyDef : Box2DDisposableObject
         set => b2BodyDef_set_type(Native, value);
     }
 
-    public Vec2 Position
+    public Vector2 Position
     {
         get
         {
@@ -40,7 +41,7 @@ public sealed class BodyDef : Box2DDisposableObject
         set => b2BodyDef_set_angle(Native, value);
     }
 
-    public Vec2 LinearVelocity
+    public Vector2 LinearVelocity
     {
         get
         {
@@ -98,12 +99,6 @@ public sealed class BodyDef : Box2DDisposableObject
         set => b2BodyDef_set_enabled(Native, value);
     }
 
-    internal IntPtr InternalUserData
-    {
-        get => b2BodyDef_get_userData(Native);
-        set => b2BodyDef_set_userData(Native, value);
-    }
-
     public float GravityScale
     {
         get => b2BodyDef_get_gravityScale(Native);
@@ -130,31 +125,21 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
             => b2Body_GetUserData(obj);
     }
 
-    public BodyType Type { get; }
-
     public World World { get; }
 
     public object? UserData { get; set; }
 
-    public Vec2 Position
+    public Vector2 Position
     {
         get
         {
             b2Body_GetPosition(Native, out var value);
             return value;
         }
+        set => b2Body_SetPosition(Native, ref value);
     }
 
-    public Transform Transform
-    {
-        get
-        {
-            b2Body_GetTransform(Native, out var value);
-            return value;
-        }
-    }
-
-    public Vec2 LinearVelocity
+    public Vector2 LinearVelocity
     {
         get
         {
@@ -170,9 +155,25 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
         set => b2Body_SetAngularVelocity(Native, value);
     }
 
-    public float Angle => b2Body_GetAngle(Native);
+    public float Angle
+    {
+        get => b2Body_GetAngle(Native);
+        set => b2Body_SetAngle(Native, value);
+    }
+
+    public float GravityScale
+    {
+        get => b2Body_GetGravityScale(Native);
+        set => b2Body_SetGravityScale(Native, value);
+    }
 
     public float Mass => b2Body_GetMass(Native);
+
+    public BodyType Type
+    {
+        get => b2Body_GetType(Native);
+        set => b2Body_SetType(Native, value);
+    }
 
     public bool Awake
     {
@@ -188,12 +189,18 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
 
     internal Body(World world, BodyDef def)
     {
-        Type = def.Type;
         World = world;
         UserData = def.UserData;
-        def.InternalUserData = Handle;
-        var native = b2World_CreateBody(world.Native, def.Native);
 
+        var native = b2World_CreateBody(world.Native, def.Native, Handle);
+        Initialize(native);
+    }
+
+    internal Body(World world)
+    {
+        World = world;
+
+        var native = b2World_CreateBody2(world.Native, Handle);
         Initialize(native);
     }
 
@@ -203,58 +210,67 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
     public Fixture CreateFixture(Shape shape, float density)
         => new(this, shape, density);
 
-    public void SetTransform(Vec2 position, float angle)
+    public void DestroyFixture(Fixture fixture)
+    {
+        b2Body_DestroyFixture(Native, fixture.Native);
+        fixture.Invalidate();
+    }
+
+    public void GetTransform(out Transform transform)
+        => b2Body_GetTransform(Native, out transform);
+
+    public void SetTransform(Vector2 position, float angle)
         => b2Body_SetTransform(Native, ref position, angle);
 
-    public void ApplyForce(Vec2 force, Vec2 point, bool wake)
+    public void ApplyForce(Vector2 force, Vector2 point, bool wake)
         => b2Body_ApplyForce(Native, ref force, ref point, wake);
 
-    public void ApplyForceToCenter(Vec2 force, bool wake)
+    public void ApplyForceToCenter(Vector2 force, bool wake)
         => b2Body_ApplyForceToCenter(Native, ref force, wake);
 
     public void ApplyTorque(float torque, bool wake)
         => b2Body_ApplyTorque(Native, torque, wake);
 
-    public void ApplyLinearImpulse(Vec2 impluse, Vec2 point, bool wake)
+    public void ApplyLinearImpulse(Vector2 impluse, Vector2 point, bool wake)
         => b2Body_ApplyLinearImpulse(Native, ref impluse, ref point, wake);
 
-    public void ApplyLinearImpulseToCenter(Vec2 impulse, bool wake)
+    public void ApplyLinearImpulseToCenter(Vector2 impulse, bool wake)
         => b2Body_ApplyLinearImpulseToCenter(Native, ref impulse, wake);
 
     public void ApplyAngularImpulse(float impulse, bool wake)
         => b2Body_ApplyAngularImpulse(Native, impulse, wake);
 
-    public Vec2 GetWorldPoint(Vec2 localPoint)
+    public Vector2 GetWorldPoint(Vector2 localPoint)
     {
         b2Body_GetWorldPoint(Native, ref localPoint, out var value);
         return value;
     }
 
-    public Vec2 GetWorldVector(Vec2 localVector)
+    public Vector2 GetWorldVector(Vector2 localVector)
     {
         b2Body_GetWorldVector(Native, ref localVector, out var value);
         return value;
     }
 
-    public Vec2 GetLocalPoint(Vec2 worldPoint)
+    public Vector2 GetLocalPoint(Vector2 worldPoint)
     {
         b2Body_GetLocalPoint(Native, ref worldPoint, out var value);
         return value;
     }
 
-    public Vec2 GetLocalVector(Vec2 worldVector)
+    public Vector2 GetLocalVector(Vector2 worldVector)
     {
         b2Body_GetLocalVector(Native, ref worldVector, out var value);
         return value;
     }
 
-    public Vec2 GetLinearVelocityFromWorldPoint(Vec2 worldPoint)
+    public Vector2 GetLinearVelocityFromWorldPoint(Vector2 worldPoint)
     {
         b2Body_GetLinearVelocityFromWorldPoint(Native, ref worldPoint, out var value);
         return value;
     }
 
-    public Vec2 GetLinearVelocityFromLocalPoint(Vec2 localPoint)
+    public Vector2 GetLinearVelocityFromLocalPoint(Vector2 localPoint)
     {
         b2Body_GetLinearVelocityFromLocalPoint(Native, ref localPoint, out var value);
         return value;

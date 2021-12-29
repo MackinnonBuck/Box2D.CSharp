@@ -1,4 +1,4 @@
-﻿using Box2D.Math;
+﻿using System.Numerics;
 
 namespace Box2D.Dynamics.Joints;
 
@@ -6,7 +6,7 @@ using static Interop.NativeMethods;
 
 public sealed class RevoluteJointDef : JointDef
 {
-    public Vec2 LocalAnchorA
+    public Vector2 LocalAnchorA
     {
         get
         {
@@ -16,7 +16,7 @@ public sealed class RevoluteJointDef : JointDef
         set => b2RevoluteJointDef_set_localAnchorA(Native, ref value);
     }
 
-    public Vec2 LocalAnchorB
+    public Vector2 LocalAnchorB
     {
         get
         {
@@ -74,7 +74,7 @@ public sealed class RevoluteJointDef : JointDef
         Initialize(native);
     }
 
-    public void Initialize(Body bodyA, Body bodyB, Vec2 anchor)
+    public void Initialize(Body bodyA, Body bodyB, Vector2 anchor)
         => b2RevoluteJointDef_Initialize(Native, bodyA.Native, bodyB.Native, ref anchor);
 
     protected override void Dispose(bool disposing)
@@ -85,7 +85,7 @@ public sealed class RevoluteJoint : Joint
 {
     public override JointType Type => JointType.Revolute;
 
-    public Vec2 LocalAnchorA
+    public Vector2 LocalAnchorA
     {
         get
         {
@@ -94,7 +94,7 @@ public sealed class RevoluteJoint : Joint
         }
     }
 
-    public Vec2 LocalAnchorB
+    public Vector2 LocalAnchorB
     {
         get
         {

@@ -1,6 +1,7 @@
 ﻿using Box2D.Core;
 using Box2D.Math;
 using System;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Security;
 
@@ -15,15 +16,15 @@ internal sealed class InternalDraw : Box2DDisposableObject
     [UnmanagedFunctionPointer(Conv), SuppressUnmanagedCodeSecurity]
     private delegate void DrawSolidPolygonUnmanagedDelegate(IntPtr vertices, int vertexCount, [In] ref Color color);
     [UnmanagedFunctionPointer(Conv), SuppressUnmanagedCodeSecurity]
-    private delegate void DrawCircleUnmanagedDelegate([In] ref Vec2 center, float radius, [In] ref Color color);
+    private delegate void DrawCircleUnmanagedDelegate([In] ref Vector2 center, float radius, [In] ref Color color);
     [UnmanagedFunctionPointer(Conv), SuppressUnmanagedCodeSecurity]
-    private delegate void DrawSolidCircleUnmanagedDelegate([In] ref Vec2 center, float radius, [In] ref Vec2 axis, [In] ref Color color);
+    private delegate void DrawSolidCircleUnmanagedDelegate([In] ref Vector2 center, float radius, [In] ref Vector2 axis, [In] ref Color color);
     [UnmanagedFunctionPointer(Conv), SuppressUnmanagedCodeSecurity]
-    private delegate void DrawSegmentUnmanagedDelegate([In] ref Vec2 p1, [In] ref Vec2 p2, [In] ref Color color);
+    private delegate void DrawSegmentUnmanagedDelegate([In] ref Vector2 p1, [In] ref Vector2 p2, [In] ref Color color);
     [UnmanagedFunctionPointer(Conv), SuppressUnmanagedCodeSecurity]
     private delegate void DrawTransformUnmanagedDelegate([In] ref Transform xf);
     [UnmanagedFunctionPointer(Conv), SuppressUnmanagedCodeSecurity]
-    private delegate void DrawPointUnmanagedDelegate([In] ref Vec2 p, float size, [In] ref Color color);
+    private delegate void DrawPointUnmanagedDelegate([In] ref Vector2 p, float size, [In] ref Color color);
 
     private readonly DrawPolygonUnmanagedDelegate _drawPolygon;
     private readonly DrawSolidPolygonUnmanagedDelegate _drawSolidPolygon;
@@ -71,19 +72,19 @@ internal sealed class InternalDraw : Box2DDisposableObject
     private void DrawSolidPolygonUnmanaged(IntPtr vertices, int vertexCount, ref Color color)
         => _userDraw.DrawSolidPolygon(new(vertices, vertexCount), color);
 
-    private void DrawCircleUnmanaged(ref Vec2 center, float radius, ref Color color)
+    private void DrawCircleUnmanaged(ref Vector2 center, float radius, ref Color color)
         => _userDraw.DrawCircle(center, radius, color);
 
-    private void DrawSolidCircleUnmanaged(ref Vec2 center, float radius, ref Vec2 axis, ref Color color)
+    private void DrawSolidCircleUnmanaged(ref Vector2 center, float radius, ref Vector2 axis, ref Color color)
         => _userDraw.DrawSolidCircle(center, radius, axis, color);
 
-    private void DrawSegmentUnmanaged(ref Vec2 p1, ref Vec2 p2, ref Color color)
+    private void DrawSegmentUnmanaged(ref Vector2 p1, ref Vector2 p2, ref Color color)
         => _userDraw.DrawSegment(p1, p2, color);
 
     private void DrawTransformUnmanaged(ref Transform xf)
         => _userDraw.DrawTransform(xf);
 
-    private void DrawPointUnmanaged(ref Vec2 p, float size, ref Color color)
+    private void DrawPointUnmanaged(ref Vector2 p, float size, ref Color color)
         => _userDraw.DrawPoint(p, size, color);
 
     protected override void Dispose(bool disposing)

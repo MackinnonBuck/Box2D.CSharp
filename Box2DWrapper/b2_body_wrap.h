@@ -45,6 +45,7 @@ extern "C"
      */
     BOX2D_API b2Fixture* b2Body_CreateFixture(b2Body* obj, b2FixtureDef* def);
     BOX2D_API b2Fixture* b2Body_CreateFixture2(b2Body* obj, b2Shape* shape, float density, uintptr_t userData);
+    BOX2D_API void b2Body_DestroyFixture(b2Body* obj, b2Fixture* fixture);
     BOX2D_API void b2Body_GetTransform(b2Body* obj, b2Transform* transform);
     BOX2D_API void b2Body_SetTransform(b2Body* obj, b2Vec2* position, float angle);
     BOX2D_API void b2Body_ApplyForce(b2Body* obj, b2Vec2* force, b2Vec2* point, bool wake);
@@ -59,13 +60,19 @@ extern "C"
     BOX2D_API void b2Body_GetLocalVector(b2Body* obj, b2Vec2* worldVector, b2Vec2* value);
     BOX2D_API void b2Body_GetLinearVelocityFromWorldPoint(b2Body* obj, b2Vec2* worldPoint, b2Vec2* value);
     BOX2D_API void b2Body_GetLinearVelocityFromLocalPoint(b2Body* obj, b2Vec2* localPoint, b2Vec2* value);
-    BOX2D_API void b2Body_GetPosition(b2Body* obj, b2Vec2* v);
+    BOX2D_API void b2Body_GetPosition(b2Body* obj, b2Vec2* value);
+    BOX2D_API void b2Body_SetPosition(b2Body* obj, b2Vec2* value);
     BOX2D_API float b2Body_GetAngle(b2Body* obj);
+    BOX2D_API void b2Body_SetAngle(b2Body* obj, float value);
+    BOX2D_API float b2Body_GetGravityScale(b2Body* obj);
+    BOX2D_API void b2Body_SetGravityScale(b2Body* obj, float scale);
     BOX2D_API void b2Body_GetLinearVelocity(b2Body* obj, b2Vec2* value);
     BOX2D_API void b2Body_SetLinearVelocity(b2Body* obj, b2Vec2* v);
     BOX2D_API float b2Body_GetAngularVelocity(b2Body* obj);
     BOX2D_API void b2Body_SetAngularVelocity(b2Body* obj, float omega);
     BOX2D_API float b2Body_GetMass(b2Body* obj);
+    BOX2D_API b2BodyType b2Body_GetType(b2Body* obj);
+    BOX2D_API void b2Body_SetType(b2Body* obj, b2BodyType type);
     BOX2D_API bool b2Body_IsAwake(b2Body* obj);
     BOX2D_API void b2Body_SetAwake(b2Body* obj, bool flag);
     BOX2D_API b2Fixture* b2Body_GetFixtureList(b2Body* obj);

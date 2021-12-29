@@ -1,4 +1,4 @@
-﻿using Box2D.Math;
+﻿using System.Numerics;
 using System.Runtime.InteropServices;
 
 namespace Box2D.Collision;
@@ -6,7 +6,7 @@ namespace Box2D.Collision;
 [StructLayout(LayoutKind.Sequential)]
 public struct ManifoldPoint
 {
-    public Vec2 LocalPoint { get; set; }
+    public Vector2 LocalPoint { get; set; }
 
     public float NormalImpulse { get; set; }
 

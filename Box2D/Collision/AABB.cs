@@ -1,4 +1,4 @@
-﻿using Box2D.Math;
+﻿using System.Numerics;
 using System.Runtime.InteropServices;
 
 namespace Box2D.Collision;
@@ -6,22 +6,24 @@ namespace Box2D.Collision;
 [StructLayout(LayoutKind.Sequential)]
 public struct AABB
 {
-    public Vec2 LowerBound { get; set; }
+    public Vector2 LowerBound { get; set; }
 
-    public Vec2 UpperBound { get; set; }
+    public Vector2 UpperBound { get; set; }
 
     public bool IsValid
     {
         get
         {
             var d = UpperBound - LowerBound;
-            return d.X >= 0f & d.Y >= 0f && LowerBound.IsValid && UpperBound.IsValid;
+            return d.X >= 0f & d.Y >= 0f &&
+                !float.IsInfinity(LowerBound.X) && !float.IsInfinity(LowerBound.Y) &&
+                !float.IsInfinity(UpperBound.X) && !float.IsInfinity(UpperBound.Y);
         }
     }
 
-    public Vec2 Center => 0.5f * (LowerBound + UpperBound);
+    public Vector2 Center => 0.5f * (LowerBound + UpperBound);
 
-    public Vec2 Extents => 0.5f * (UpperBound - LowerBound);
+    public Vector2 Extents => 0.5f * (UpperBound - LowerBound);
 
     public float Perimeter
     {
@@ -35,14 +37,14 @@ public struct AABB
 
     public void Combine(AABB other)
     {
-        LowerBound = Vec2.Min(LowerBound, other.LowerBound);
-        UpperBound = Vec2.Max(UpperBound, other.UpperBound);
+        LowerBound = Vector2.Min(LowerBound, other.LowerBound);
+        UpperBound = Vector2.Max(UpperBound, other.UpperBound);
     }
 
     public void Combine(AABB aabb1, AABB aabb2)
     {
-        LowerBound = Vec2.Min(aabb1.LowerBound, aabb2.LowerBound);
-        UpperBound = Vec2.Max(aabb1.UpperBound, aabb2.UpperBound);
+        LowerBound = Vector2.Min(aabb1.LowerBound, aabb2.LowerBound);
+        UpperBound = Vector2.Max(aabb1.UpperBound, aabb2.UpperBound);
     }
 
     public bool Contains(AABB other)

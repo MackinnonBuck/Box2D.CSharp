@@ -1,8 +1,8 @@
 ﻿using Box2D.Collision.Shapes;
 using Box2D.Dynamics;
 using Box2D.Dynamics.Joints;
-using Box2D.Math;
 using System;
+using System.Numerics;
 using Xunit;
 
 namespace UnitTests;
@@ -12,7 +12,7 @@ public class JointTests
     [Fact]
     public void JointTest_Works()
     {
-        var gravity = new Vec2(0f, -10f);
+        var gravity = new Vector2(0f, -10f);
         using var world = new World(gravity);
 
         using var bodyDef = new BodyDef
@@ -49,12 +49,12 @@ public class JointTests
         bodyC.CreateFixture(fixtureDef);
 
         using var distanceJointDef = new DistanceJointDef();
-        distanceJointDef.Initialize(ground, bodyA, bodyDef.Position + new Vec2(0f, 4f), bodyDef.Position);
+        distanceJointDef.Initialize(ground, bodyA, bodyDef.Position + new Vector2(0f, 4f), bodyDef.Position);
         distanceJointDef.MinLength = distanceJointDef.Length;
         distanceJointDef.MaxLength = distanceJointDef.Length;
 
         using var prismaticJointDef = new PrismaticJointDef();
-        prismaticJointDef.Initialize(ground, bodyB, bodyDef.Position, new Vec2(1f, 0f));
+        prismaticJointDef.Initialize(ground, bodyB, bodyDef.Position, new Vector2(1f, 0f));
 
         using var revoluteJointDef = new RevoluteJointDef();
         revoluteJointDef.Initialize(ground, bodyC, bodyDef.Position);

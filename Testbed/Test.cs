@@ -5,9 +5,9 @@ using Box2D.Drawing;
 using Box2D.Dynamics;
 using Box2D.Dynamics.Callbacks;
 using Box2D.Dynamics.Joints;
-using Box2D.Math;
 using Box2D.Profiling;
 using Silk.NET.Input;
+using System.Numerics;
 using Testbed.Drawing;
 
 namespace Testbed;
@@ -40,11 +40,11 @@ internal class TestDestructionListener : IDestructionListener
 
 internal class TestQueryCallback : IQueryCallback
 {
-    public Vec2 Point { get; private set; }
+    public Vector2 Point { get; private set; }
 
     public Fixture? Fixture { get; private set; }
 
-    public void Reset(Vec2 point)
+    public void Reset(Vector2 point)
     {
         Point = point;
         Fixture = null;
@@ -73,9 +73,9 @@ struct ContactPoint
 
     public Fixture? FixtureB { get; init; }
 
-    public Vec2 Normal { get; init; }
+    public Vector2 Normal { get; init; }
 
-    public Vec2 Position { get; init; }
+    public Vector2 Position { get; init; }
 
     public PointState State { get; init; }
 
@@ -120,11 +120,11 @@ internal class Test : IContactListener, IDisposable
 
     protected int PointCount { get; private set; }
 
-    protected Vec2 BombSpawnPoint { get; private set; }
+    protected Vector2 BombSpawnPoint { get; private set; }
 
     protected bool BombSpawning { get; private set; }
 
-    protected Vec2 MouseWorld { get; private set; }
+    protected Vector2 MouseWorld { get; private set; }
 
     protected int StepCount { get; private set; }
 
@@ -355,7 +355,7 @@ internal class Test : IContactListener, IDisposable
     {
     }
 
-    public void ShiftOrigin(Vec2 newOrigin)
+    public void ShiftOrigin(Vector2 newOrigin)
     {
         World.ShiftOrigin(newOrigin);
     }
@@ -423,7 +423,7 @@ internal class Test : IContactListener, IDisposable
     {
     }
 
-    public virtual void MouseDown(Vec2 p)
+    public virtual void MouseDown(Vector2 p)
     {
         MouseWorld = p;
 
@@ -433,7 +433,7 @@ internal class Test : IContactListener, IDisposable
         }
 
         var aabb = new AABB();
-        var d = new Vec2(0.001f, 0.001f);
+        var d = new Vector2(0.001f, 0.001f);
         aabb.LowerBound = p - d;
         aabb.UpperBound = p + d;
 
@@ -459,7 +459,7 @@ internal class Test : IContactListener, IDisposable
         }
     }
 
-    public virtual void ShiftMouseDown(Vec2 p)
+    public virtual void ShiftMouseDown(Vector2 p)
     {
         MouseWorld = p;
 
@@ -471,7 +471,7 @@ internal class Test : IContactListener, IDisposable
         SpawnBomb(p);
     }
 
-    public virtual void MouseUp(Vec2 p)
+    public virtual void MouseUp(Vector2 p)
     {
         if (MouseJoint is not null)
         {
@@ -485,7 +485,7 @@ internal class Test : IContactListener, IDisposable
         }
     }
 
-    public virtual void MouseMove(Vec2 p)
+    public virtual void MouseMove(Vector2 p)
     {
         MouseWorld = p;
 
@@ -495,13 +495,13 @@ internal class Test : IContactListener, IDisposable
         }
     }
 
-    private void SpawnBomb(Vec2 worldPoint)
+    private void SpawnBomb(Vector2 worldPoint)
     {
         BombSpawnPoint = worldPoint;
         BombSpawning = true;
     }
 
-    private void CompleteBombSpawn(Vec2 p)
+    private void CompleteBombSpawn(Vector2 p)
     {
         if (!BombSpawning)
         {
@@ -517,12 +517,12 @@ internal class Test : IContactListener, IDisposable
 
     public void LaunchBomb()
     {
-        var p = new Vec2(MathUtils.RandomFloat(-15f, 15f), 30f);
+        var p = new Vector2(MathUtils.RandomFloat(-15f, 15f), 30f);
         var v = -5f * p;
         LaunchBomb(p, v);
     }
 
-    public void LaunchBomb(Vec2 position, Vec2 velocity)
+    public void LaunchBomb(Vector2 position, Vector2 velocity)
     {
         if (Bomb is not null)
         {

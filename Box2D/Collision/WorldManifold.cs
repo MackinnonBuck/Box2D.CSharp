@@ -1,6 +1,7 @@
 ﻿using Box2D.Collections;
 using Box2D.Core;
 using Box2D.Math;
+using System.Numerics;
 
 namespace Box2D.Collision;
 
@@ -8,7 +9,7 @@ using static Interop.NativeMethods;
 
 public class WorldManifold : Box2DDisposableObject
 {
-    public Vec2 Normal
+    public Vector2 Normal
     {
         get
         {
@@ -18,7 +19,7 @@ public class WorldManifold : Box2DDisposableObject
         set => b2WorldManifold_set_normal(Native, ref value);
     }
 
-    public ArrayMember<Vec2> Points { get; }
+    public ArrayMember<Vector2> Points { get; }
 
     public ArrayMember<float> Separations { get; }
 

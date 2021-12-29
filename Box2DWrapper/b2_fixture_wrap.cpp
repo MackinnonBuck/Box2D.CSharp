@@ -123,6 +123,18 @@ b2Shape* b2Fixture_GetShape(b2Fixture* obj)
     return obj->GetShape();
 }
 
+bool b2Fixture_IsSensor(b2Fixture* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->IsSensor();
+}
+
+void b2Fixture_SetSensor(b2Fixture* obj, bool sensor)
+{
+    VERIFY_INSTANCE;
+    obj->SetSensor(sensor);
+}
+
 b2Fixture* b2Fixture_GetNext(b2Fixture* obj)
 {
     VERIFY_INSTANCE;

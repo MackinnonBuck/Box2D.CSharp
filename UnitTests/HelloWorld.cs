@@ -1,6 +1,6 @@
 ﻿using Box2D.Collision.Shapes;
 using Box2D.Dynamics;
-using Box2D.Math;
+using System.Numerics;
 using Xunit;
 
 namespace UnitTests;
@@ -11,7 +11,7 @@ public class HelloWorld
     public void HelloWorld_Works()
     {
         // Define the gravity vector.
-        var gravity = new Vec2(0f, -10f);
+        var gravity = new Vector2(0f, -10f);
 
         // Construct a world object, which will hold and simulate the rigid bodies.
         using var world = new World(gravity);

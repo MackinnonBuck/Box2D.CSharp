@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -7,21 +8,21 @@ namespace Box2D.Math;
 [StructLayout(LayoutKind.Sequential)]
 public struct Transform : IEquatable<Transform>
 {
-    private static readonly Transform _identity = new(Vec2.Zero, Rot.Identity);
+    private static readonly Transform _identity = new(Vector2.Zero, Rot.Identity);
 
     public static ref readonly Transform Identity => ref _identity;
 
-    public Vec2 P { get; set; }
+    public Vector2 P { get; set; }
 
     public Rot Q { get; set; }
 
-    public Transform(Vec2 position, Rot rotation)
+    public Transform(Vector2 position, Rot rotation)
     {
         P = position;
         Q = rotation;
     }
 
-    public Transform(Vec2 position, float angle)
+    public Transform(Vector2 position, float angle)
     {
         P = position;
         Q = new(angle);

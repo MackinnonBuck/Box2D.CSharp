@@ -1,8 +1,8 @@
 ﻿using Box2D.Collision.Shapes;
 using Box2D.Dynamics;
 using Box2D.Dynamics.Joints;
-using Box2D.Math;
 using Silk.NET.Input;
+using System.Numerics;
 
 namespace Testbed.Tests;
 
@@ -20,8 +20,7 @@ internal class Car : Test
 
     public Car()
     {
-        using var groundBd = new BodyDef();
-        var ground = World.CreateBody(groundBd);
+        var ground = World.CreateBody();
 
         {
             using var shape = new EdgeShape();
@@ -116,7 +115,7 @@ internal class Car : Test
             };
 
             using var jd = new RevoluteJointDef();
-            Vec2 anchor;
+            Vector2 anchor;
 
             using var bd = new BodyDef
             {
@@ -130,14 +129,14 @@ internal class Car : Test
                 var body = World.CreateBody(bd);
                 body.CreateFixture(fd);
 
-                anchor = new Vec2(160f + 2f * i, -0.125f);
+                anchor = new Vector2(160f + 2f * i, -0.125f);
                 jd.Initialize(prevBody, body, anchor);
                 World.CreateJoint(jd);
 
                 prevBody = body;
             }
 
-            anchor = new Vec2(160f + 2f * n, -0.125f);
+            anchor = new Vector2(160f + 2f * n, -0.125f);
             jd.Initialize(prevBody, ground, anchor);
             World.CreateJoint(jd);
         }
@@ -176,7 +175,7 @@ internal class Car : Test
         // Car
         {
             using var chassis = new PolygonShape();
-            Span<Vec2> vertices = stackalloc Vec2[]
+            Span<Vector2> vertices = stackalloc Vector2[]
             {
                 new(-1.5f, -0.5f),
                 new(1.5f, -0.5f),
@@ -216,7 +215,7 @@ internal class Car : Test
             _wheel2.CreateFixture(fd);
 
             using var jd = new WheelJointDef();
-            var axis = new Vec2(0f, 1f);
+            var axis = new Vector2(0f, 1f);
 
             var mass1 = _wheel1.Mass;
             var mass2 = _wheel2.Mass;

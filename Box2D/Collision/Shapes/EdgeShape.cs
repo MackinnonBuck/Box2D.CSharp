@@ -1,5 +1,5 @@
-﻿using Box2D.Math;
-using System;
+﻿using System;
+using System.Numerics;
 
 namespace Box2D.Collision.Shapes;
 
@@ -7,7 +7,7 @@ using static Interop.NativeMethods;
 
 public class EdgeShape : Shape
 {
-    public Vec2 Vertex0
+    public Vector2 Vertex0
     {
         get
         {
@@ -16,7 +16,7 @@ public class EdgeShape : Shape
         }
     }
 
-    public Vec2 Vertex1
+    public Vector2 Vertex1
     {
         get
         {
@@ -25,7 +25,7 @@ public class EdgeShape : Shape
         }
     }
 
-    public Vec2 Vertex2
+    public Vector2 Vertex2
     {
         get
         {
@@ -34,7 +34,7 @@ public class EdgeShape : Shape
         }
     }
 
-    public Vec2 Vertex3
+    public Vector2 Vertex3
     {
         get
         {
@@ -58,9 +58,9 @@ public class EdgeShape : Shape
         Initialize(native);
     }
 
-    public void SetOneSided(Vec2 v0, Vec2 v1, Vec2 v2, Vec2 v3)
+    public void SetOneSided(Vector2 v0, Vector2 v1, Vector2 v2, Vector2 v3)
         => b2EdgeShape_SetOneSided(Native, ref v0, ref v1, ref v2, ref v3);
 
-    public void SetTwoSided(Vec2 v1, Vec2 v2)
+    public void SetTwoSided(Vector2 v1, Vector2 v2)
         => b2EdgeShape_SetTwoSided(Native, ref v1, ref v2);
 }
