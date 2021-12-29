@@ -12,7 +12,7 @@ namespace Box2D.Interop;
 [SuppressUnmanagedCodeSecurity]
 internal static class NativeMethods
 {
-    private const string Dll = "libbox2d";
+    private const string Dll = "box2dwrapper";
 
     public const CallingConvention Conv = CallingConvention.Cdecl;
 
