@@ -18,7 +18,7 @@ public abstract class Shape : Box2DDisposableObject
 {
     internal static ShapeFromIntPtr FromIntPtr { get; } = new();
 
-    internal struct ShapeFromIntPtr
+    internal class ShapeFromIntPtr
     {
         public Shape? Create(IntPtr obj, ShapeType type)
         {
