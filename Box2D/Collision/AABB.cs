@@ -15,7 +15,9 @@ public struct AABB
         get
         {
             var d = UpperBound - LowerBound;
-            return d.X >= 0f & d.Y >= 0f && LowerBound.IsValid() && UpperBound.IsValid();
+            return d.X >= 0f & d.Y >= 0f &&
+                !float.IsInfinity(LowerBound.X) && !float.IsInfinity(LowerBound.Y) &&
+                !float.IsInfinity(UpperBound.X) && !float.IsInfinity(UpperBound.Y);
         }
     }
 
