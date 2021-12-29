@@ -28,7 +28,9 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_SetDebugDraw(IntPtr obj, IntPtr debugDraw);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern IntPtr b2World_CreateBody(IntPtr obj, IntPtr def);
+    public static extern IntPtr b2World_CreateBody(IntPtr obj, IntPtr def, IntPtr userData);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2World_CreateBody2(IntPtr obj, IntPtr userData);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_DestroyBody(IntPtr obj, IntPtr body);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -311,6 +313,8 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Body_CreateFixture2(IntPtr obj, IntPtr shape, float density, IntPtr userData);
     [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_DestroyFixture(IntPtr obj, IntPtr fixture);
+    [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Body_GetTransform(IntPtr obj, out Transform transform);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Body_SetTransform(IntPtr obj, [In] ref Vector2 position, float angle);
@@ -341,7 +345,15 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Body_GetPosition(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_SetPosition(IntPtr obj, [In] ref Vector2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2Body_GetAngle(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_SetAngle(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2Body_GetGravityScale(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_SetGravityScale(IntPtr obj, float scale);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Body_GetLinearVelocity(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -352,6 +364,10 @@ internal static class NativeMethods
     public static extern void b2Body_SetAngularVelocity(IntPtr obj, float omega);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2Body_GetMass(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern BodyType b2Body_GetType(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_SetType(IntPtr obj, BodyType type);
     [DllImport(Dll, CallingConvention = Conv)]
     [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2Body_IsAwake(IntPtr obj);
@@ -412,6 +428,11 @@ internal static class NativeMethods
      */
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Fixture_GetShape(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static extern bool b2Fixture_IsSensor(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Fixture_SetSensor(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool sensor);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Fixture_GetNext(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]

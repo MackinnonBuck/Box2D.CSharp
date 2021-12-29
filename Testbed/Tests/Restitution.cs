@@ -13,8 +13,7 @@ internal class Restitution : Test
     public Restitution()
     {
         {
-            using var bd = new BodyDef();
-            var ground = World.CreateBody(bd);
+            var ground = World.CreateBody();
 
             using var shape = new EdgeShape();
             shape.SetTwoSided(new(-40f, 0f), new(40f, 0f));

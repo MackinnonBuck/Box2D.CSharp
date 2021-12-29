@@ -11,8 +11,7 @@ internal class Tumbler : Test
 
     public Tumbler()
     {
-        using var groundBd = new BodyDef();
-        var ground = World.CreateBody(groundBd);
+        var ground = World.CreateBody();
 
         {
             using var bd = new BodyDef

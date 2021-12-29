@@ -125,6 +125,12 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
         }
     }
 
+    public bool IsSensor
+    {
+        get => b2Fixture_IsSensor(Native);
+        set => b2Fixture_SetSensor(Native, value);
+    }
+
     public Fixture? Next => FromIntPtr.Get(b2Fixture_GetNext(Native));
 
     internal Fixture(Body body, in FixtureDef def)

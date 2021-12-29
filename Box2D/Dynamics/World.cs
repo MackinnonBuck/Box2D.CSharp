@@ -134,6 +134,9 @@ public sealed class World : Box2DDisposableObject
     public Body CreateBody(BodyDef def)
         => new(this, def);
 
+    public Body CreateBody()
+        => new(this);
+
     public void DestroyBody(Body body)
     {
         b2World_DestroyBody(Native, body.Native);

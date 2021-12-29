@@ -19,8 +19,7 @@ internal class Sensor : Test
 
     public Sensor()
     {
-        using var groundBd = new BodyDef();
-        var ground = World.CreateBody(groundBd);
+        var ground = World.CreateBody();
 
         {
             using var shape = new EdgeShape();

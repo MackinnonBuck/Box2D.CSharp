@@ -99,12 +99,6 @@ public sealed class BodyDef : Box2DDisposableObject
         set => b2BodyDef_set_enabled(Native, value);
     }
 
-    internal IntPtr InternalUserData
-    {
-        get => b2BodyDef_get_userData(Native);
-        set => b2BodyDef_set_userData(Native, value);
-    }
-
     public float GravityScale
     {
         get => b2BodyDef_get_gravityScale(Native);
@@ -131,8 +125,6 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
             => b2Body_GetUserData(obj);
     }
 
-    public BodyType Type { get; }
-
     public World World { get; }
 
     public object? UserData { get; set; }
@@ -144,15 +136,7 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
             b2Body_GetPosition(Native, out var value);
             return value;
         }
-    }
-
-    public Transform Transform
-    {
-        get
-        {
-            b2Body_GetTransform(Native, out var value);
-            return value;
-        }
+        set => b2Body_SetPosition(Native, ref value);
     }
 
     public Vector2 LinearVelocity
@@ -171,9 +155,25 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
         set => b2Body_SetAngularVelocity(Native, value);
     }
 
-    public float Angle => b2Body_GetAngle(Native);
+    public float Angle
+    {
+        get => b2Body_GetAngle(Native);
+        set => b2Body_SetAngle(Native, value);
+    }
+
+    public float GravityScale
+    {
+        get => b2Body_GetGravityScale(Native);
+        set => b2Body_SetGravityScale(Native, value);
+    }
 
     public float Mass => b2Body_GetMass(Native);
+
+    public BodyType Type
+    {
+        get => b2Body_GetType(Native);
+        set => b2Body_SetType(Native, value);
+    }
 
     public bool Awake
     {
@@ -189,12 +189,18 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
 
     internal Body(World world, BodyDef def)
     {
-        Type = def.Type;
         World = world;
         UserData = def.UserData;
-        def.InternalUserData = Handle;
-        var native = b2World_CreateBody(world.Native, def.Native);
 
+        var native = b2World_CreateBody(world.Native, def.Native, Handle);
+        Initialize(native);
+    }
+
+    internal Body(World world)
+    {
+        World = world;
+
+        var native = b2World_CreateBody2(world.Native, Handle);
         Initialize(native);
     }
 
@@ -203,6 +209,15 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
 
     public Fixture CreateFixture(Shape shape, float density)
         => new(this, shape, density);
+
+    public void DestroyFixture(Fixture fixture)
+    {
+        b2Body_DestroyFixture(Native, fixture.Native);
+        fixture.Invalidate();
+    }
+
+    public void GetTransform(out Transform transform)
+        => b2Body_GetTransform(Native, out transform);
 
     public void SetTransform(Vector2 position, float angle)
         => b2Body_SetTransform(Native, ref position, angle);

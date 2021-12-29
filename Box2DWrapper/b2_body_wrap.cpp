@@ -208,6 +208,12 @@ b2Fixture* b2Body_CreateFixture2(b2Body* obj, b2Shape* shape, float density, uin
     return obj->CreateFixture(&def);
 }
 
+void b2Body_DestroyFixture(b2Body* obj, b2Fixture* fixture)
+{
+    VERIFY_INSTANCE;
+    obj->DestroyFixture(fixture);
+}
+
 void b2Body_GetTransform(b2Body* obj, b2Transform* transform)
 {
     VERIFY_INSTANCE;
@@ -292,16 +298,40 @@ void b2Body_GetLinearVelocityFromLocalPoint(b2Body* obj, b2Vec2* localPoint, b2V
     *value = obj->GetLinearVelocityFromLocalPoint(*localPoint);
 }
 
-void b2Body_GetPosition(b2Body* obj, b2Vec2* v)
+void b2Body_GetPosition(b2Body* obj, b2Vec2* value)
 {
     VERIFY_INSTANCE;
-    *v = obj->GetPosition();
+    *value = obj->GetPosition();
+}
+
+void b2Body_SetPosition(b2Body* obj, b2Vec2* value)
+{
+    VERIFY_INSTANCE;
+    obj->SetTransform(*value, obj->GetAngle());
 }
 
 float b2Body_GetAngle(b2Body* obj)
 {
     VERIFY_INSTANCE;
     return obj->GetAngle();
+}
+
+void b2Body_SetAngle(b2Body* obj, float value)
+{
+    VERIFY_INSTANCE;
+    obj->SetTransform(obj->GetPosition(), value);
+}
+
+float b2Body_GetGravityScale(b2Body* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->GetGravityScale();
+}
+
+void b2Body_SetGravityScale(b2Body* obj, float scale)
+{
+    VERIFY_INSTANCE;
+    obj->SetGravityScale(scale);
 }
 
 void b2Body_GetLinearVelocity(b2Body* obj, b2Vec2* value)
@@ -332,6 +362,18 @@ float b2Body_GetMass(b2Body* obj)
 {
     VERIFY_INSTANCE;
     return obj->GetMass();
+}
+
+b2BodyType b2Body_GetType(b2Body* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->GetType();
+}
+
+void b2Body_SetType(b2Body* obj, b2BodyType type)
+{
+    VERIFY_INSTANCE;
+    obj->SetType(type);
 }
 
 bool b2Body_IsAwake(b2Body* obj)

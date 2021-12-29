@@ -2,6 +2,8 @@
 #include "verify.h"
 #include "b2_world_wrap.h"
 
+#include <box2d/b2_body.h>
+
 b2World* b2World_new(b2Vec2* gravity)
 {
     return new b2World(*gravity);
@@ -25,10 +27,19 @@ void b2World_SetDebugDraw(b2World* obj, b2Draw* debugDraw)
     obj->SetDebugDraw(debugDraw);
 }
 
-b2Body* b2World_CreateBody(b2World* obj, b2BodyDef* def)
+b2Body* b2World_CreateBody(b2World* obj, b2BodyDef* def, uintptr_t userData)
 {
     VERIFY_INSTANCE;
+    def->userData.pointer = userData;
     return obj->CreateBody(def);
+}
+
+b2Body* b2World_CreateBody2(b2World* obj, uintptr_t userData)
+{
+    VERIFY_INSTANCE;
+    b2BodyDef def;
+    def.userData.pointer = userData;
+    return obj->CreateBody(&def);
 }
 
 void b2World_DestroyBody(b2World* obj, b2Body* body)

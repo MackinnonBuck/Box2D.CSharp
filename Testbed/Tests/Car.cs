@@ -20,8 +20,7 @@ internal class Car : Test
 
     public Car()
     {
-        using var groundBd = new BodyDef();
-        var ground = World.CreateBody(groundBd);
+        var ground = World.CreateBody();
 
         {
             using var shape = new EdgeShape();
