@@ -7,13 +7,6 @@ namespace Box2D.Collision;
 
 using static Interop.NativeMethods;
 
-public enum ManifoldType
-{
-    Circles,
-    FaceA,
-    FaceB,
-}
-
 public readonly ref struct Manifold
 {
     private readonly IntPtr _native;

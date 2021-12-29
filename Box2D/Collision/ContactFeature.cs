@@ -2,12 +2,6 @@
 
 namespace Box2D.Collision;
 
-public enum ContactFeatureType : byte
-{
-    Vertex = 0,
-    Face = 1,
-}
-
 [StructLayout(LayoutKind.Sequential)]
 public struct ContactFeature
 {

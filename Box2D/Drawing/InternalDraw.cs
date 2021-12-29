@@ -88,7 +88,5 @@ internal sealed class InternalDraw : Box2DDisposableObject
         => _userDraw.DrawPoint(p, size, color);
 
     protected override void Dispose(bool disposing)
-    {
-        b2DrawWrapper_delete(Native);
-    }
+        => b2DrawWrapper_delete(Native);
 }
