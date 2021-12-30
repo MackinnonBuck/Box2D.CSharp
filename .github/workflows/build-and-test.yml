@@ -14,7 +14,8 @@ env:
   BUILD_PLATFORM: x64
 
 jobs:
-  run:
+  build-and-test:
+    name: MSBuild + XUnit
     runs-on: windows-2022
 
     steps:
