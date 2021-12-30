@@ -25,7 +25,13 @@ jobs:
       with:
         vs-version: '[17.0,)'
         msbuild-architecture: x64
-
+    
+    - name: Configure VCPKG dependencies
+      run: |
+        bootstrap-vcpkg
+        vcpkg install box2d:x64-windows
+        vcpkg integrate install
+        
     - name: Restore NuGet packages
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: nuget restore ${{env.SOLUTION_FILE_PATH}}
