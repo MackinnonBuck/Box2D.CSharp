@@ -1,4 +1,4 @@
-# Box2DSharp
+# Box2D.CSharp
 
 A C# wrapper for Box2D, a 2D physics engine for games.
 
