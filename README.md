@@ -1,3 +1,5 @@
+![Status](https://github.com/MackinnonBuck/Box2D.CSharp/actions/workflows/build-and-test.yml/badge.svg)
+
 # Box2D.CSharp
 
 A C# wrapper for Box2D, a 2D physics engine for games.
