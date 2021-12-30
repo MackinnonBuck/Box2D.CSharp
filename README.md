@@ -1,4 +1,4 @@
-# Box2DSharp
+# Box2D.CSharp
 
 A C# wrapper for Box2D, a 2D physics engine for games.
 
@@ -22,13 +22,13 @@ Currently, a significant but incomplete subset of the full Box2D API is supporte
 
 Following is a high-level overview of the project structure:
 
-**/Box2D:** The C# class library exposing the Box2D API. Most of the project lives in here.
+**/src/Box2D:** The C# class library exposing the Box2D API. Most of the project lives in here.
 
-**/Box2DWrapper:** A C/C++ wrapper that compiles Box2D as a native DLL. Windows is currently the only supported platform, but migrating to a CMake project for Linux/MacOS support is something being considered for the future.
+**/src/Box2DWrapper:** A C/C++ wrapper that compiles Box2D as a native DLL. Windows is currently the only supported platform, but migrating to a CMake project for Linux/MacOS support is something being considered for the future.
 
-**/Testbed:** A C# translation of the official [Box2D testbed](https://github.com/erincatto/box2d/tree/master/testbed).
+**/test/Testbed:** A C# translation of the official [Box2D testbed](https://github.com/erincatto/box2d/tree/master/testbed).
 
-**/UnitTests:** C# translations of the official [Box2D unit tests](https://github.com/erincatto/box2d/tree/master/unit-test).
+**/test/UnitTests:** C# translations of the official [Box2D unit tests](https://github.com/erincatto/box2d/tree/master/unit-test).
 
 ## Contributing
 

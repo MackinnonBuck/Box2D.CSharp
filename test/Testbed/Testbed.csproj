@@ -18,11 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Box2D\Box2D.csproj" />
+    <ProjectReference Include="..\..\src\Box2D\Box2D.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /y /d &quot;..\lib\$(PlatformTarget)\$(Configuration)\box2dwrapper.dll&quot; &quot;$(OutDir)&quot;" />
+    <Exec Command="xcopy /y /d &quot;..\..\lib\$(PlatformTarget)\$(Configuration)\box2dwrapper.dll&quot; &quot;$(OutDir)&quot;" />
   </Target>
 
 </Project>
