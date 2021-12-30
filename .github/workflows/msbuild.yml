@@ -1,6 +1,6 @@
 name: MSBuild
 
-on: [push, pull_request]
+on: [push]
 
 env:
   # Path to the solution file relative to the root of the project.
@@ -12,6 +12,8 @@ env:
   BUILD_CONFIGURATION: Release
   
   BUILD_PLATFORM: x64
+  
+  DOTNET_VERSION: '6.0'
 
 jobs:
   build:
