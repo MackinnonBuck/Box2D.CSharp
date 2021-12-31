@@ -3,6 +3,7 @@
 #include "api.h"
 
 #include <box2d/b2_world.h>
+#include <box2d/b2_body.h>
 
 extern "C"
 {
@@ -11,7 +12,7 @@ extern "C"
     BOX2D_API void b2World_SetContactListener(b2World* obj, b2ContactListener* listener);
     BOX2D_API void b2World_SetDebugDraw(b2World* obj, b2Draw* debugDraw);
     BOX2D_API b2Body* b2World_CreateBody(b2World* obj, b2BodyDef* def, uintptr_t userData);
-    BOX2D_API b2Body* b2World_CreateBody2(b2World* obj, uintptr_t userData);
+    BOX2D_API b2Body* b2World_CreateBody2(b2World* obj, b2BodyType type, b2Vec2* position, float angle, uintptr_t userData);
     BOX2D_API void b2World_DestroyBody(b2World* obj, b2Body* body);
     BOX2D_API b2Joint* b2World_CreateJoint(b2World* obj, b2JointDef* def, uintptr_t userData);
     BOX2D_API void b2World_DestroyJoint(b2World* obj, b2Joint* joint);

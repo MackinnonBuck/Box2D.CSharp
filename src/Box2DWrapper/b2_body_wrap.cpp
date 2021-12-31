@@ -323,6 +323,18 @@ void b2Body_SetAngle(b2Body* obj, float value)
     obj->SetTransform(obj->GetPosition(), value);
 }
 
+void b2Body_GetWorldCenter(b2Body* obj, b2Vec2* value)
+{
+    VERIFY_INSTANCE;
+    *value = obj->GetWorldCenter();
+}
+
+void b2Body_GetLocalCenter(b2Body* obj, b2Vec2* value)
+{
+    VERIFY_INSTANCE;
+    *value = obj->GetLocalCenter();
+}
+
 float b2Body_GetGravityScale(b2Body* obj)
 {
     VERIFY_INSTANCE;
@@ -363,6 +375,12 @@ float b2Body_GetMass(b2Body* obj)
 {
     VERIFY_INSTANCE;
     return obj->GetMass();
+}
+
+float b2Body_GetInertia(b2Body* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->GetInertia();
 }
 
 b2BodyType b2Body_GetType(b2Body* obj)

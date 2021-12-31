@@ -98,6 +98,7 @@
     <ClInclude Include="b2_draw_wrap.h" />
     <ClInclude Include="b2_edge_shape_wrap.h" />
     <ClInclude Include="b2_fixture_wrap.h" />
+    <ClInclude Include="b2_friction_joint_wrap.h" />
     <ClInclude Include="b2_joint_wrap.h" />
     <ClInclude Include="b2_mouse_joint_wrap.h" />
     <ClInclude Include="b2_polygon_shape_wrap.h" />
@@ -120,6 +121,7 @@
     <ClCompile Include="b2_draw_wrap.cpp" />
     <ClCompile Include="b2_edge_shape_wrap.cpp" />
     <ClCompile Include="b2_fixture_wrap.cpp" />
+    <ClCompile Include="b2_friction_joint_wrap.cpp" />
     <ClCompile Include="b2_joint_wrap.cpp" />
     <ClCompile Include="b2_mouse_joint_wrap.cpp" />
     <ClCompile Include="b2_polygon_shape_wrap.cpp" />

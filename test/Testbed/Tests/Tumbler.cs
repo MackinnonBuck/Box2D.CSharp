@@ -55,12 +55,7 @@ internal class Tumbler : Test
 
         if (_count < 800)
         {
-            using var bd = new BodyDef
-            {
-                Type = BodyType.Dynamic,
-                Position = new(0f, 10f),
-            };
-            var body = World.CreateBody(bd);
+            var body = World.CreateBody(BodyType.Dynamic, new(0f, 10f));
 
             using var shape = new PolygonShape();
             shape.SetAsBox(0.125f, 0.125f);

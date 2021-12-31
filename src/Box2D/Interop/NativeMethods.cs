@@ -30,7 +30,7 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2World_CreateBody(IntPtr obj, IntPtr def, IntPtr userData);
     [DllImport(Dll, CallingConvention = Conv)]
-    public static extern IntPtr b2World_CreateBody2(IntPtr obj, IntPtr userData);
+    public static extern IntPtr b2World_CreateBody2(IntPtr obj, BodyType type, [In] ref Vector2 position, float angle, IntPtr userData);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2World_DestroyBody(IntPtr obj, IntPtr body);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -351,6 +351,10 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Body_SetAngle(IntPtr obj, float value);
     [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_GetWorldCenter(IntPtr obj, out Vector2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2Body_GetLocalCenter(IntPtr obj, out Vector2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2Body_GetGravityScale(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Body_SetGravityScale(IntPtr obj, float scale);
@@ -364,6 +368,8 @@ internal static class NativeMethods
     public static extern void b2Body_SetAngularVelocity(IntPtr obj, float omega);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern float b2Body_GetMass(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2Body_GetInertia(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern BodyType b2Body_GetType(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
@@ -990,4 +996,46 @@ internal static class NativeMethods
     public static extern float b2WheelJoint_GetDamping(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2WheelJoint_SetDamping(IntPtr obj, float damping);
+
+    /*
+     * b2FrictionJointDef
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2FrictionJointDef_new();
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FrictionJointDef_Initialize(IntPtr obj, IntPtr bodyA, IntPtr bodyB, [In] ref Vector2 anchor);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FrictionJointDef_get_localAnchorA(IntPtr obj, out Vector2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FrictionJointDef_set_localAnchorA(IntPtr obj, [In] ref Vector2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FrictionJointDef_get_localAnchorB(IntPtr obj, out Vector2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FrictionJointDef_set_localAnchorB(IntPtr obj, [In] ref Vector2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2FrictionJointDef_get_maxForce(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FrictionJointDef_set_maxForce(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2FrictionJointDef_get_maxTorque(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FrictionJointDef_set_maxTorque(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FrictionJointDef_delete(IntPtr obj);
+
+    /*
+     * b2FrictionJoint
+     */
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FrictionJoint_GetLocalAnchorA(IntPtr obj, out Vector2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FrictionJoint_GetLocalAnchorB(IntPtr obj, out Vector2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2FrictionJoint_GetMaxForce(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FrictionJoint_SetMaxForce(IntPtr obj, float force);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern float b2FrictionJoint_GetMaxTorque(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FrictionJoint_SetMaxTorque(IntPtr obj, float torque);
 }

@@ -1,5 +1,6 @@
 ﻿using Box2D.Collision.Shapes;
 using Box2D.Dynamics;
+using System.Numerics;
 
 namespace Testbed.Tests;
 
@@ -22,15 +23,10 @@ internal class AddPair : Test
             var minY = 4f;
             var maxY = 6f;
 
-            using var bd = new BodyDef
-            {
-                Type = BodyType.Dynamic,
-            };
-
             for (var i = 0; i < 400; i++)
             {
-                bd.Position = new(MathUtils.RandomFloat(minX, maxX), MathUtils.RandomFloat(minY, maxY));
-                var body = World.CreateBody(bd);
+                var position = new Vector2(MathUtils.RandomFloat(minX, maxX), MathUtils.RandomFloat(minY, maxY));
+                var body = World.CreateBody(BodyType.Dynamic, position);
                 body.CreateFixture(shape, 0.01f);
             }
         }

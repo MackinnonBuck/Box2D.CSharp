@@ -37,16 +37,9 @@ internal class Restitution : Test
                 RestitutionThreshold = Threshold,
             };
 
-            using var bd = new BodyDef
-            {
-                Type = BodyType.Dynamic,
-            };
-
             for (var i = 0; i < _restitution.Length; i++)
             {
-                bd.Position = new(-10f + 3f * i, 20f);
-
-                var body = World.CreateBody(bd);
+                var body = World.CreateBody(BodyType.Dynamic, new(-10f + 3f * i, 20f));
                 fd.Restitution = _restitution[i];
 
                 body.CreateFixture(fd);

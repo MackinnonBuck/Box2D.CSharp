@@ -48,18 +48,11 @@ internal class Sensor : Test
                 Radius = 1f,
             };
 
-            using var bd = new BodyDef
-            {
-                Type = BodyType.Dynamic,
-            };
-
             for (var i = 0; i < Count; i++)
             {
-                bd.Position = new(-10f + 3f * i, 20f);
-                bd.UserData = i;
-
                 _touching[i] = false;
-                _bodies[i] = World.CreateBody(bd);
+                _bodies[i] = World.CreateBody(BodyType.Dynamic, new(-10f + 3f * i, 20f));
+                _bodies[i].UserData = i;
                 _bodies[i].CreateFixture(shape, 1f);
             }
         }

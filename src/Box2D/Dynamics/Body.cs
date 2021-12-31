@@ -78,6 +78,30 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
     }
 
     /// <summary>
+    /// Gets the world position of the center of mass.
+    /// </summary>
+    public Vector2 WorldCenter
+    {
+        get
+        {
+            b2Body_GetWorldCenter(Native, out var value);
+            return value;
+        }
+    }
+
+    /// <summary>
+    /// Gets the local position of the center of mass.
+    /// </summary>
+    public Vector2 LocalCenter
+    {
+        get
+        {
+            b2Body_GetLocalCenter(Native, out var value);
+            return value;
+        }
+    }
+
+    /// <summary>
     /// Gets or sets the gravity scale of the body.
     /// </summary>
     public float GravityScale
@@ -90,6 +114,11 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
     /// Gets the total mass of the body.
     /// </summary>
     public float Mass => b2Body_GetMass(Native);
+
+    /// <summary>
+    /// Gets the rotational inertia of the body about the local origin.
+    /// </summary>
+    public float Inertia => b2Body_GetInertia(Native);
 
     /// <summary>
     /// Gets or sets the type of this body.
@@ -134,11 +163,11 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
         Initialize(native);
     }
 
-    internal Body(World world)
+    internal Body(World world, BodyType type, ref Vector2 position, float angle)
     {
         World = world;
 
-        var native = b2World_CreateBody2(world.Native, Handle);
+        var native = b2World_CreateBody2(world.Native, type, ref position, angle, Handle);
         Initialize(native);
     }
 

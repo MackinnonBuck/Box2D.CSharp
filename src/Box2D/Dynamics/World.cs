@@ -210,8 +210,8 @@ public sealed class World : Box2DDisposableObject
     /// <summary>
     /// Creates a rigid body.
     /// </summary>
-    public Body CreateBody()
-        => new(this);
+    public Body CreateBody(BodyType type = BodyType.Static, Vector2 position = default, float angle = 0f)
+        => new(this, type, ref position, angle);
 
     /// <summary>
     /// Destroys a rigid body. No references to the body are retained.

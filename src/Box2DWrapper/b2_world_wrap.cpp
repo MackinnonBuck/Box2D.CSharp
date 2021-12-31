@@ -35,10 +35,13 @@ b2Body* b2World_CreateBody(b2World* obj, b2BodyDef* def, uintptr_t userData)
     return obj->CreateBody(def);
 }
 
-b2Body* b2World_CreateBody2(b2World* obj, uintptr_t userData)
+b2Body* b2World_CreateBody2(b2World* obj, b2BodyType type, b2Vec2* position, float angle, uintptr_t userData)
 {
     VERIFY_INSTANCE;
     b2BodyDef def;
+    def.type = type;
+    def.position = *position;
+    def.angle = angle;
     def.userData.pointer = userData;
     return obj->CreateBody(&def);
 }
