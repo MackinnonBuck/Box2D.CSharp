@@ -1,4 +1,4 @@
-![Status](https://github.com/MackinnonBuck/Box2D.CSharp/actions/workflows/build-and-test.yml/badge.svg)
+[![Build and Test](https://github.com/MackinnonBuck/Box2D.CSharp/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/MackinnonBuck/Box2D.CSharp/actions/workflows/build-and-test.yml)
 
 # Box2D.CSharp
 
@@ -14,7 +14,7 @@ Speed is achieved by compiling Erin Catto's [Box2D](https://github.com/erincatto
 
 Reliability is partly inherited from the C++ Box2D implementation, but is also helped by toggleable access-checking mechanisms designed to catch invalid uses of the API and throw meaningful exceptions.
 
-Memory-efficiency comes from the use of `struct`s for small copies of unmanaged data types and `ref struct`s for temporary handles to unmanaged resources. This differs from several other C# ports of Box2D that, for example, represent contact information using `class`es, which can create significant GC pressure during high contact frequency.
+Memory-efficiency comes from the use of `struct`s for small copies of unmanaged data types and `ref struct`s for temporary handles to unmanaged resources. This differs from C# reimplementations of Box2D that, for example, represent contact information using `class`es, which can create significant GC pressure during high contact frequency.
 
 ## Status
 
