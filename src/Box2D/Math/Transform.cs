@@ -51,6 +51,54 @@ public struct Transform : IEquatable<Transform>
         Rotation = new(angle);
     }
 
+    /// <summary>
+    /// Multiplies a transform by a vector.
+    /// </summary>
+    /// <param name="t">The transform.</param>
+    /// <param name="v">The vector.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2 Mul(Transform t, Vector2 v)
+    {
+        var x = (t.Rotation.Cos * v.X - t.Rotation.Sin * v.Y) + t.Position.X;
+        var y = (t.Rotation.Sin * v.X + t.Rotation.Cos * v.Y) + t.Position.Y;
+
+        return new(x, y);
+    }
+
+    /// <summary>
+    /// Transpose multiplies a transform by a vector.
+    /// </summary>
+    /// <param name="t">The transform.</param>
+    /// <param name="v">The vector.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2 MulT(Transform t, Vector2 v)
+    {
+        var px = v.X - t.Position.X;
+        var py = v.Y - t.Position.Y;
+        var x = (t.Rotation.Cos * px + t.Rotation.Sin * py);
+        var y = (-t.Rotation.Sin * px + t.Rotation.Cos * py);
+
+        return new(x, y);
+    }
+
+    /// <summary>
+    /// Multiplies a transform by another transform.
+    /// </summary>
+    /// <param name="a">The first transform</param>
+    /// <param name="b">The second transform.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Transform Mul(Transform a, Transform b)
+        => new(Rot.Mul(a.Rotation, b.Position) + a.Position, Rot.Mul(a.Rotation, b.Rotation));
+
+    /// <summary>
+    /// Transpose multiplies a transform by another transform.
+    /// </summary>
+    /// <param name="a">The first transform</param>
+    /// <param name="b">The second transform.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Transform MulT(Transform a, Transform b)
+        => new(Rot.Mul(a.Rotation, b.Position) - a.Position, Rot.Mul(a.Rotation, b.Rotation));
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(Transform a, Transform b)
         => a.Equals(b);

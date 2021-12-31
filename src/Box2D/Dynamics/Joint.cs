@@ -98,7 +98,7 @@ public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
             JointType.Gear => throw new NotImplementedException(),
             JointType.Wheel => new WheelJoint(userData),
             JointType.Weld => throw new NotImplementedException(),
-            JointType.Friction => throw new NotImplementedException(),
+            JointType.Friction => new FrictionJoint(userData),
             JointType.Rope => throw new NotImplementedException(),
             JointType.Motor => throw new NotImplementedException(),
             var x => throw new InvalidOperationException($"Invalid joint type '{x}'."),

@@ -53,6 +53,53 @@ public struct Rot : IEquatable<Rot>
         Cos = (float)System.Math.Cos(angle);
     }
 
+    /// <summary>
+    /// Constructs a new <see cref="Rot"/> instance.
+    /// </summary>
+    /// <param name="sin">The sine value.</param>
+    /// <param name="cos">The cosine value.</param>
+    public Rot(float sin, float cos)
+    {
+        Sin = sin;
+        Cos = cos;
+    }
+
+    /// <summary>
+    /// Multiplies two rotations.
+    /// </summary>
+    /// <param name="q">The first rotation.</param>
+    /// <param name="r">The second rotation.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Rot Mul(Rot q, Rot r)
+        => new(q.Sin * r.Cos + q.Cos * r.Sin, q.Cos * r.Cos - q.Sin * r.Sin);
+
+    /// <summary>
+    /// Transpose multiplies two rotations.
+    /// </summary>
+    /// <param name="q">The first rotation.</param>
+    /// <param name="r">The second rotation.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Rot MulT(Rot q, Rot r)
+        => new(q.Cos * r.Sin - q.Sin * r.Cos, q.Cos * r.Cos + q.Sin * r.Sin);
+
+    /// <summary>
+    /// Rotates a vector.
+    /// </summary>
+    /// <param name="q">The rotation.</param>
+    /// <param name="v">The vector.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2 Mul(Rot q, Vector2 v)
+        => new(q.Cos * v.X - q.Sin * v.Y, q.Sin * v.X + q.Cos * v.Y);
+
+    /// <summary>
+    /// Inverse rotates a vector.
+    /// </summary>
+    /// <param name="q">The rotation.</param>
+    /// <param name="v">The vector.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2 MulT(Rot q, Vector2 v)
+        => new(q.Cos * v.X + q.Sin * v.Y, -q.Sin * v.X + q.Cos * v.Y);
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(Rot a, Rot b)
         => a.Equals(b);
