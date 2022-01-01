@@ -107,6 +107,12 @@ void b2FixtureDef_set_filter(b2FixtureDef* obj, b2Filter* filter)
     obj->filter = *filter;
 }
 
+void b2FixtureDef_reset(b2FixtureDef* obj)
+{
+    VERIFY_INSTANCE;
+    *obj = b2FixtureDef();
+}
+
 void b2FixtureDef_delete(b2FixtureDef* obj)
 {
     VERIFY_INSTANCE;

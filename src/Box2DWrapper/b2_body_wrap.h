@@ -38,6 +38,7 @@ extern "C"
     BOX2D_API void b2BodyDef_set_userData(b2BodyDef* obj, uintptr_t value);
     BOX2D_API float b2BodyDef_get_gravityScale(b2BodyDef* obj);
     BOX2D_API void b2BodyDef_set_gravityScale(b2BodyDef* obj, float value);
+    BOX2D_API void b2BodyDef_reset(b2BodyDef* obj);
     BOX2D_API void b2BodyDef_delete(b2BodyDef* obj);
 
     /*

@@ -23,7 +23,10 @@ public abstract class Box2DDisposableObject : Box2DObject, IDisposable
     }
 
     /// <inheritdoc/>
-    public void Dispose()
+    public virtual void Dispose()
+        => DisposeCore();
+
+    private protected void DisposeCore()
     {
         if (IsValid)
         {

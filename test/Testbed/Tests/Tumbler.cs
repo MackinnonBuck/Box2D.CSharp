@@ -14,12 +14,10 @@ internal class Tumbler : Test
         var ground = World.CreateBody();
 
         {
-            using var bd = new BodyDef
-            {
-                Type = BodyType.Dynamic,
-                AllowSleep = false,
-                Position = new(0f, 10f),
-            };
+            using var bd = BodyDef.Create();
+            bd.Type = BodyType.Dynamic;
+            bd.AllowSleep = false;
+            bd.Position = new(0f, 10f);
             var body = World.CreateBody(bd);
 
             using var shape = new PolygonShape();

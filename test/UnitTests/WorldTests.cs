@@ -29,10 +29,8 @@ public class WorldTests
             Radius = 5f,
         };
 
-        using var bodyDef = new BodyDef
-        {
-            Type = BodyType.Dynamic,
-        };
+        using var bodyDef = BodyDef.Create();
+        bodyDef.Type = BodyType.Dynamic;
 
         var bodyA = world.CreateBody(bodyDef);
         var bodyB = world.CreateBody(bodyDef);

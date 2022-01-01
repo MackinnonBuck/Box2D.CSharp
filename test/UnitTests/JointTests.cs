@@ -15,11 +15,9 @@ public class JointTests
         var gravity = new Vector2(0f, -10f);
         using var world = new World(gravity);
 
-        using var bodyDef = new BodyDef
-        {
-            Type = BodyType.Dynamic,
-            Position = new(-2f, 3f),
-        };
+        using var bodyDef = BodyDef.Create();
+        bodyDef.Type = BodyType.Dynamic;
+        bodyDef.Position = new(-2f, 3f);
         var ground = world.CreateBody(bodyDef);
 
         using var circle = new CircleShape
@@ -27,15 +25,13 @@ public class JointTests
             Radius = 1f,
         };
 
-        using var fixtureDef = new FixtureDef
+        using var fixtureDef = FixtureDef.Create();
+        fixtureDef.Filter = new()
         {
-            Filter = new()
-            {
-                MaskBits = 0,
-            },
-            Density = 1f,
-            Shape = circle,
+            MaskBits = 0,
         };
+        fixtureDef.Density = 1f;
+        fixtureDef.Shape = circle;
 
         var bodyA = world.CreateBody(bodyDef);
         var bodyB = world.CreateBody(bodyDef);

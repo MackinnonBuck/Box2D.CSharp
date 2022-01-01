@@ -34,11 +34,9 @@ internal class Sensor : Test
                 Position = new(0f, 10f),
             };
 
-            using var fd = new FixtureDef
-            {
-                Shape = shape,
-                IsSensor = true,
-            };
+            using var fd = FixtureDef.Create();
+            fd.Shape = shape;
+            fd.IsSensor = true;
             _sensor = ground.CreateFixture(fd);
         }
 

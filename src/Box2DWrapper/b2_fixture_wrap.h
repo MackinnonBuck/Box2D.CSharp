@@ -26,6 +26,7 @@ extern "C"
     BOX2D_API void b2FixtureDef_set_isSensor(b2FixtureDef* obj, bool value);
     BOX2D_API void b2FixtureDef_get_filter(b2FixtureDef* obj, b2Filter* filter);
     BOX2D_API void b2FixtureDef_set_filter(b2FixtureDef* obj, b2Filter* filter);
+    BOX2D_API void b2FixtureDef_reset(b2FixtureDef* obj);
     BOX2D_API void b2FixtureDef_delete(b2FixtureDef* obj);
 
     /*

@@ -1,4 +1,5 @@
 ﻿using Box2D.Core;
+using Box2D.Core.Factories;
 using System.Numerics;
 
 namespace Box2D.Dynamics;
@@ -10,7 +11,7 @@ using static Interop.NativeMethods;
 /// You can safely re-use body definitions. Shapes are added to a body after
 /// construction.
 /// </summary>
-public sealed class BodyDef : Box2DDisposableObject
+public sealed class BodyDef : Box2DPoolableObject<BodyDef, BodyDefFactory>
 {
     /// <summary>
     /// Gets or sets the application-specific body data.
@@ -157,7 +158,7 @@ public sealed class BodyDef : Box2DDisposableObject
     /// <summary>
     /// Constructs a new <see cref="BodyDef"/> instance.
     /// </summary>
-    public BodyDef() : base(isUserOwned: true)
+    internal BodyDef() : base(isUserOwned: true)
     {
         var native = b2BodyDef_new();
         Initialize(native);
@@ -166,4 +167,10 @@ public sealed class BodyDef : Box2DDisposableObject
     /// <inheritdoc/>
     protected override void Dispose(bool disposing)
         => b2BodyDef_delete(Native);
+
+    private protected override void Reset()
+    {
+        UserData = null;
+        b2BodyDef_reset(Native);
+    }
 }

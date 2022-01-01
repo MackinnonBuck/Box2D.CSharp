@@ -40,12 +40,10 @@ internal class BodyTypes : Test
             using var shape = new PolygonShape();
             shape.SetAsBox(0.5f, 4f, new(4f, 0f), 0.5f * MathF.PI);
 
-            using var fd = new FixtureDef
-            {
-                Shape = shape,
-                Friction = 0.6f,
-                Density = 2f,
-            };
+            using var fd = FixtureDef.Create();
+            fd.Shape = shape;
+            fd.Friction = 0.6f;
+            fd.Density = 2f;
             _platform.CreateFixture(fd);
 
             using var rjd = new RevoluteJointDef();
@@ -72,12 +70,10 @@ internal class BodyTypes : Test
             using var shape = new PolygonShape();
             shape.SetAsBox(0.75f, 0.75f);
 
-            using var fd = new FixtureDef
-            {
-                Shape = shape,
-                Friction = 0.6f,
-                Density = 2f,
-            };
+            using var fd = FixtureDef.Create();
+            fd.Shape = shape;
+            fd.Friction = 0.6f;
+            fd.Density = 2f;
 
             body.CreateFixture(fd);
         }

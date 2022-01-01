@@ -35,12 +35,10 @@ internal class BoxStack : Test
             using var shape = new PolygonShape();
             shape.SetAsBox(0.5f, 0.5f);
 
-            using var fd = new FixtureDef
-            {
-                Shape = shape,
-                Density = 1f,
-                Friction = 0.3f,
-            };
+            using var fd = FixtureDef.Create();
+            fd.Shape = shape;
+            fd.Density = 1f;
+            fd.Friction = 0.3f;
 
             for (var j = 0; j < ColumnCount; j++)
             {
@@ -76,19 +74,15 @@ internal class BoxStack : Test
                     using var shape = new CircleShape();
                     shape.Radius = 0.25f;
 
-                    using var fd = new FixtureDef
-                    {
-                        Shape = shape,
-                        Density = 20f,
-                        Restitution = 0.05f,
-                    };
+                    using var fd = FixtureDef.Create();
+                    fd.Shape = shape;
+                    fd.Density = 20f;
+                    fd.Restitution = 0.05f;
 
-                    using var bd = new BodyDef
-                    {
-                        Type = BodyType.Dynamic,
-                        Bullet = true,
-                        Position = new(-31f, 5f),
-                    };
+                    using var bd = BodyDef.Create();
+                    bd.Type = BodyType.Dynamic;
+                    bd.Bullet = true;
+                    bd.Position = new(-31f, 5f);
 
                     _bullet = World.CreateBody(bd);
                     _bullet.CreateFixture(fd);

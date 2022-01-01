@@ -303,6 +303,8 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2BodyDef_set_gravityScale(IntPtr obj, float value);
     [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2BodyDef_reset(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2BodyDef_delete(IntPtr obj);
 
     /*
@@ -426,6 +428,8 @@ internal static class NativeMethods
     public static extern void b2FixtureDef_get_filter(IntPtr obj, out Filter filter);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2FixtureDef_set_filter(IntPtr obj, [In] ref Filter filter);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FixtureDef_reset(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2FixtureDef_delete(IntPtr obj);
 

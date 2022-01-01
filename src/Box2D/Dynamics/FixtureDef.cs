@@ -1,5 +1,6 @@
 ﻿using Box2D.Collision;
 using Box2D.Core;
+using Box2D.Core.Factories;
 using System;
 
 namespace Box2D.Dynamics;
@@ -10,7 +11,7 @@ using static Interop.NativeMethods;
 /// Used to create a fixture. This class defines an abstract fixture
 /// definition. You can reuse fixture definitions safely.
 /// </summary>
-public sealed class FixtureDef : Box2DDisposableObject
+public sealed class FixtureDef : Box2DPoolableObject<FixtureDef, FixtureDefFactory>
 {
     private Shape? _shape;
 
@@ -97,7 +98,7 @@ public sealed class FixtureDef : Box2DDisposableObject
     /// <summary>
     /// Constructs a new <see cref="FixtureDef"/> instance.
     /// </summary>
-    public FixtureDef() : base(isUserOwned: true)
+    internal FixtureDef() : base(isUserOwned: true)
     {
         var native = b2FixtureDef_new();
         Initialize(native);
@@ -106,4 +107,10 @@ public sealed class FixtureDef : Box2DDisposableObject
     /// <inheritdoc/>
     protected override void Dispose(bool disposing)
         => b2FixtureDef_delete(Native);
+
+    private protected override void Reset()
+    {
+        UserData = null;
+        b2FixtureDef_reset(Native);
+    }
 }

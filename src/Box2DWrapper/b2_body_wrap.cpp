@@ -181,6 +181,12 @@ void b2BodyDef_set_gravityScale(b2BodyDef* obj, float value)
     obj->gravityScale = value;
 }
 
+void b2BodyDef_reset(b2BodyDef* obj)
+{
+    VERIFY_INSTANCE;
+    *obj = b2BodyDef();
+}
+
 void b2BodyDef_delete(b2BodyDef* obj)
 {
     VERIFY_INSTANCE;

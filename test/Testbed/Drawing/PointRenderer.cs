@@ -80,7 +80,7 @@ void main(void)
         _gl.VertexAttribPointer(SizeAttribute, 1, GLEnum.Float, false, 0, null);
         _gl.BufferData<float>(GLEnum.ArrayBuffer, _sizes, BufferUsageARB.DynamicDraw);
 
-        _gl.CheckForErrors();
+        //_gl.CheckForErrors();
 
         _gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
         _gl.BindVertexArray(0);
@@ -137,7 +137,7 @@ void main(void)
         _gl.DrawArrays(PrimitiveType.Points, 0, (uint)_count);
         _gl.Disable(EnableCap.ProgramPointSize);
 
-        _gl.CheckForErrors();
+        //_gl.CheckForErrors();
 
         _gl.BindBuffer(GLEnum.ArrayBuffer, 0);
         _gl.BindVertexArray(0);

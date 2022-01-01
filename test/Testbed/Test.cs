@@ -141,7 +141,7 @@ internal class Test : IContactListener, IDisposable
         World.SetDestructionListener(DestructionListener);
         World.SetContactListener(this);
 
-        using var bodyDef = new BodyDef();
+        using var bodyDef = BodyDef.Create();
         GroundBody = World.CreateBody(bodyDef);
     }
 
@@ -530,21 +530,17 @@ internal class Test : IContactListener, IDisposable
             Bomb = null;
         }
 
-        using var bd = new BodyDef
-        {
-            Type = BodyType.Dynamic,
-            Position = position,
-            Bullet = true,
-        };
+        using var bd = BodyDef.Create();
+        bd.Type = BodyType.Dynamic;
+        bd.Position = position;
+        bd.Bullet = true;
         Bomb = World.CreateBody(bd);
         Bomb.LinearVelocity = velocity;
 
-        using var fd = new FixtureDef
-        {
-            Shape = _bombShape,
-            Density = 20f,
-            Restitution = 0f,
-        };
+        using var fd = FixtureDef.Create();
+        fd.Shape = _bombShape;
+        fd.Density = 20f;
+        fd.Restitution = 0f;
 
         Bomb.CreateFixture(fd);
     }

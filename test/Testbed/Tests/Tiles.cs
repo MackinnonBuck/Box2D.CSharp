@@ -1,4 +1,5 @@
 ﻿using Box2D.Collision.Shapes;
+using Box2D.Core;
 using Box2D.Dynamics;
 using System.Diagnostics;
 using System.Numerics;
@@ -8,12 +9,15 @@ namespace Testbed.Tests;
 [TestEntry("Benchmark", "Tiles")]
 internal class Tiles : Test
 {
-    private int _fixtureCount = 0;
-    private float _createTime;
+    private readonly int _fixtureCount = 0;
+    private readonly float _createTime;
 
     public Tiles()
     {
         var stopwatch = Stopwatch.StartNew();
+
+        var bodyDef = BodyDef.Create();
+        bodyDef.Angle = 3f;
 
         {
             var a = 0.5f;

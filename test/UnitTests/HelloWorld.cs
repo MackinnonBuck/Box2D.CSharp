@@ -17,10 +17,8 @@ public class HelloWorld
         using var world = new World(gravity);
 
         // Define the ground body.
-        using var groundBodyDef = new BodyDef
-        {
-            Position = new(0f, -10f),
-        };
+        using var groundBodyDef = BodyDef.Create();
+        groundBodyDef.Position = new(0f, -10f);
 
         // Call the body factory to create a body and add it to the world.
         var groundBody = world.CreateBody(groundBodyDef);
@@ -35,11 +33,9 @@ public class HelloWorld
         groundBody.CreateFixture(groundBox, 0.0f);
 
         // Define the dynamic body. We set its position and call the body factory.
-        using var bodyDef = new BodyDef
-        {
-            Type = BodyType.Dynamic,
-            Position = new(0f, 4f),
-        };
+        using var bodyDef = BodyDef.Create();
+        bodyDef.Type = BodyType.Dynamic;
+        bodyDef.Position = new(0f, 4f);
         var body = world.CreateBody(bodyDef);
 
         // Define another box shape for our dynamic body.
@@ -47,12 +43,10 @@ public class HelloWorld
         dynamicBox.SetAsBox(1f, 1f);
 
         // Define the dynamic body fixture.
-        using var fixtureDef = new FixtureDef
-        {
-            Shape = dynamicBox,
-            Density = 1f,       // Non-zero density so it will be dynamic.
-            Friction = 0.3f,    // Override the default friction.
-        };
+        using var fixtureDef = FixtureDef.Create();
+        fixtureDef.Shape = dynamicBox;
+        fixtureDef.Density = 1f;       // Non-zero density so it will be dynamic.
+        fixtureDef.Friction = 0.3f;    // Override the default friction.
 
         // Add the fixture to the body.
         body.CreateFixture(fixtureDef);

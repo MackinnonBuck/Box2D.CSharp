@@ -25,12 +25,10 @@ internal class Car : Test
         {
             using var shape = new EdgeShape();
 
-            using var fd = new FixtureDef
-            {
-                Shape = shape,
-                Density = 0f,
-                Friction = 0.6f,
-            };
+            using var fd = FixtureDef.Create();
+            fd.Shape = shape;
+            fd.Density = 0f;
+            fd.Friction = 0.6f;
 
             shape.SetTwoSided(new(-20f, 0f), new(20f, 0f));
             ground.CreateFixture(fd);
@@ -102,12 +100,10 @@ internal class Car : Test
             using var shape = new PolygonShape();
             shape.SetAsBox(1f, 0.125f);
 
-            using var fd = new FixtureDef
-            {
-                Shape = shape,
-                Density = 1f,
-                Friction = 0.6f,
-            };
+            using var fd = FixtureDef.Create();
+            fd.Shape = shape;
+            fd.Density = 1f;
+            fd.Friction = 0.6f;
 
             using var jd = new RevoluteJointDef();
             Vector2 anchor;
@@ -174,12 +170,10 @@ internal class Car : Test
             _car = World.CreateBody(BodyType.Dynamic, new(0f, 1f));
             _car.CreateFixture(chassis, 1f);
 
-            using var fd = new FixtureDef
-            {
-                Shape = circle,
-                Density = 1f,
-                Friction = 0.9f,
-            };
+            using var fd = FixtureDef.Create();
+            fd.Shape = circle;
+            fd.Density = 1f;
+            fd.Friction = 0.9f;
 
             _wheel1 = World.CreateBody(BodyType.Dynamic, new(-1f, 0.35f));
             _wheel1.CreateFixture(fd);

@@ -34,12 +34,10 @@ internal class AddPair : Test
         {
             using var shape = new PolygonShape();
             shape.SetAsBox(1.5f, 1.5f);
-            using var bd = new BodyDef
-            {
-                Type = BodyType.Dynamic,
-                Position = new(-40f, 5f),
-                Bullet = true,
-            };
+            using var bd = BodyDef.Create();
+            bd.Type = BodyType.Dynamic;
+            bd.Position = new(-40f, 5f);
+            bd.Bullet = true;
             var body = World.CreateBody(bd);
             body.CreateFixture(shape, 1f);
             body.LinearVelocity = new(10f, 0f);
