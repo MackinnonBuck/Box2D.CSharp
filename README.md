@@ -1,6 +1,8 @@
-[![Build and Test](https://github.com/MackinnonBuck/Box2D.CSharp/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/MackinnonBuck/Box2D.CSharp/actions/workflows/build-and-test.yml)
+![Logo](/docs/images/logo.png)
 
 # Box2D.CSharp
+
+[![Build and Test](https://github.com/MackinnonBuck/Box2D.CSharp/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/MackinnonBuck/Box2D.CSharp/actions/workflows/build-and-test.yml)
 
 A C# wrapper for Box2D, a 2D physics engine for games.
 
