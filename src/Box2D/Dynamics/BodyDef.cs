@@ -1,5 +1,5 @@
 ﻿using Box2D.Core;
-using Box2D.Core.Factories;
+using Box2D.Core.Allocation;
 using System.Numerics;
 
 namespace Box2D.Dynamics;
@@ -11,8 +11,10 @@ using static Interop.NativeMethods;
 /// You can safely re-use body definitions. Shapes are added to a body after
 /// construction.
 /// </summary>
-public sealed class BodyDef : Box2DPoolableObject<BodyDef, BodyDefFactory>
+public sealed class BodyDef : Box2DDisposableObject, IBox2DRecyclableObject
 {
+    private static readonly IAllocator<BodyDef> _allocator = Allocator.Create<BodyDef>(static () => new());
+
     /// <summary>
     /// Gets or sets the application-specific body data.
     /// </summary>
@@ -156,21 +158,27 @@ public sealed class BodyDef : Box2DPoolableObject<BodyDef, BodyDefFactory>
     }
 
     /// <summary>
-    /// Constructs a new <see cref="BodyDef"/> instance.
+    /// Creates a new <see cref="BodyDef"/> instance.
     /// </summary>
-    internal BodyDef() : base(isUserOwned: true)
+    public static BodyDef Create()
+        => _allocator.Allocate();
+
+    private BodyDef() : base(isUserOwned: true)
     {
         var native = b2BodyDef_new();
         Initialize(native);
     }
 
-    /// <inheritdoc/>
-    protected override void Dispose(bool disposing)
-        => b2BodyDef_delete(Native);
+    bool IBox2DRecyclableObject.TryRecycle()
+        => _allocator.TryRecycle(this);
 
-    private protected override void Reset()
+    void IBox2DRecyclableObject.Reset()
     {
         UserData = null;
         b2BodyDef_reset(Native);
     }
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
+        => b2BodyDef_delete(Native);
 }

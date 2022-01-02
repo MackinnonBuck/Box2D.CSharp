@@ -46,13 +46,13 @@ internal class BodyTypes : Test
             fd.Density = 2f;
             _platform.CreateFixture(fd);
 
-            using var rjd = new RevoluteJointDef();
+            using var rjd = RevoluteJointDef.Create();
             rjd.Initialize(_attachmenet, _platform, new(0f, 5f));
             rjd.MaxMotorTorque = 50f;
             rjd.EnableMotor = true;
             World.CreateJoint(rjd);
 
-            using var pjd = new PrismaticJointDef();
+            using var pjd = PrismaticJointDef.Create();
             pjd.Initialize(ground, _platform, new(0f, 5f), new(1f, 0f));
             pjd.MaxMotorForce = 1000f;
             pjd.EnableMotor = true;

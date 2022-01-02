@@ -1,6 +1,6 @@
 ﻿using Box2D.Collision;
 using Box2D.Core;
-using Box2D.Core.Factories;
+using Box2D.Core.Allocation;
 using System;
 
 namespace Box2D.Dynamics;
@@ -11,8 +11,10 @@ using static Interop.NativeMethods;
 /// Used to create a fixture. This class defines an abstract fixture
 /// definition. You can reuse fixture definitions safely.
 /// </summary>
-public sealed class FixtureDef : Box2DPoolableObject<FixtureDef, FixtureDefFactory>
+public sealed class FixtureDef : Box2DDisposableObject, IBox2DRecyclableObject
 {
+    private static readonly IAllocator<FixtureDef> _allocator = Allocator.Create<FixtureDef>(static () => new());
+
     private Shape? _shape;
 
     /// <summary>
@@ -96,21 +98,27 @@ public sealed class FixtureDef : Box2DPoolableObject<FixtureDef, FixtureDefFacto
     }
 
     /// <summary>
-    /// Constructs a new <see cref="FixtureDef"/> instance.
+    /// Creates a new <see cref="FixtureDef"/> instance.
     /// </summary>
-    internal FixtureDef() : base(isUserOwned: true)
+    public static FixtureDef Create()
+        => _allocator.Allocate();
+
+    private FixtureDef() : base(isUserOwned: true)
     {
         var native = b2FixtureDef_new();
         Initialize(native);
     }
 
-    /// <inheritdoc/>
-    protected override void Dispose(bool disposing)
-        => b2FixtureDef_delete(Native);
+    bool IBox2DRecyclableObject.TryRecycle()
+        => _allocator.TryRecycle(this);
 
-    private protected override void Reset()
+    void IBox2DRecyclableObject.Reset()
     {
         UserData = null;
         b2FixtureDef_reset(Native);
     }
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
+        => b2FixtureDef_delete(Native);
 }

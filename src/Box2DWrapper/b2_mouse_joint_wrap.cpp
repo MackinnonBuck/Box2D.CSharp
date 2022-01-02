@@ -59,6 +59,12 @@ void b2MouseJointDef_set_damping(b2MouseJointDef* obj, float value)
     obj->damping = value;
 }
 
+void b2MouseJointDef_reset(b2MouseJointDef* obj)
+{
+    VERIFY_INSTANCE;
+    *obj = b2MouseJointDef();
+}
+
 void b2MouseJointDef_delete(b2MouseJointDef* obj)
 {
     VERIFY_INSTANCE;

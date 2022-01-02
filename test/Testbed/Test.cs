@@ -96,7 +96,7 @@ internal class Test : IContactListener, IDisposable
 
     private readonly TestQueryCallback _queryCallback = new();
 
-    private readonly MouseJointDef _mouseJointDef = new();
+    private readonly MouseJointDef _mouseJointDef = MouseJointDef.Create();
 
     private readonly CircleShape _bombShape = new() { Radius = 0.3f };
 
@@ -233,7 +233,7 @@ internal class Test : IContactListener, IDisposable
 
             if (Box2DObjectTracker.Instance is { } tracker)
             {
-                DebugDraw.DrawString(5, TextLine, $"managed objects = {tracker.ObjectCount}");
+                DebugDraw.DrawString(5, TextLine, $"managed/finalized = {tracker.TotalReferenceCount}/{tracker.TotalFinalizerCallCount}");
                 TextLine += TextIncrement;
             }
         }

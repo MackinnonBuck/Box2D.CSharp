@@ -65,6 +65,12 @@ void b2FrictionJointDef_set_maxTorque(b2FrictionJointDef* obj, float value)
     obj->maxTorque = value;
 }
 
+void b2FrictionJointDef_reset(b2FrictionJointDef* obj)
+{
+    VERIFY_INSTANCE;
+    *obj = b2FrictionJointDef();
+}
+
 void b2FrictionJointDef_delete(b2FrictionJointDef* obj)
 {
     VERIFY_INSTANCE;

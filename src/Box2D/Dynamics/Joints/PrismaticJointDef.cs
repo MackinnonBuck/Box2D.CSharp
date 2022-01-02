@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using Box2D.Core.Allocation;
+using System.Numerics;
 
 namespace Box2D.Dynamics.Joints;
 
@@ -14,6 +15,8 @@ using static Interop.NativeMethods;
 /// </summary>
 public sealed class PrismaticJointDef : JointDef
 {
+    private static readonly IAllocator<PrismaticJointDef> _allocator = Allocator.Create<PrismaticJointDef>(static () => new());
+
     /// <summary>
     /// Gets or sets the local anchor point relative to body A's origin.
     /// </summary>
@@ -117,9 +120,12 @@ public sealed class PrismaticJointDef : JointDef
     }
 
     /// <summary>
-    /// Constructs a new <see cref="PrismaticJointDef"/> instance.
+    /// Creates a new <see cref="PrismaticJointDef"/> instance.
     /// </summary>
-    public PrismaticJointDef()
+    public static PrismaticJointDef Create()
+        => _allocator.Allocate();
+
+    private PrismaticJointDef()
     {
         var native = b2PrismaticJointDef_new();
         Initialize(native);
@@ -131,6 +137,12 @@ public sealed class PrismaticJointDef : JointDef
     /// </summary>
     public void Initialize(Body bodyA, Body bodyB, Vector2 anchor, Vector2 axis)
         => b2PrismaticJointDef_Initialize(Native, bodyA.Native, bodyB.Native, ref anchor, ref axis);
+
+    private protected override bool TryRecycle()
+        => _allocator.TryRecycle(this);
+
+    private protected override void Reset()
+        => b2PrismaticJointDef_reset(Native);
 
     /// <inheritdoc/>
     protected override void Dispose(bool disposing)

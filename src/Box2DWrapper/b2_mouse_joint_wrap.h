@@ -18,6 +18,7 @@ extern "C"
     BOX2D_API void b2MouseJointDef_set_stiffness(b2MouseJointDef* obj, float value);
     BOX2D_API float b2MouseJointDef_get_damping(b2MouseJointDef* obj);
     BOX2D_API void b2MouseJointDef_set_damping(b2MouseJointDef* obj, float value);
+    BOX2D_API void b2MouseJointDef_reset(b2MouseJointDef* obj);
     BOX2D_API void b2MouseJointDef_delete(b2MouseJointDef* obj);
 
     /*

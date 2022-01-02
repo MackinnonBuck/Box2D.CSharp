@@ -5,7 +5,7 @@ namespace Box2D.Core;
 
 internal interface IGetFromIntPtr<T>
 {
-    public IntPtr GetManagedHandle(IntPtr obj);
+    IntPtr GetManagedHandle(IntPtr obj);
 }
 
 internal static class GetFromIntPtrExtensions

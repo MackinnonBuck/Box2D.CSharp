@@ -33,6 +33,7 @@ extern "C"
     BOX2D_API void b2WheelJointDef_set_stiffness(b2WheelJointDef* obj, float value);
     BOX2D_API float b2WheelJointDef_get_damping(b2WheelJointDef* obj);
     BOX2D_API void b2WheelJointDef_set_damping(b2WheelJointDef* obj, float value);
+    BOX2D_API void b2WheelJointDef_reset(b2WheelJointDef* obj);
     BOX2D_API void b2WheelJointDef_delete(b2WheelJointDef* obj);
 
     /*

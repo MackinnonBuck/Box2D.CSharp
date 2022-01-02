@@ -137,6 +137,12 @@ void b2PrismaticJointDef_set_motorSpeed(b2PrismaticJointDef* obj, float value)
     obj->motorSpeed = value;
 }
 
+void b2PrismaticJointDef_reset(b2PrismaticJointDef* obj)
+{
+    VERIFY_INSTANCE;
+    *obj = b2PrismaticJointDef();
+}
+
 void b2PrismaticJointDef_delete(b2PrismaticJointDef* obj)
 {
     VERIFY_INSTANCE;

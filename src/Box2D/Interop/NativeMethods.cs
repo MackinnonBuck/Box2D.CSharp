@@ -635,6 +635,8 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2DistanceJointDef_set_damping(IntPtr obj, float value);
     [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2DistanceJointDef_reset(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2DistanceJointDef_delete(IntPtr obj);
 
     /*
@@ -716,6 +718,8 @@ internal static class NativeMethods
     public static extern float b2PrismaticJointDef_get_motorSpeed(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2PrismaticJointDef_set_motorSpeed(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PrismaticJointDef_reset(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2PrismaticJointDef_delete(IntPtr obj);
 
@@ -807,6 +811,8 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2RevoluteJointDef_set_maxMotorTorque(IntPtr obj, float value);
     [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2RevoluteJointDef_reset(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2RevoluteJointDef_delete(IntPtr obj);
 
     /*
@@ -870,6 +876,8 @@ internal static class NativeMethods
     public static extern float b2MouseJointDef_get_damping(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2MouseJointDef_set_damping(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2MouseJointDef_reset(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2MouseJointDef_delete(IntPtr obj);
 
@@ -946,6 +954,8 @@ internal static class NativeMethods
     public static extern float b2WheelJointDef_get_damping(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2WheelJointDef_set_damping(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2WheelJointDef_reset(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2WheelJointDef_delete(IntPtr obj);
 
@@ -1024,6 +1034,8 @@ internal static class NativeMethods
     public static extern float b2FrictionJointDef_get_maxTorque(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2FrictionJointDef_set_maxTorque(IntPtr obj, float value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2FrictionJointDef_reset(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2FrictionJointDef_delete(IntPtr obj);
 

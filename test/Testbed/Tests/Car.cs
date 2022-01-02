@@ -84,7 +84,7 @@ internal class Car : Test
             box.SetAsBox(10f, 0.25f);
             body.CreateFixture(box, 1f);
 
-            using var jd = new RevoluteJointDef();
+            using var jd = RevoluteJointDef.Create();
             jd.Initialize(ground, body, body.Position);
             jd.LowerAngle = -8f * MathF.PI / 180f;
             jd.UpperAngle = 8f * MathF.PI / 180f;
@@ -105,7 +105,7 @@ internal class Car : Test
             fd.Density = 1f;
             fd.Friction = 0.6f;
 
-            using var jd = new RevoluteJointDef();
+            using var jd = RevoluteJointDef.Create();
             Vector2 anchor;
 
             var prevBody = ground;
@@ -181,7 +181,7 @@ internal class Car : Test
             _wheel2 = World.CreateBody(BodyType.Dynamic, new(1f, 0.4f));
             _wheel2.CreateFixture(fd);
 
-            using var jd = new WheelJointDef();
+            using var jd = WheelJointDef.Create();
             var axis = new Vector2(0f, 1f);
 
             var mass1 = _wheel1.Mass;

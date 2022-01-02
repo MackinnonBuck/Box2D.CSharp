@@ -30,17 +30,15 @@ internal class Tumbler : Test
             shape.SetAsBox(10f, 0.5f, new(0f, -10f), 0f);
             body.CreateFixture(shape, 5f);
 
-            using var jd = new RevoluteJointDef
-            {
-                BodyA = ground,
-                BodyB = body,
-                LocalAnchorA = new(0f, 10f),
-                LocalAnchorB = new(0f, 0f),
-                ReferenceAngle = 0f,
-                MotorSpeed = 0.05f * MathF.PI,
-                MaxMotorTorque = 1e8f,
-                EnableMotor = true,
-            };
+            using var jd = RevoluteJointDef.Create();
+            jd.BodyA = ground;
+            jd.BodyB = body;
+            jd.LocalAnchorA = new(0f, 10f);
+            jd.LocalAnchorB = new(0f, 0f);
+            jd.ReferenceAngle = 0f;
+            jd.MotorSpeed = 0.05f * MathF.PI;
+            jd.MaxMotorTorque = 1e8f;
+            jd.EnableMotor = true;
             World.CreateJoint(jd);
         }
 

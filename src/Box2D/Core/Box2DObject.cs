@@ -44,7 +44,7 @@ public abstract class Box2DObject
             throw new InvalidOperationException($"Cannot uninitialize an already-uinitialized {GetType()}.");
         }
 
-        _native = IntPtr.Zero;
         Box2DObjectTracker.Remove(this);
+        _native = IntPtr.Zero;
     }
 }

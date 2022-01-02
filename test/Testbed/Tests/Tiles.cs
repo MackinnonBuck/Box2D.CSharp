@@ -16,7 +16,7 @@ internal class Tiles : Test
     {
         var stopwatch = Stopwatch.StartNew();
 
-        var bodyDef = BodyDef.Create();
+        using var bodyDef = BodyDef.Create();
         bodyDef.Angle = 3f;
 
         {

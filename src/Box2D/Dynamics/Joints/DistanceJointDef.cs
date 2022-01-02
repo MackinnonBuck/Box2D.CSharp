@@ -1,4 +1,6 @@
-﻿using System.Numerics;
+﻿using Box2D.Core;
+using Box2D.Core.Allocation;
+using System.Numerics;
 
 namespace Box2D.Dynamics.Joints;
 
@@ -12,6 +14,8 @@ using static Interop.NativeMethods;
 /// </summary>
 public sealed class DistanceJointDef : JointDef
 {
+    private static readonly IAllocator<DistanceJointDef> _allocator = Allocator.Create<DistanceJointDef>(static () => new());
+
     /// <summary>
     /// Gets or sets the local anchor point relative to body A's origin.
     /// </summary>
@@ -84,9 +88,12 @@ public sealed class DistanceJointDef : JointDef
     }
 
     /// <summary>
-    /// Constructs a new <see cref="DistanceJointDef"/> instance.
+    /// Creates a new <see cref="DistanceJointDef"/> instance.
     /// </summary>
-    public DistanceJointDef()
+    public static DistanceJointDef Create()
+        => _allocator.Allocate();
+
+    private DistanceJointDef()
     {
         var native = b2DistanceJointDef_new();
         Initialize(native);
@@ -98,6 +105,12 @@ public sealed class DistanceJointDef : JointDef
     /// </summary>
     public void Initialize(Body bodyA, Body bodyB, Vector2 anchorA, Vector2 anchorB)
         => b2DistanceJointDef_Initialize(Native, bodyA.Native, bodyB.Native, anchorA, anchorB);
+
+    private protected override bool TryRecycle()
+        => _allocator.TryRecycle(this);
+
+    private protected override void Reset()
+        => b2DistanceJointDef_reset(Native);
 
     /// <inheritdoc/>
     protected override void Dispose(bool disposing)

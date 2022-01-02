@@ -8,7 +8,7 @@ using static Interop.NativeMethods;
 /// <summary>
 /// Used to construct joints.
 /// </summary>
-public abstract class JointDef : Box2DDisposableObject
+public abstract class JointDef : Box2DDisposableObject, IBox2DRecyclableObject
 {
     /// <summary>
     /// Gets or sets the application-specific data for the joint.
@@ -61,4 +61,17 @@ public abstract class JointDef : Box2DDisposableObject
     protected JointDef() : base(isUserOwned: true)
     {
     }
+
+    bool IBox2DRecyclableObject.TryRecycle()
+        => TryRecycle();
+
+    void IBox2DRecyclableObject.Reset()
+    {
+        UserData = null;
+        Reset();
+    }
+
+    private protected abstract bool TryRecycle();
+
+    private protected abstract void Reset();
 }

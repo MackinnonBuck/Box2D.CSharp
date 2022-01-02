@@ -96,16 +96,14 @@ internal class ApplyForce : Test
 
             var radius = MathF.Sqrt(2f * inertia / mass);
 
-            using var jd = new FrictionJointDef
-            {
-                BodyA = ground,
-                BodyB = _body,
-                LocalAnchorA = Vector2.Zero,
-                LocalAnchorB = _body.LocalCenter,
-                CollideConnected = true,
-                MaxForce = 0.5f * mass * gravity,
-                MaxTorque = 0.2f * mass * radius * gravity,
-            };
+            using var jd = FrictionJointDef.Create();
+            jd.BodyA = ground;
+            jd.BodyB = _body;
+            jd.LocalAnchorA = Vector2.Zero;
+            jd.LocalAnchorB = _body.LocalCenter;
+            jd.CollideConnected = true;
+            jd.MaxForce = 0.5f * mass * gravity;
+            jd.MaxTorque = 0.2f * mass * radius * gravity;
 
             World.CreateJoint(jd);
         }
@@ -119,13 +117,11 @@ internal class ApplyForce : Test
             fd.Density = 1f;
             fd.Friction = 0.3f;
 
-            using var jd = new FrictionJointDef
-            {
-                LocalAnchorA = Vector2.Zero,
-                LocalAnchorB = Vector2.Zero,
-                BodyA = ground,
-                CollideConnected = true,
-            };
+            using var jd = FrictionJointDef.Create();
+            jd.LocalAnchorA = Vector2.Zero;
+            jd.LocalAnchorB = Vector2.Zero;
+            jd.BodyA = ground;
+            jd.CollideConnected = true;
 
             for (var i = 0; i < 10; i++)
             {

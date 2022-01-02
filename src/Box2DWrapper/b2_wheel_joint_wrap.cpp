@@ -149,6 +149,12 @@ void b2WheelJointDef_set_damping(b2WheelJointDef* obj, float value)
     obj->damping = value;
 }
 
+void b2WheelJointDef_reset(b2WheelJointDef* obj)
+{
+    VERIFY_INSTANCE;
+    *obj = b2WheelJointDef();
+}
+
 void b2WheelJointDef_delete(b2WheelJointDef* obj)
 {
     VERIFY_INSTANCE;
