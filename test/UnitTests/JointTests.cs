@@ -44,15 +44,15 @@ public class JointTests
         bodyB.CreateFixture(fixtureDef);
         bodyC.CreateFixture(fixtureDef);
 
-        using var distanceJointDef = new DistanceJointDef();
+        using var distanceJointDef = DistanceJointDef.Create();
         distanceJointDef.Initialize(ground, bodyA, bodyDef.Position + new Vector2(0f, 4f), bodyDef.Position);
         distanceJointDef.MinLength = distanceJointDef.Length;
         distanceJointDef.MaxLength = distanceJointDef.Length;
 
-        using var prismaticJointDef = new PrismaticJointDef();
+        using var prismaticJointDef = PrismaticJointDef.Create();
         prismaticJointDef.Initialize(ground, bodyB, bodyDef.Position, new Vector2(1f, 0f));
 
-        using var revoluteJointDef = new RevoluteJointDef();
+        using var revoluteJointDef = RevoluteJointDef.Create();
         revoluteJointDef.Initialize(ground, bodyC, bodyDef.Position);
 
         var distanceJoint = (DistanceJoint)world.CreateJoint(distanceJointDef);
