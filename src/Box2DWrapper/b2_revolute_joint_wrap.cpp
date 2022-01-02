@@ -2,6 +2,8 @@
 #include "verify.h"
 #include "b2_revolute_joint_wrap.h"
 
+#include <memory>
+
 /*
  * b2RevoluteJointDef
  */
@@ -128,7 +130,8 @@ void b2RevoluteJointDef_set_maxMotorTorque(b2RevoluteJointDef* obj, float value)
 void b2RevoluteJointDef_reset(b2RevoluteJointDef* obj)
 {
     VERIFY_INSTANCE;
-    *obj = b2RevoluteJointDef();
+    obj->~b2RevoluteJointDef();
+    new (obj) b2RevoluteJointDef();
 }
 
 void b2RevoluteJointDef_delete(b2RevoluteJointDef* obj)

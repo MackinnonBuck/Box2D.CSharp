@@ -18,7 +18,7 @@ internal class BodyTypes : Test
         var ground = World.CreateBody();
 
         {
-            using var shape = new EdgeShape();
+            using var shape = EdgeShape.Create();
             shape.SetTwoSided(new(-20f, 0f), new(20f, 0f));
 
             ground.CreateFixture(shape, 0f);
@@ -28,7 +28,7 @@ internal class BodyTypes : Test
         {
             _attachmenet = World.CreateBody(BodyType.Dynamic, new(0f, 3f));
 
-            using var shape = new PolygonShape();
+            using var shape = PolygonShape.Create();
             shape.SetAsBox(0.5f, 2f);
             _attachmenet.CreateFixture(shape, 2f);
         }
@@ -37,7 +37,7 @@ internal class BodyTypes : Test
         {
             _platform = World.CreateBody(BodyType.Dynamic, new(-4f, 5f));
 
-            using var shape = new PolygonShape();
+            using var shape = PolygonShape.Create();
             shape.SetAsBox(0.5f, 4f, new(4f, 0f), 0.5f * MathF.PI);
 
             using var fd = FixtureDef.Create();
@@ -67,7 +67,7 @@ internal class BodyTypes : Test
         {
             var body = World.CreateBody(BodyType.Dynamic, new(0f, 8f));
 
-            using var shape = new PolygonShape();
+            using var shape = PolygonShape.Create();
             shape.SetAsBox(0.75f, 0.75f);
 
             using var fd = FixtureDef.Create();

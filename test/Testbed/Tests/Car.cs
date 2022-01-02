@@ -23,7 +23,7 @@ internal class Car : Test
         var ground = World.CreateBody();
 
         {
-            using var shape = new EdgeShape();
+            using var shape = EdgeShape.Create();
 
             using var fd = FixtureDef.Create();
             fd.Shape = shape;
@@ -80,7 +80,7 @@ internal class Car : Test
         {
             var body = World.CreateBody(BodyType.Dynamic, new(140f, 1f));
 
-            using var box = new PolygonShape();
+            using var box = PolygonShape.Create();
             box.SetAsBox(10f, 0.25f);
             body.CreateFixture(box, 1f);
 
@@ -97,7 +97,7 @@ internal class Car : Test
         // Bridge
         {
             var n = 20;
-            using var shape = new PolygonShape();
+            using var shape = PolygonShape.Create();
             shape.SetAsBox(1f, 0.125f);
 
             using var fd = FixtureDef.Create();
@@ -129,7 +129,7 @@ internal class Car : Test
 
         // Boxes
         {
-            using var box = new PolygonShape();
+            using var box = PolygonShape.Create();
             box.SetAsBox(0.5f, 0.5f);
 
             var body = World.CreateBody(BodyType.Dynamic, new(230f, 0.5f));
@@ -150,7 +150,7 @@ internal class Car : Test
 
         // Car
         {
-            using var chassis = new PolygonShape();
+            using var chassis = PolygonShape.Create();
             Span<Vector2> vertices = stackalloc Vector2[]
             {
                 new(-1.5f, -0.5f),
@@ -162,10 +162,8 @@ internal class Car : Test
             };
             chassis.Set(vertices);
 
-            using var circle = new CircleShape
-            {
-                Radius = 0.4f,
-            };
+            using var circle = CircleShape.Create();
+            circle.Radius = 0.4f;
 
             _car = World.CreateBody(BodyType.Dynamic, new(0f, 1f));
             _car.CreateFixture(chassis, 1f);

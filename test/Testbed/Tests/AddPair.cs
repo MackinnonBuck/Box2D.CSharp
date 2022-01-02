@@ -12,11 +12,9 @@ internal class AddPair : Test
         World.Gravity = new(0f, 0f);
 
         {
-            using var shape = new CircleShape
-            {
-                Position = new(0f, 0f),
-                Radius = 0.1f,
-            };
+            using var shape = CircleShape.Create();
+            shape.Position = new(0f, 0f);
+            shape.Radius = 0.1f;
 
             var minX = -6f;
             var maxX = 0f;
@@ -32,7 +30,7 @@ internal class AddPair : Test
         }
 
         {
-            using var shape = new PolygonShape();
+            using var shape = PolygonShape.Create();
             shape.SetAsBox(1.5f, 1.5f);
             using var bd = BodyDef.Create();
             bd.Type = BodyType.Dynamic;

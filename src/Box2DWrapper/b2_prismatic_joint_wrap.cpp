@@ -2,6 +2,8 @@
 #include "verify.h"
 #include "b2_prismatic_joint_wrap.h"
 
+#include <memory>
+
 /*
  * b2PrismaticJointDef
  */
@@ -140,7 +142,8 @@ void b2PrismaticJointDef_set_motorSpeed(b2PrismaticJointDef* obj, float value)
 void b2PrismaticJointDef_reset(b2PrismaticJointDef* obj)
 {
     VERIFY_INSTANCE;
-    *obj = b2PrismaticJointDef();
+    obj->~b2PrismaticJointDef();
+    new (obj) b2PrismaticJointDef();
 }
 
 void b2PrismaticJointDef_delete(b2PrismaticJointDef* obj)

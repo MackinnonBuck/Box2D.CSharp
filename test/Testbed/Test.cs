@@ -96,9 +96,9 @@ internal class Test : IContactListener, IDisposable
 
     private readonly TestQueryCallback _queryCallback = new();
 
-    private readonly MouseJointDef _mouseJointDef = MouseJointDef.Create();
+    private readonly MouseJointDef _mouseJointDef;
 
-    private readonly CircleShape _bombShape = new() { Radius = 0.3f };
+    private readonly CircleShape _bombShape;
 
     protected DebugDraw DebugDraw { get; private set; } = default!;
 
@@ -143,6 +143,11 @@ internal class Test : IContactListener, IDisposable
 
         using var bodyDef = BodyDef.Create();
         GroundBody = World.CreateBody(bodyDef);
+
+        _mouseJointDef = MouseJointDef.Create();
+
+        _bombShape = CircleShape.Create();
+        _bombShape.Radius = 0.3f;
     }
 
     public void Initialize(DebugDraw debugDraw, Settings settings, Camera camera)

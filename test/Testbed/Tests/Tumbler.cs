@@ -20,7 +20,7 @@ internal class Tumbler : Test
             bd.Position = new(0f, 10f);
             var body = World.CreateBody(bd);
 
-            using var shape = new PolygonShape();
+            using var shape = PolygonShape.Create();
             shape.SetAsBox(0.5f, 10f, new(10f, 0f), 0f);
             body.CreateFixture(shape, 5f);
             shape.SetAsBox(0.5f, 10f, new(-10f, 0f), 0f);
@@ -53,7 +53,7 @@ internal class Tumbler : Test
         {
             var body = World.CreateBody(BodyType.Dynamic, new(0f, 10f));
 
-            using var shape = new PolygonShape();
+            using var shape = PolygonShape.Create();
             shape.SetAsBox(0.125f, 0.125f);
             body.CreateFixture(shape, 1f);
 

@@ -15,7 +15,7 @@ internal class Restitution : Test
         {
             var ground = World.CreateBody();
 
-            using var shape = new EdgeShape();
+            using var shape = EdgeShape.Create();
             shape.SetTwoSided(new(-40f, 0f), new(40f, 0f));
 
             using var fd = FixtureDef.Create();
@@ -25,7 +25,7 @@ internal class Restitution : Test
         }
 
         {
-            using var shape = new CircleShape();
+            using var shape = CircleShape.Create();
             shape.Radius = 1f;
 
             using var fd = FixtureDef.Create();

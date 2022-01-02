@@ -20,10 +20,8 @@ public class JointTests
         bodyDef.Position = new(-2f, 3f);
         var ground = world.CreateBody(bodyDef);
 
-        using var circle = new CircleShape
-        {
-            Radius = 1f,
-        };
+        using var circle = CircleShape.Create();
+        circle.Radius = 1f;
 
         using var fixtureDef = FixtureDef.Create();
         fixtureDef.Filter = new()

@@ -25,7 +25,7 @@ internal class ApplyForce : Test
         var ground = World.CreateBody(position: new(0f, 20f));
 
         {
-            using var shape = new EdgeShape();
+            using var shape = EdgeShape.Create();
 
             using var sd = FixtureDef.Create();
             sd.Shape = shape;
@@ -71,7 +71,7 @@ internal class ApplyForce : Test
                 Transform.Mul(xf1, new Vector2(0f, 0.5f)),
             };
 
-            using var poly = new PolygonShape();
+            using var poly = PolygonShape.Create();
             poly.Set(vertices);
 
             _body.CreateFixture(poly, 2f);
@@ -109,7 +109,7 @@ internal class ApplyForce : Test
         }
 
         {
-            using var shape = new PolygonShape();
+            using var shape = PolygonShape.Create();
             shape.SetAsBox(0.5f, 0.5f);
 
             using var fd = FixtureDef.Create();

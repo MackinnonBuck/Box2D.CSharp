@@ -2,6 +2,8 @@
 #include "verify.h"
 #include "b2_polygon_shape_wrap.h"
 
+#include <memory>
+
 b2PolygonShape* b2PolygonShape_new()
 {
     return new b2PolygonShape;
@@ -29,4 +31,11 @@ void b2PolygonShape_get_m_centroid(b2PolygonShape* obj, b2Vec2* value)
 {
     VERIFY_INSTANCE;
     *value = obj->m_centroid;
+}
+
+void b2PolygonShape_reset(b2PolygonShape* obj)
+{
+    VERIFY_INSTANCE;
+    obj->~b2PolygonShape();
+    new (obj) b2PolygonShape();
 }

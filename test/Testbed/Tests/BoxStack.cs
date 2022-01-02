@@ -21,7 +21,7 @@ internal class BoxStack : Test
         {
             var ground = World.CreateBody();
 
-            using var shape = new EdgeShape();
+            using var shape = EdgeShape.Create();
             shape.SetTwoSided(new(-40f, 0f), new(40f, 0f));
             ground.CreateFixture(shape, 0f);
 
@@ -32,7 +32,7 @@ internal class BoxStack : Test
         {
             Span<float> xs = stackalloc float[] { 0f, -10f, -5f, 5f, 10f };
 
-            using var shape = new PolygonShape();
+            using var shape = PolygonShape.Create();
             shape.SetAsBox(0.5f, 0.5f);
 
             using var fd = FixtureDef.Create();
@@ -71,7 +71,7 @@ internal class BoxStack : Test
                 }
 
                 {
-                    using var shape = new CircleShape();
+                    using var shape = CircleShape.Create();
                     shape.Radius = 0.25f;
 
                     using var fd = FixtureDef.Create();

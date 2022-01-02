@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Box2D.Core.Allocation;
+using System;
 using System.Numerics;
 
 namespace Box2D.Collision.Shapes;
@@ -10,6 +11,8 @@ using static Interop.NativeMethods;
 /// </summary>
 public class CircleShape : Shape
 {
+    private static readonly IAllocator<CircleShape> _allocator = Allocator.Create<CircleShape>(static () => new());
+
     /// <inheritdoc/>
     public override ShapeType Type => ShapeType.Circle;
 
@@ -27,9 +30,12 @@ public class CircleShape : Shape
     }
 
     /// <summary>
-    /// Constructs a new <see cref="CircleShape"/> instance.
+    /// Creates a new <see cref="CircleShape"/> instance.
     /// </summary>
-    public CircleShape() : base(isUserOwned: true)
+    public static CircleShape Create()
+        => _allocator.Allocate();
+
+    private CircleShape() : base(isUserOwned: true)
     {
         var native = b2CircleShape_new();
         Initialize(native);
@@ -39,4 +45,10 @@ public class CircleShape : Shape
     {
         Initialize(native);
     }
+
+    private protected override bool TryRecycle()
+        => _allocator.TryRecycle(this);
+
+    private protected override void Reset()
+        => b2CircleShape_reset(Native);
 }

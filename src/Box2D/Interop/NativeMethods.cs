@@ -482,6 +482,8 @@ internal static class NativeMethods
     public static extern void b2CircleShape_get_m_p(IntPtr obj, out Vector2 value);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2CircleShape_set_m_p(IntPtr obj, [In] ref Vector2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2CircleShape_reset(IntPtr obj);
 
     /*
      * b2EdgeShape
@@ -503,6 +505,8 @@ internal static class NativeMethods
     [DllImport(Dll, CallingConvention = Conv)]
     [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2EdgeShape_get_m_oneSided(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2EdgeShape_reset(IntPtr obj);
 
     /*
      * b2PolygonShape
@@ -517,6 +521,8 @@ internal static class NativeMethods
     public static extern int b2PolygonShape_SetAsBox2(IntPtr obj, float hx, float hy, [In] ref Vector2 center, float angle);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2PolygonShape_get_m_centroid(IntPtr obj, out Vector2 value);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern void b2PolygonShape_reset(IntPtr obj);
 
     /*
      * b2_joint_wrap top-level functions

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Box2D.Core.Allocation;
+using System;
 using System.Numerics;
 
 namespace Box2D.Collision.Shapes;
@@ -12,6 +13,8 @@ using static Interop.NativeMethods;
 /// </summary>
 public class EdgeShape : Shape
 {
+    private static readonly IAllocator<EdgeShape> _allocator = Allocator.Create<EdgeShape>(static () => new());
+
     /// <summary>
     /// Gets the first adjacent vertex.
     /// </summary>
@@ -70,9 +73,12 @@ public class EdgeShape : Shape
     public override ShapeType Type => ShapeType.Edge;
 
     /// <summary>
-    /// Constructs a new <see cref="EdgeShape"/> instance.
+    /// Creates a new <see cref="EdgeShape"/> instance.
     /// </summary>
-    public EdgeShape() : base(isUserOwned: true)
+    public static EdgeShape Create()
+        => _allocator.Allocate();
+
+    private EdgeShape() : base(isUserOwned: true)
     {
         var native = b2EdgeShape_new();
         Initialize(native);
@@ -97,4 +103,10 @@ public class EdgeShape : Shape
     /// </summary>
     public void SetTwoSided(Vector2 v1, Vector2 v2)
         => b2EdgeShape_SetTwoSided(Native, ref v1, ref v2);
+
+    private protected override bool TryRecycle()
+        => _allocator.TryRecycle(this);
+
+    private protected override void Reset()
+        => b2EdgeShape_reset(Native);
 }

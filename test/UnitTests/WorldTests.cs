@@ -24,10 +24,8 @@ public class WorldTests
         world.SetDebugDraw(draw);
         world.DrawFlags = DrawFlags.ShapeBit | DrawFlags.AabbBit;
 
-        using var circle = new CircleShape
-        {
-            Radius = 5f,
-        };
+        using var circle = CircleShape.Create();
+        circle.Radius = 5f;
 
         using var bodyDef = BodyDef.Create();
         bodyDef.Type = BodyType.Dynamic;

@@ -14,7 +14,7 @@ using static Interop.NativeMethods;
 /// automatically when a <see cref="Dynamics.Fixture"/> is created.
 /// Shapes may encapsulate one or more child shapes.
 /// </summary>
-public abstract class Shape : Box2DDisposableObject
+public abstract class Shape : Box2DDisposableObject, IBox2DRecyclableObject
 {
     internal static ShapeFromIntPtr FromIntPtr { get; } = new();
 
@@ -104,4 +104,15 @@ public abstract class Shape : Box2DDisposableObject
             b2Shape_delete(Native);
         }
     }
+
+    bool IBox2DRecyclableObject.TryRecycle()
+        // We only want to attempt recycling if this object is user owned.
+        => IsUserOwned && TryRecycle();
+
+    void IBox2DRecyclableObject.Reset()
+        => Reset();
+
+    private protected abstract bool TryRecycle();
+
+    private protected abstract void Reset();
 }
