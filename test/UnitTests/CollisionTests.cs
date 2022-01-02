@@ -15,7 +15,7 @@ public class CollisionTests
         var hy = 1.5f;
         var angle1 = 0.25f;
 
-        using var polygon1 = new PolygonShape();
+        using var polygon1 = PolygonShape.Create();
         polygon1.SetAsBox(hx, hy, center, angle1);
 
         var epsilon = 1.192092896e-07f;
@@ -33,7 +33,7 @@ public class CollisionTests
             new Vector2(center.X + hx, center.Y + hy),
         };
 
-        using var polygon2 = new PolygonShape();
+        using var polygon2 = PolygonShape.Create();
         polygon2.Set(vertices);
 
         Assert.True(MathF.Abs(polygon2.Centroid.X - center.X) < absTol + relTol * MathF.Abs(center.X));

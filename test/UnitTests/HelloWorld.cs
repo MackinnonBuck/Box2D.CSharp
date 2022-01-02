@@ -24,7 +24,7 @@ public class HelloWorld
         var groundBody = world.CreateBody(groundBodyDef);
 
         // Define the ground box shape.
-        using var groundBox = new PolygonShape();
+        using var groundBox = PolygonShape.Create();
 
         // Set the extents (half-widths) of the box.
         groundBox.SetAsBox(50f, 10f);
@@ -39,7 +39,7 @@ public class HelloWorld
         var body = world.CreateBody(bodyDef);
 
         // Define another box shape for our dynamic body.
-        using var dynamicBox = new PolygonShape();
+        using var dynamicBox = PolygonShape.Create();
         dynamicBox.SetAsBox(1f, 1f);
 
         // Define the dynamic body fixture.
