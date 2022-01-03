@@ -11,25 +11,48 @@ using static Interop.NativeMethods;
 /// <summary>
 /// A rigid body. These are created via <see cref="World.CreateBody"/>.
 /// </summary>
-public sealed class Body : Box2DSubObject, IBox2DList<Body>
+public readonly struct Body : IBox2DList<Body>
 {
-    internal static BodyFromIntPtr FromIntPtr { get; } = new();
-
-    internal class BodyFromIntPtr : IGetFromIntPtr<Body>
+    internal readonly struct Reviver : IManagedHandleReviver
     {
-        public IntPtr GetManagedHandle(IntPtr obj)
-            => b2Body_GetUserData(obj);
+        public string FriendlyManagedTypeName => "body";
+
+        public IntPtr ReviveManagedHandle(IntPtr native)
+            => b2Body_GetUserData(native);
     }
 
-    /// <summary>
-    /// Gets the parent world of this body.
-    /// </summary>
-    public World World { get; }
+    internal readonly struct Destroyer : INativeResourceDestroyer
+    {
+        private readonly IntPtr _worldNative;
+
+        public Destroyer(IntPtr worldNative)
+        {
+            _worldNative = worldNative;
+        }
+
+        public void Destroy(IntPtr native)
+        {
+            b2World_DestroyBody(_worldNative, native);
+        }
+    }
+
+    private readonly NativeHandle<Reviver> _nativeHandle;
+
+    internal IntPtr Native => _nativeHandle.Ptr;
 
     /// <summary>
-    /// Gets or sets the user data object.
+    /// Gets whether this body instance is null.
     /// </summary>
-    public object? UserData { get; set; }
+    /// <remarks>
+    /// This will not necessarily return <see langword="true"/> if the body has been implicitly destroyed.
+    /// You can manually nullify <see cref="Body"/> instances by assigning them to <see langword="default"/>.
+    /// </remarks>
+    public bool IsNull => _nativeHandle.IsNull;
+
+    /// <summary>
+    /// Gets the user data object.
+    /// </summary>
+    public object? UserData => _nativeHandle.GetUserData();
 
     /// <summary>
     /// Gets or sets the world body origin position.
@@ -152,24 +175,32 @@ public sealed class Body : Box2DSubObject, IBox2DList<Body>
     /// <summary>
     /// Gets the next bodyin the world's body list.
     /// </summary>
-    public Body? Next => FromIntPtr.Get(b2Body_GetNext(Native));
+    public Body Next => new(b2Body_GetNext(Native));
 
-    internal Body(World world, BodyDef def)
+    internal Body(IntPtr world, BodyDef def)
     {
-        World = world;
-        UserData = def.UserData;
-
-        var native = b2World_CreateBody(world.Native, def.Native, Handle);
-        Initialize(native);
+        var managedHandle = ManagedHandle.Create(def.UserData);
+        var native = b2World_CreateBody(world, def.Native, managedHandle.Ptr);
+        _nativeHandle = new(native, managedHandle);
     }
 
-    internal Body(World world, BodyType type, ref Vector2 position, float angle)
+    internal Body(IntPtr world, BodyType type, ref Vector2 position, float angle, object? userData)
     {
-        World = world;
-
-        var native = b2World_CreateBody2(world.Native, type, ref position, angle, Handle);
-        Initialize(native);
+        var managedHandle = ManagedHandle.Create(userData);
+        var native = b2World_CreateBody2(world, type, ref position, angle, managedHandle.Ptr);
+        _nativeHandle = new(native, managedHandle);
     }
+
+    internal Body(IntPtr native)
+    {
+        _nativeHandle = new(native);
+    }
+
+    internal void Invalidate()
+        => _nativeHandle.Invalidate();
+
+    internal void Destroy(IntPtr worldNative)
+        => _nativeHandle.Destroy(new Destroyer(worldNative));
 
     /// <summary>
     /// Creates a fixture and attaches it to this body. Use this function if you need

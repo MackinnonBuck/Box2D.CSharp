@@ -33,7 +33,7 @@ public sealed class World : Box2DDisposableObject
     /// Gets the world body list. With the returned body, use <see cref="Body.Next"/> to get
     /// the next body in the world list. A <c>null</c> body indicates the end of the list.
     /// </summary>
-    public Body? BodyList => Body.FromIntPtr.Get(b2World_GetBodyList(Native));
+    public Body BodyList => new(b2World_GetBodyList(Native));
 
     /// <summary>
     /// Gets the world joint list. With the returned joint, use <see cref="Joint.Next"/> to get
@@ -205,22 +205,19 @@ public sealed class World : Box2DDisposableObject
     /// Creates a rigid body given a definition.
     /// </summary>
     public Body CreateBody(BodyDef def)
-        => new(this, def);
+        => new(Native, def);
 
     /// <summary>
     /// Creates a rigid body.
     /// </summary>
-    public Body CreateBody(BodyType type = BodyType.Static, Vector2 position = default, float angle = 0f)
-        => new(this, type, ref position, angle);
+    public Body CreateBody(BodyType type = BodyType.Static, Vector2 position = default, float angle = 0f, object? userData = null)
+        => new(Native, type, ref position, angle, userData);
 
     /// <summary>
     /// Destroys a rigid body. No references to the body are retained.
     /// </summary>
     public void DestroyBody(Body body)
-    {
-        b2World_DestroyBody(Native, body.Native);
-        body.Invalidate();
-    }
+        => body.Destroy(Native);
 
     /// <summary>
     /// Creates a joint to constrain bodies together. No reference to the definition

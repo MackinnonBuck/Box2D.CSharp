@@ -21,6 +21,8 @@ public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
             => b2Joint_GetUserData(obj);
     }
 
+    bool IBox2DList<Joint>.IsNull => false;
+
     /// <summary>
     /// Gets or sets the user data object.
     /// </summary>
@@ -34,12 +36,12 @@ public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
     /// <summary>
     /// Gets the first body attached to this joint.
     /// </summary>
-    public Body BodyA => Body.FromIntPtr.Get(b2Joint_GetBodyA(Native))!;
+    public Body BodyA => new(b2Joint_GetBodyA(Native));
 
     /// <summary>
     /// Gets the second body attached to this joint.
     /// </summary>
-    public Body BodyB => Body.FromIntPtr.Get(b2Joint_GetBodyB(Native))!;
+    public Body BodyB => new(b2Joint_GetBodyB(Native));
 
     /// <summary>
     /// Gets the anchor point on <see cref="BodyA"/> in world coordinates.

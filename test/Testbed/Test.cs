@@ -100,6 +100,10 @@ internal class Test : IContactListener, IDisposable
 
     private readonly CircleShape _bombShape;
 
+    private Body _groundBody;
+
+    private Body _bomb;
+
     protected DebugDraw DebugDraw { get; private set; } = default!;
 
     protected Settings Settings { get; private set; } = default!;
@@ -114,9 +118,9 @@ internal class Test : IContactListener, IDisposable
 
     protected ContactPoint[] Points { get; } = new ContactPoint[MaxContactPoints];
 
-    protected Body GroundBody { get; }
+    protected ref Body GroundBody => ref _groundBody;
 
-    protected Body? Bomb { get; private set; } = default!;
+    protected ref Body Bomb => ref _bomb;
 
     protected int PointCount { get; private set; }
 
@@ -529,10 +533,10 @@ internal class Test : IContactListener, IDisposable
 
     public void LaunchBomb(Vector2 position, Vector2 velocity)
     {
-        if (Bomb is not null)
+        if (!Bomb.IsNull)
         {
             World.DestroyBody(Bomb);
-            Bomb = null;
+            Bomb = default;
         }
 
         using var bd = BodyDef.Create();

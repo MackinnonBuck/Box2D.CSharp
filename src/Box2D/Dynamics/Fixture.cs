@@ -26,6 +26,8 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
             => b2Fixture_GetUserData(obj);
     }
 
+    bool IBox2DList<Fixture>.IsNull => false;
+
     private Shape? _shape;
 
     /// <summary>

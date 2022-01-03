@@ -45,8 +45,11 @@ internal class Sensor : Test
             for (var i = 0; i < Count; i++)
             {
                 _touching[i] = false;
-                _bodies[i] = World.CreateBody(BodyType.Dynamic, new(-10f + 3f * i, 20f));
-                _bodies[i].UserData = i;
+                using var bd = BodyDef.Create();
+                bd.Type = BodyType.Dynamic;
+                bd.Position = new(-10f + 3f * i, 20f);
+                bd.UserData = i;
+                _bodies[i] = World.CreateBody(bd);
                 _bodies[i].CreateFixture(shape, 1f);
             }
         }

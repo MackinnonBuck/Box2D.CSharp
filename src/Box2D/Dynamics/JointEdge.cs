@@ -38,10 +38,10 @@ public readonly ref struct JointEdge
     /// <summary>
     /// Gets or sets the other attached body.
     /// </summary>
-    public Body? Other
+    public Body Other
     {
-        get => Body.FromIntPtr.Get(b2JointEdge_get_other(Native));
-        set => b2JointEdge_set_other(Native, value?.Native ?? IntPtr.Zero);
+        get => new(b2JointEdge_get_other(Native));
+        set => b2JointEdge_set_other(Native, value.IsNull ? IntPtr.Zero : value.Native);
     }
 
     /// <summary>

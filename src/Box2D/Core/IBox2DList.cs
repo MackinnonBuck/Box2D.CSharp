@@ -1,8 +1,10 @@
 ﻿namespace Box2D.Core;
 
-internal interface IBox2DList<T> where T : class, IBox2DList<T>
+internal interface IBox2DList<T> where T : IBox2DList<T>
 {
-    public T? Next { get; }
+    public bool IsNull { get; }
+
+    public T Next { get; }
 
     public struct Enumerator
     {
@@ -12,12 +14,12 @@ internal interface IBox2DList<T> where T : class, IBox2DList<T>
 
         public Enumerator(IBox2DList<T>? list)
         {
-            _list = list as T;
+            _list = (T?)list;
         }
 
         public bool MoveNext()
         {
-            if (_list is null)
+            if (_list is null || _list.IsNull)
             {
                 return false;
             }
@@ -32,6 +34,6 @@ internal interface IBox2DList<T> where T : class, IBox2DList<T>
 
 internal static class Box2DListExtensions
 {
-    public static IBox2DList<T>.Enumerator GetEnumerator<T>(this IBox2DList<T>? list) where T : class, IBox2DList<T>
+    public static IBox2DList<T>.Enumerator GetEnumerator<T>(this T? list) where T : IBox2DList<T>
         => new(list);
 }

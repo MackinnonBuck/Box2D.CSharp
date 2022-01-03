@@ -14,7 +14,7 @@ internal class BoxStack : Test
     private readonly Body[] _bodies = new Body[RowCount * ColumnCount];
     private readonly int[] _indices = new int[RowCount * ColumnCount];
 
-    private Body? _bullet;
+    private Body _bullet;
 
     public BoxStack()
     {
@@ -49,8 +49,11 @@ internal class BoxStack : Test
                     _indices[n] = n;
 
                     var x = 0f;
-                    var body = World.CreateBody(BodyType.Dynamic, new(xs[j] + x, 0.55f + 1.1f * i));
-                    body.UserData = n;
+                    using var bd = BodyDef.Create();
+                    bd.Type = BodyType.Dynamic;
+                    bd.Position = new(xs[j] + x, 0.55f + 1.1f * i);
+                    bd.UserData = n;
+                    var body = World.CreateBody(bd);
 
                     _bodies[n] = body;
                     body.CreateFixture(fd);
@@ -64,10 +67,10 @@ internal class BoxStack : Test
         switch (key)
         {
             case Key.Comma:
-                if (_bullet is not null)
+                if (!_bullet.IsNull)
                 {
                     World.DestroyBody(_bullet);
-                    _bullet = null;
+                    _bullet = default;
                 }
 
                 {
