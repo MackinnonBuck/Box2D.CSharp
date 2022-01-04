@@ -4,8 +4,9 @@ on: [push]
 
 env:
   SOLUTION_FILE_PATH: .
-  BUILD_CONFIGURATION: Release
   BUILD_PLATFORM: x64
+  matrix:
+    BUILD_CONFIGURATION: [Debug, Release]
 
 jobs:
   build-and-test:
