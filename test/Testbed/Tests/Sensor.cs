@@ -22,37 +22,34 @@ internal class Sensor : Test
         var ground = World.CreateBody();
 
         {
-            using var shape = new EdgeShape();
+            using var shape = EdgeShape.Create();
             shape.SetTwoSided(new(-40f, 0f), new(40f, 0f));
             ground.CreateFixture(shape, 0f);
         }
 
         {
-            using var shape = new CircleShape
-            {
-                Radius = 5f,
-                Position = new(0f, 10f),
-            };
+            using var shape = CircleShape.Create();
+            shape.Radius = 5f;
+            shape.Position = new(0f, 10f);
 
-            using var fd = new FixtureDef
-            {
-                Shape = shape,
-                IsSensor = true,
-            };
+            using var fd = FixtureDef.Create();
+            fd.Shape = shape;
+            fd.IsSensor = true;
             _sensor = ground.CreateFixture(fd);
         }
 
         {
-            using var shape = new CircleShape
-            {
-                Radius = 1f,
-            };
+            using var shape = CircleShape.Create();
+            shape.Radius = 1f;
 
             for (var i = 0; i < Count; i++)
             {
                 _touching[i] = false;
-                _bodies[i] = World.CreateBody(BodyType.Dynamic, new(-10f + 3f * i, 20f));
-                _bodies[i].UserData = i;
+                using var bd = BodyDef.Create();
+                bd.Type = BodyType.Dynamic;
+                bd.Position = new(-10f + 3f * i, 20f);
+                bd.UserData = i;
+                _bodies[i] = World.CreateBody(bd);
                 _bodies[i].CreateFixture(shape, 1f);
             }
         }

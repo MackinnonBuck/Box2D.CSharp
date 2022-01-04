@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using Box2D.Core.Allocation;
+using System.Numerics;
 
 namespace Box2D.Dynamics.Joints;
 
@@ -9,6 +10,8 @@ using static Interop.NativeMethods;
 /// </summary>
 public sealed class FrictionJointDef : JointDef
 {
+    private static readonly IAllocator<FrictionJointDef> _allocator = Allocator.Create<FrictionJointDef>(static () => new());
+
     /// <summary>
     /// Gets or sets the local anchor point relative to body A's origin.
     /// </summary>
@@ -54,9 +57,12 @@ public sealed class FrictionJointDef : JointDef
     }
 
     /// <summary>
-    /// Constructs a new <see cref="FrictionJointDef"/> instance.
+    /// Creates a new <see cref="FrictionJointDef"/> instance.
     /// </summary>
-    public FrictionJointDef()
+    public static FrictionJointDef Create()
+        => _allocator.Allocate();
+
+    private FrictionJointDef()
     {
         var native = b2FrictionJointDef_new();
         Initialize(native);
@@ -67,6 +73,12 @@ public sealed class FrictionJointDef : JointDef
     /// </summary>
     public void Initialize(Body bodyA, Body bodyB, Vector2 anchor)
         => b2FrictionJointDef_Initialize(Native, bodyA.Native, bodyB.Native, ref anchor);
+
+    private protected override bool TryRecycle()
+        => _allocator.TryRecycle(this);
+
+    private protected override void Reset()
+        => b2FrictionJointDef_reset(Native);
 
     /// <inheritdoc/>
     protected override void Dispose(bool disposing)

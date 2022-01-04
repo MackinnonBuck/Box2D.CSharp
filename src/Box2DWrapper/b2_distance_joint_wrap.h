@@ -25,6 +25,7 @@ extern "C"
     BOX2D_API void b2DistanceJointDef_set_stiffness(b2DistanceJointDef* obj, float value);
     BOX2D_API float b2DistanceJointDef_get_damping(b2DistanceJointDef* obj);
     BOX2D_API void b2DistanceJointDef_set_damping(b2DistanceJointDef* obj, float value);
+    BOX2D_API void b2DistanceJointDef_reset(b2DistanceJointDef* obj);
     BOX2D_API void b2DistanceJointDef_delete(b2DistanceJointDef* obj);
 
     /*

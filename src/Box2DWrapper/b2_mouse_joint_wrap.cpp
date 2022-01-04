@@ -2,6 +2,8 @@
 #include "verify.h"
 #include "b2_mouse_joint_wrap.h"
 
+#include <memory>
+
 /*
  * b2MouseJointDef
  */
@@ -57,6 +59,13 @@ void b2MouseJointDef_set_damping(b2MouseJointDef* obj, float value)
 {
     VERIFY_INSTANCE;
     obj->damping = value;
+}
+
+void b2MouseJointDef_reset(b2MouseJointDef* obj)
+{
+    VERIFY_INSTANCE;
+    obj->~b2MouseJointDef();
+    new (obj) b2MouseJointDef();
 }
 
 void b2MouseJointDef_delete(b2MouseJointDef* obj)

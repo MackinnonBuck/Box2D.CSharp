@@ -2,6 +2,8 @@
 #include "verify.h"
 #include "b2_wheel_joint_wrap.h"
 
+#include <memory>
+
 /*
  * b2WheelJointDef
  */
@@ -147,6 +149,13 @@ void b2WheelJointDef_set_damping(b2WheelJointDef* obj, float value)
 {
     VERIFY_INSTANCE;
     obj->damping = value;
+}
+
+void b2WheelJointDef_reset(b2WheelJointDef* obj)
+{
+    VERIFY_INSTANCE;
+    obj->~b2WheelJointDef();
+    new (obj) b2WheelJointDef();
 }
 
 void b2WheelJointDef_delete(b2WheelJointDef* obj)

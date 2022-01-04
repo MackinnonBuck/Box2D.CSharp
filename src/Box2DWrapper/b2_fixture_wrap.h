@@ -26,14 +26,17 @@ extern "C"
     BOX2D_API void b2FixtureDef_set_isSensor(b2FixtureDef* obj, bool value);
     BOX2D_API void b2FixtureDef_get_filter(b2FixtureDef* obj, b2Filter* filter);
     BOX2D_API void b2FixtureDef_set_filter(b2FixtureDef* obj, b2Filter* filter);
+    BOX2D_API void b2FixtureDef_reset(b2FixtureDef* obj);
     BOX2D_API void b2FixtureDef_delete(b2FixtureDef* obj);
 
     /*
      * b2Fixture
      */
+    BOX2D_API b2Shape::Type b2Fixture_GetType(b2Fixture* obj);
     BOX2D_API b2Shape* b2Fixture_GetShape(b2Fixture* obj);
     BOX2D_API bool b2Fixture_IsSensor(b2Fixture* obj);
     BOX2D_API void b2Fixture_SetSensor(b2Fixture* obj, bool sensor);
+    BOX2D_API b2Body* b2Fixture_GetBody(b2Fixture* obj);
     BOX2D_API b2Fixture* b2Fixture_GetNext(b2Fixture* obj);
     BOX2D_API uintptr_t b2Fixture_GetUserData(b2Fixture* obj);
     BOX2D_API bool b2Fixture_TestPoint(b2Fixture* obj, b2Vec2* p);

@@ -35,7 +35,7 @@ internal sealed class InternalQueryCallback : Box2DDisposableObject
     }
 
     private bool ReportFixtureUnmanaged(IntPtr fixture)
-        => _userCallback!.ReportFixture(Fixture.FromIntPtr.Get(fixture)!);
+        => _userCallback!.ReportFixture(new(fixture));
 
     protected override void Dispose(bool disposing)
         => b2QueryCallbackWrapper_delete(Native);

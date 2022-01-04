@@ -2,6 +2,8 @@
 #include "verify.h"
 #include "b2_friction_joint_wrap.h"
 
+#include <memory>
+
 /*
  * b2FrictionJointDef
  */
@@ -63,6 +65,13 @@ void b2FrictionJointDef_set_maxTorque(b2FrictionJointDef* obj, float value)
 {
     VERIFY_INSTANCE;
     obj->maxTorque = value;
+}
+
+void b2FrictionJointDef_reset(b2FrictionJointDef* obj)
+{
+    VERIFY_INSTANCE;
+    obj->~b2FrictionJointDef();
+    new (obj) b2FrictionJointDef();
 }
 
 void b2FrictionJointDef_delete(b2FrictionJointDef* obj)

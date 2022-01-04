@@ -23,14 +23,12 @@ internal class Car : Test
         var ground = World.CreateBody();
 
         {
-            using var shape = new EdgeShape();
+            using var shape = EdgeShape.Create();
 
-            using var fd = new FixtureDef
-            {
-                Shape = shape,
-                Density = 0f,
-                Friction = 0.6f,
-            };
+            using var fd = FixtureDef.Create();
+            fd.Shape = shape;
+            fd.Density = 0f;
+            fd.Friction = 0.6f;
 
             shape.SetTwoSided(new(-20f, 0f), new(20f, 0f));
             ground.CreateFixture(fd);
@@ -82,11 +80,11 @@ internal class Car : Test
         {
             var body = World.CreateBody(BodyType.Dynamic, new(140f, 1f));
 
-            using var box = new PolygonShape();
+            using var box = PolygonShape.Create();
             box.SetAsBox(10f, 0.25f);
             body.CreateFixture(box, 1f);
 
-            using var jd = new RevoluteJointDef();
+            using var jd = RevoluteJointDef.Create();
             jd.Initialize(ground, body, body.Position);
             jd.LowerAngle = -8f * MathF.PI / 180f;
             jd.UpperAngle = 8f * MathF.PI / 180f;
@@ -99,17 +97,15 @@ internal class Car : Test
         // Bridge
         {
             var n = 20;
-            using var shape = new PolygonShape();
+            using var shape = PolygonShape.Create();
             shape.SetAsBox(1f, 0.125f);
 
-            using var fd = new FixtureDef
-            {
-                Shape = shape,
-                Density = 1f,
-                Friction = 0.6f,
-            };
+            using var fd = FixtureDef.Create();
+            fd.Shape = shape;
+            fd.Density = 1f;
+            fd.Friction = 0.6f;
 
-            using var jd = new RevoluteJointDef();
+            using var jd = RevoluteJointDef.Create();
             Vector2 anchor;
 
             var prevBody = ground;
@@ -133,7 +129,7 @@ internal class Car : Test
 
         // Boxes
         {
-            using var box = new PolygonShape();
+            using var box = PolygonShape.Create();
             box.SetAsBox(0.5f, 0.5f);
 
             var body = World.CreateBody(BodyType.Dynamic, new(230f, 0.5f));
@@ -154,7 +150,7 @@ internal class Car : Test
 
         // Car
         {
-            using var chassis = new PolygonShape();
+            using var chassis = PolygonShape.Create();
             Span<Vector2> vertices = stackalloc Vector2[]
             {
                 new(-1.5f, -0.5f),
@@ -166,20 +162,16 @@ internal class Car : Test
             };
             chassis.Set(vertices);
 
-            using var circle = new CircleShape
-            {
-                Radius = 0.4f,
-            };
+            using var circle = CircleShape.Create();
+            circle.Radius = 0.4f;
 
             _car = World.CreateBody(BodyType.Dynamic, new(0f, 1f));
             _car.CreateFixture(chassis, 1f);
 
-            using var fd = new FixtureDef
-            {
-                Shape = circle,
-                Density = 1f,
-                Friction = 0.9f,
-            };
+            using var fd = FixtureDef.Create();
+            fd.Shape = circle;
+            fd.Density = 1f;
+            fd.Friction = 0.9f;
 
             _wheel1 = World.CreateBody(BodyType.Dynamic, new(-1f, 0.35f));
             _wheel1.CreateFixture(fd);
@@ -187,7 +179,7 @@ internal class Car : Test
             _wheel2 = World.CreateBody(BodyType.Dynamic, new(1f, 0.4f));
             _wheel2.CreateFixture(fd);
 
-            using var jd = new WheelJointDef();
+            using var jd = WheelJointDef.Create();
             var axis = new Vector2(0f, 1f);
 
             var mass1 = _wheel1.Mass;

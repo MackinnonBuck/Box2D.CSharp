@@ -25,14 +25,12 @@ internal class ApplyForce : Test
         var ground = World.CreateBody(position: new(0f, 20f));
 
         {
-            using var shape = new EdgeShape();
+            using var shape = EdgeShape.Create();
 
-            using var sd = new FixtureDef
-            {
-                Shape = shape,
-                Density = 0f,
-                Restitution = Restitution,
-            };
+            using var sd = FixtureDef.Create();
+            sd.Shape = shape;
+            sd.Density = 0f;
+            sd.Restitution = Restitution;
 
             // Left vertical
             shape.SetTwoSided(new(-20f, -20f), new(-20f, 20f));
@@ -52,13 +50,11 @@ internal class ApplyForce : Test
         }
 
         {
-            using var bd = new BodyDef
-            {
-                Type = BodyType.Dynamic,
-                Position = new(0f, 3f),
-                Angle = MathF.PI,
-                AllowSleep = false,
-            };
+            using var bd = BodyDef.Create();
+            bd.Type = BodyType.Dynamic;
+            bd.Position = new(0f, 3f);
+            bd.Angle = MathF.PI;
+            bd.AllowSleep = false;
 
             _body = World.CreateBody(bd);
 
@@ -75,7 +71,7 @@ internal class ApplyForce : Test
                 Transform.Mul(xf1, new Vector2(0f, 0.5f)),
             };
 
-            using var poly = new PolygonShape();
+            using var poly = PolygonShape.Create();
             poly.Set(vertices);
 
             _body.CreateFixture(poly, 2f);
@@ -100,38 +96,32 @@ internal class ApplyForce : Test
 
             var radius = MathF.Sqrt(2f * inertia / mass);
 
-            using var jd = new FrictionJointDef
-            {
-                BodyA = ground,
-                BodyB = _body,
-                LocalAnchorA = Vector2.Zero,
-                LocalAnchorB = _body.LocalCenter,
-                CollideConnected = true,
-                MaxForce = 0.5f * mass * gravity,
-                MaxTorque = 0.2f * mass * radius * gravity,
-            };
+            using var jd = FrictionJointDef.Create();
+            jd.BodyA = ground;
+            jd.BodyB = _body;
+            jd.LocalAnchorA = Vector2.Zero;
+            jd.LocalAnchorB = _body.LocalCenter;
+            jd.CollideConnected = true;
+            jd.MaxForce = 0.5f * mass * gravity;
+            jd.MaxTorque = 0.2f * mass * radius * gravity;
 
             World.CreateJoint(jd);
         }
 
         {
-            using var shape = new PolygonShape();
+            using var shape = PolygonShape.Create();
             shape.SetAsBox(0.5f, 0.5f);
 
-            using var fd = new FixtureDef
-            {
-                Shape = shape,
-                Density = 1f,
-                Friction = 0.3f,
-            };
+            using var fd = FixtureDef.Create();
+            fd.Shape = shape;
+            fd.Density = 1f;
+            fd.Friction = 0.3f;
 
-            using var jd = new FrictionJointDef
-            {
-                LocalAnchorA = Vector2.Zero,
-                LocalAnchorB = Vector2.Zero,
-                BodyA = ground,
-                CollideConnected = true,
-            };
+            using var jd = FrictionJointDef.Create();
+            jd.LocalAnchorA = Vector2.Zero;
+            jd.LocalAnchorB = Vector2.Zero;
+            jd.BodyA = ground;
+            jd.CollideConnected = true;
 
             for (var i = 0; i < 10; i++)
             {

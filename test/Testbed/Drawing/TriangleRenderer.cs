@@ -71,7 +71,7 @@ void main(void)
         _gl.VertexAttribPointer(ColorAttribute, 4, GLEnum.Float, false, 0, null);
         _gl.BufferData<float>(GLEnum.ArrayBuffer, _colors, BufferUsageARB.DynamicDraw);
 
-        _gl.CheckForErrors();
+        //_gl.CheckForErrors();
 
         _gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
         _gl.BindVertexArray(0);
@@ -124,7 +124,7 @@ void main(void)
         _gl.DrawArrays(PrimitiveType.Triangles, 0, (uint)_count);
         _gl.Disable(EnableCap.Blend);
 
-        _gl.CheckForErrors();
+        //_gl.CheckForErrors();
 
         _gl.BindBuffer(GLEnum.ArrayBuffer, 0);
         _gl.BindVertexArray(0);

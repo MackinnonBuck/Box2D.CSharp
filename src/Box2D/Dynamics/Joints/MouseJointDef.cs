@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using Box2D.Core.Allocation;
+using System.Numerics;
 
 namespace Box2D.Dynamics.Joints;
 
@@ -10,6 +11,8 @@ using static Interop.NativeMethods;
 /// </summary>
 public sealed class MouseJointDef : JointDef
 {
+    private static readonly IAllocator<MouseJointDef> _allocator = Allocator.Create<MouseJointDef>(static () => new());
+
     /// <summary>
     /// Gets or sets the initial world target point. This is assumed to coincide
     /// with the body anchor initially.
@@ -54,13 +57,22 @@ public sealed class MouseJointDef : JointDef
     }
 
     /// <summary>
-    /// Constructs a new <see cref="MouseJointDef"/> instance.
+    /// Creates a new <see cref="MouseJointDef"/> instance.
     /// </summary>
-    public MouseJointDef()
+    public static MouseJointDef Create()
+        => _allocator.Allocate();
+
+    private MouseJointDef()
     {
         var native = b2MouseJointDef_new();
         Initialize(native);
     }
+
+    private protected override bool TryRecycle()
+        => _allocator.TryRecycle(this);
+
+    private protected override void Reset()
+        => b2MouseJointDef_reset(Native);
 
     /// <inheritdoc/>
     protected override void Dispose(bool disposing)

@@ -35,14 +35,14 @@ internal sealed class InternalDestructionListener : Box2DDisposableObject
 
     private void SayGoodbyeJointUnmanaged(IntPtr jointNative)
     {
-        var joint = Joint.FromIntPtr.Get(jointNative)!;
+        var joint = Joint.FromIntPtr(jointNative)!;
         _userListener?.SayGoodbye(joint);
         joint.Invalidate();
     }
 
     private void SayGoodbyeFixtureUnmanaged(IntPtr fixtureNative)
     {
-        var fixture = Fixture.FromIntPtr.Get(fixtureNative)!;
+        var fixture = new Fixture(fixtureNative);
         _userListener?.SayGoodbye(fixture);
         fixture.Invalidate();
     }

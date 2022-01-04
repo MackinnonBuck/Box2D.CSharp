@@ -10,6 +10,8 @@ namespace Box2D.Core;
 /// </summary>
 public abstract class Box2DDisposableObject : Box2DObject, IDisposable
 {
+    private bool _isTryingToRecycle;
+
     internal bool IsUserOwned { get; }
 
     internal Box2DDisposableObject(bool isUserOwned)
@@ -24,6 +26,37 @@ public abstract class Box2DDisposableObject : Box2DObject, IDisposable
 
     /// <inheritdoc/>
     public void Dispose()
+    {
+        if (_isTryingToRecycle)
+        {
+            // We're getting disposed while attempting to be recycled.
+            // This probably means that the recycling mechanism decided not
+            // to recycle this instance, so we'll just perform a normal dispose.
+            DisposeCore();
+            return;
+        }
+
+        if (this is not IBox2DRecyclableObject recyclable)
+        {
+            // This type cannot be recycled, so we'll dispose now.
+            DisposeCore();
+            return;
+        }
+
+        // At this point, we should attempt to recycle this instance.
+
+        _isTryingToRecycle = true;
+
+        if (!recyclable.TryRecycle())
+        {
+            // We did not attempt to recycle, so we'll dispose immediately.
+            DisposeCore();
+        }
+
+        _isTryingToRecycle = false;
+    }
+
+    private protected void DisposeCore()
     {
         if (IsValid)
         {
@@ -40,6 +73,8 @@ public abstract class Box2DDisposableObject : Box2DObject, IDisposable
         {
             Dispose(false);
             Uninitialize();
+
+            Box2DObjectTracker.IncrementFinalizerCallCount();
         }
     }
 
@@ -49,7 +84,7 @@ public abstract class Box2DDisposableObject : Box2DObject, IDisposable
     /// </summary>
     /// <param name="disposing">
     /// Indicates whether the method call comes from a <see cref="IDisposable.Dispose"/>
-    /// method (its value is <c>true</c>) or from a finalizer (its value is <c>false</c>).
+    /// method (its value is <see langword="true"/>) or from a finalizer (its value is <see langword="false"/>).
     /// </param>
     protected abstract void Dispose(bool disposing);
 }

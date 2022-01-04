@@ -31,6 +31,7 @@ extern "C"
     BOX2D_API void b2PrismaticJointDef_set_maxMotorForce(b2PrismaticJointDef* obj, float value);
     BOX2D_API float b2PrismaticJointDef_get_motorSpeed(b2PrismaticJointDef* obj);
     BOX2D_API void b2PrismaticJointDef_set_motorSpeed(b2PrismaticJointDef* obj, float value);
+    BOX2D_API void b2PrismaticJointDef_reset(b2PrismaticJointDef* obj);
     BOX2D_API void b2PrismaticJointDef_delete(b2PrismaticJointDef* obj);
 
     /*

@@ -2,6 +2,8 @@
 #include "verify.h"
 #include "b2_distance_joint_wrap.h"
 
+#include <memory>
+
 /*
  * b2DistanceJointDef
  */
@@ -99,6 +101,13 @@ void b2DistanceJointDef_set_damping(b2DistanceJointDef* obj, float value)
 {
     VERIFY_INSTANCE;
     obj->damping = value;
+}
+
+void b2DistanceJointDef_reset(b2DistanceJointDef* obj)
+{
+    VERIFY_INSTANCE;
+    obj->~b2DistanceJointDef();
+    new (obj) b2DistanceJointDef();
 }
 
 void b2DistanceJointDef_delete(b2DistanceJointDef* obj)

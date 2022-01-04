@@ -17,4 +17,5 @@ extern "C"
     BOX2D_API void b2EdgeShape_get_m_vertex2(b2EdgeShape* obj, b2Vec2* value);
     BOX2D_API void b2EdgeShape_get_m_vertex3(b2EdgeShape* obj, b2Vec2* value);
     BOX2D_API bool b2EdgeShape_get_m_oneSided(b2EdgeShape* obj);
+    BOX2D_API void b2EdgeShape_reset(b2EdgeShape* obj);
 }

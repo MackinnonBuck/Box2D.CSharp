@@ -29,6 +29,7 @@ extern "C"
     BOX2D_API void b2RevoluteJointDef_set_motorSpeed(b2RevoluteJointDef* obj, float value);
     BOX2D_API float b2RevoluteJointDef_get_maxMotorTorque(b2RevoluteJointDef* obj);
     BOX2D_API void b2RevoluteJointDef_set_maxMotorTorque(b2RevoluteJointDef* obj, float value);
+    BOX2D_API void b2RevoluteJointDef_reset(b2RevoluteJointDef* obj);
     BOX2D_API void b2RevoluteJointDef_delete(b2RevoluteJointDef* obj);
 
     /*

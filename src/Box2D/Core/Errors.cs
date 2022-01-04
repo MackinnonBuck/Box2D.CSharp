@@ -6,38 +6,62 @@ namespace Box2D.Core;
 
 using static Config.Conditionals;
 
+internal enum InvalidAccessReason
+{
+    NullInstance,
+    DisposedInstance,
+    ImplicitlyDestroyedInstance,
+}
+
 internal static class Errors
 {
-    [Conditional(BOX2D_VALID_ACCESS_CHECKING)]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void ThrowIfInvalidAccess(IntPtr ptr)
-        => ThrowIfInvalidAccess<object>(null, ptr);
-
-    [Conditional(BOX2D_VALID_ACCESS_CHECKING)]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void ThrowIfInvalidAccess<T>(T? instance, IntPtr ptr)
+    public static void ThrowIfNullManagedPointer(IntPtr ptr, string targetTypeName)
     {
         if (ptr == IntPtr.Zero)
         {
-            throw new InvalidOperationException(InvalidAccessMessage(instance));
+            throw new InvalidOperationException($"The pointer to managed type {targetTypeName} was null.");
         }
     }
 
-    private static string InvalidAccessMessage<T>(T? instance)
-        => instance switch
-        {
-            Box2DDisposableObject x =>
-                $"Attempted access of disposed instance of type '{x.GetType()}'.",
+    public static void ThrowInvalidManagedPointer(string targeTypeName)
+        => throw new InvalidOperationException($"The pointer to managed type {targeTypeName} was invalid.");
 
-            Box2DSubObject x =>
-                $"Attempted access of implicitly destroyed instance of type '{x.GetType()}'. " +
+    [Conditional(BOX2D_VALID_ACCESS_CHECKING)]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void ThrowIfNull(IntPtr ptr, string typeName)
+    {
+        if (ptr == IntPtr.Zero)
+        {
+            ThrowInvalidAccess(typeName, InvalidAccessReason.NullInstance);
+        }
+    }
+
+    [Conditional(BOX2D_VALID_ACCESS_CHECKING)]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void ThrowIfNull(IntPtr ptr, Box2DObject instance)
+    {
+        if (ptr == IntPtr.Zero)
+        {
+            ThrowInvalidAccess(instance.GetType().Name, instance switch
+            {
+                Box2DDisposableObject => InvalidAccessReason.DisposedInstance,
+                Box2DSubObject => InvalidAccessReason.ImplicitlyDestroyedInstance,
+                _ => InvalidAccessReason.NullInstance,
+            });
+        }
+    }
+
+    [Conditional(BOX2D_VALID_ACCESS_CHECKING)]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void ThrowInvalidAccess(string typeName, InvalidAccessReason reason)
+        => throw new InvalidOperationException(reason switch
+        {
+            InvalidAccessReason.NullInstance => $"Attempted access of a null {typeName} instance.",
+            InvalidAccessReason.DisposedInstance => $"Attempted access of a disposed {typeName} instance.",
+            InvalidAccessReason.ImplicitlyDestroyedInstance =>
+                $"Attempted access of an implicitly destroyed {typeName}. " +
                 $"See 'https://github.com/erincatto/box2d/blob/master/docs/loose_ends.md#implicit-destruction' " +
                 $"for more information.",
-
-            null =>
-                $"Attempted access of invalid instance.",
-
-            var x =>
-                $"Attempted access of invalid instance of type '{x.GetType()}'.",
-        };
+            _ => string.Empty,
+        });
 }

@@ -20,15 +20,15 @@ public readonly ref struct Contact
     {
         get
         {
-            Errors.ThrowIfInvalidAccess(_native);
+            Errors.ThrowIfNull(_native, nameof(Contact));
             return _native;
         }
     }
 
     /// <summary>
-    /// Gets whether this <see cref="Contact"/> points to a valid unmanaged contact.
+    /// Gets whether this <see cref="Contact"/> points to a null unmanaged contact.
     /// </summary>
-    public bool IsValid => _native != IntPtr.Zero;
+    public bool IsNull => _native == IntPtr.Zero;
 
     /// <summary>
     /// Gets the contact manifold. Do not modify the manifold unless you understand
@@ -60,7 +60,7 @@ public readonly ref struct Contact
     /// <summary>
     /// Gets fixture A in this contact.
     /// </summary>
-    public Fixture FixtureA => Fixture.FromIntPtr.Get(b2Contact_GetFixtureA(Native))!;
+    public Fixture FixtureA => new(b2Contact_GetFixtureA(Native))!;
 
     /// <summary>
     /// Gets the child primitive index for fixture A.
@@ -70,7 +70,7 @@ public readonly ref struct Contact
     /// <summary>
     /// Gets fixture B in this contact.
     /// </summary>
-    public Fixture FixtureB => Fixture.FromIntPtr.Get(b2Contact_GetFixtureB(Native))!;
+    public Fixture FixtureB => new(b2Contact_GetFixtureB(Native))!;
 
     /// <summary>
     /// Gets the child primitive index for fixture B.

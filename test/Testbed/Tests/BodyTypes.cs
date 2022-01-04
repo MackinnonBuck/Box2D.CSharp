@@ -18,7 +18,7 @@ internal class BodyTypes : Test
         var ground = World.CreateBody();
 
         {
-            using var shape = new EdgeShape();
+            using var shape = EdgeShape.Create();
             shape.SetTwoSided(new(-20f, 0f), new(20f, 0f));
 
             ground.CreateFixture(shape, 0f);
@@ -28,7 +28,7 @@ internal class BodyTypes : Test
         {
             _attachmenet = World.CreateBody(BodyType.Dynamic, new(0f, 3f));
 
-            using var shape = new PolygonShape();
+            using var shape = PolygonShape.Create();
             shape.SetAsBox(0.5f, 2f);
             _attachmenet.CreateFixture(shape, 2f);
         }
@@ -37,24 +37,22 @@ internal class BodyTypes : Test
         {
             _platform = World.CreateBody(BodyType.Dynamic, new(-4f, 5f));
 
-            using var shape = new PolygonShape();
+            using var shape = PolygonShape.Create();
             shape.SetAsBox(0.5f, 4f, new(4f, 0f), 0.5f * MathF.PI);
 
-            using var fd = new FixtureDef
-            {
-                Shape = shape,
-                Friction = 0.6f,
-                Density = 2f,
-            };
+            using var fd = FixtureDef.Create();
+            fd.Shape = shape;
+            fd.Friction = 0.6f;
+            fd.Density = 2f;
             _platform.CreateFixture(fd);
 
-            using var rjd = new RevoluteJointDef();
+            using var rjd = RevoluteJointDef.Create();
             rjd.Initialize(_attachmenet, _platform, new(0f, 5f));
             rjd.MaxMotorTorque = 50f;
             rjd.EnableMotor = true;
             World.CreateJoint(rjd);
 
-            using var pjd = new PrismaticJointDef();
+            using var pjd = PrismaticJointDef.Create();
             pjd.Initialize(ground, _platform, new(0f, 5f), new(1f, 0f));
             pjd.MaxMotorForce = 1000f;
             pjd.EnableMotor = true;
@@ -69,15 +67,13 @@ internal class BodyTypes : Test
         {
             var body = World.CreateBody(BodyType.Dynamic, new(0f, 8f));
 
-            using var shape = new PolygonShape();
+            using var shape = PolygonShape.Create();
             shape.SetAsBox(0.75f, 0.75f);
 
-            using var fd = new FixtureDef
-            {
-                Shape = shape,
-                Friction = 0.6f,
-                Density = 2f,
-            };
+            using var fd = FixtureDef.Create();
+            fd.Shape = shape;
+            fd.Friction = 0.6f;
+            fd.Density = 2f;
 
             body.CreateFixture(fd);
         }

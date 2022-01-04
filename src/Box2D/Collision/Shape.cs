@@ -2,6 +2,7 @@
 using Box2D.Core;
 using Box2D.Math;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace Box2D.Collision;
@@ -14,28 +15,43 @@ using static Interop.NativeMethods;
 /// automatically when a <see cref="Dynamics.Fixture"/> is created.
 /// Shapes may encapsulate one or more child shapes.
 /// </summary>
-public abstract class Shape : Box2DDisposableObject
+public abstract class Shape : Box2DDisposableObject, IBox2DRecyclableObject
 {
-    internal static ShapeFromIntPtr FromIntPtr { get; } = new();
+    private static readonly Dictionary<IntPtr, Shape> _nativeOwnedShapeCache = new();
 
-    internal class ShapeFromIntPtr
+    internal static Shape? GetFromCache(IntPtr obj)
     {
-        public Shape? Create(IntPtr obj, ShapeType type)
+        if (!_nativeOwnedShapeCache.TryGetValue(obj, out var cachedShape))
         {
-            if (obj == IntPtr.Zero)
-            {
-                return null;
-            }
-
-            return type switch
-            {
-                ShapeType.Circle => new CircleShape(obj),
-                ShapeType.Edge => new EdgeShape(obj),
-                ShapeType.Chain => throw new NotImplementedException(),
-                ShapeType.Polygon => new PolygonShape(obj),
-                var x => throw new ArgumentException($"Invalid shape type '{x}'.", nameof(type)),
-            };
+            return null;
         }
+
+        return cachedShape;
+    }
+
+    internal static Shape? GetFromCacheOrCreate(IntPtr obj, ShapeType type)
+    {
+        if (obj == IntPtr.Zero)
+        {
+            return null;
+        }
+
+        if (_nativeOwnedShapeCache.TryGetValue(obj, out var cachedShape))
+        {
+            return cachedShape;
+        }
+
+        Shape shape = type switch
+        {
+            ShapeType.Circle => new CircleShape(obj),
+            ShapeType.Edge => new EdgeShape(obj),
+            ShapeType.Chain => throw new NotImplementedException(),
+            ShapeType.Polygon => new PolygonShape(obj),
+            var x => throw new ArgumentException($"Invalid shape type '{x}'.", nameof(type)),
+        };
+
+        _nativeOwnedShapeCache.Add(obj, shape);
+        return shape;
     }
 
     /// <summary>
@@ -103,5 +119,20 @@ public abstract class Shape : Box2DDisposableObject
         {
             b2Shape_delete(Native);
         }
+        else
+        {
+            _nativeOwnedShapeCache.Remove(Native);
+        }
     }
+
+    bool IBox2DRecyclableObject.TryRecycle()
+        // We only want to attempt recycling if this object is user owned.
+        => IsUserOwned && TryRecycle();
+
+    void IBox2DRecyclableObject.Reset()
+        => Reset();
+
+    private protected abstract bool TryRecycle();
+
+    private protected abstract void Reset();
 }

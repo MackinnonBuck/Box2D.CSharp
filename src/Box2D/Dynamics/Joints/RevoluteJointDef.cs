@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using Box2D.Core.Allocation;
+using System.Numerics;
 
 namespace Box2D.Dynamics.Joints;
 
@@ -23,6 +24,8 @@ using static Interop.NativeMethods;
 /// </summary>
 public sealed class RevoluteJointDef : JointDef
 {
+    private static readonly IAllocator<RevoluteJointDef> _allocator = Allocator.Create<RevoluteJointDef>(static () => new());
+
     /// <summary>
     /// Gets or sets the local anchor point relative to body A's origin.
     /// </summary>
@@ -114,9 +117,12 @@ public sealed class RevoluteJointDef : JointDef
     }
 
     /// <summary>
-    /// Constructs a new <see cref="RevoluteJointDef"/> instance.
+    /// Creates a new <see cref="RevoluteJointDef"/> instance.
     /// </summary>
-    public RevoluteJointDef()
+    public static RevoluteJointDef Create()
+        => _allocator.Allocate();
+
+    private RevoluteJointDef()
     {
         var native = b2RevoluteJointDef_new();
         Initialize(native);
@@ -127,6 +133,12 @@ public sealed class RevoluteJointDef : JointDef
     /// </summary>
     public void Initialize(Body bodyA, Body bodyB, Vector2 anchor)
         => b2RevoluteJointDef_Initialize(Native, bodyA.Native, bodyB.Native, ref anchor);
+
+    private protected override bool TryRecycle()
+        => _allocator.TryRecycle(this);
+
+    private protected override void Reset()
+        => b2RevoluteJointDef_reset(Native);
 
     /// <inheritdoc/>
     protected override void Dispose(bool disposing)

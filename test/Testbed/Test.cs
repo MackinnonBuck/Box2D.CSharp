@@ -42,12 +42,12 @@ internal class TestQueryCallback : IQueryCallback
 {
     public Vector2 Point { get; private set; }
 
-    public Fixture? Fixture { get; private set; }
+    public Fixture Fixture { get; private set; }
 
     public void Reset(Vector2 point)
     {
         Point = point;
-        Fixture = null;
+        Fixture = default;
     }
 
     bool IQueryCallback.ReportFixture(Fixture fixture)
@@ -96,9 +96,13 @@ internal class Test : IContactListener, IDisposable
 
     private readonly TestQueryCallback _queryCallback = new();
 
-    private readonly MouseJointDef _mouseJointDef = new();
+    private readonly MouseJointDef _mouseJointDef;
 
-    private readonly CircleShape _bombShape = new() { Radius = 0.3f };
+    private readonly CircleShape _bombShape;
+
+    private Body _groundBody;
+
+    private Body _bomb;
 
     protected DebugDraw DebugDraw { get; private set; } = default!;
 
@@ -114,9 +118,9 @@ internal class Test : IContactListener, IDisposable
 
     protected ContactPoint[] Points { get; } = new ContactPoint[MaxContactPoints];
 
-    protected Body GroundBody { get; }
+    protected ref Body GroundBody => ref _groundBody;
 
-    protected Body? Bomb { get; private set; } = default!;
+    protected ref Body Bomb => ref _bomb;
 
     protected int PointCount { get; private set; }
 
@@ -141,8 +145,13 @@ internal class Test : IContactListener, IDisposable
         World.SetDestructionListener(DestructionListener);
         World.SetContactListener(this);
 
-        using var bodyDef = new BodyDef();
+        using var bodyDef = BodyDef.Create();
         GroundBody = World.CreateBody(bodyDef);
+
+        _mouseJointDef = MouseJointDef.Create();
+
+        _bombShape = CircleShape.Create();
+        _bombShape.Radius = 0.3f;
     }
 
     public void Initialize(DebugDraw debugDraw, Settings settings, Camera camera)
@@ -233,7 +242,7 @@ internal class Test : IContactListener, IDisposable
 
             if (Box2DObjectTracker.Instance is { } tracker)
             {
-                DebugDraw.DrawString(5, TextLine, $"managed objects = {tracker.ObjectCount}");
+                DebugDraw.DrawString(5, TextLine, $"managed/finalized = {tracker.TotalReferenceCount}/{tracker.TotalFinalizerCallCount}");
                 TextLine += TextIncrement;
             }
         }
@@ -440,7 +449,7 @@ internal class Test : IContactListener, IDisposable
         _queryCallback.Reset(p);
         World.QueryAABB(_queryCallback, aabb);
 
-        if (_queryCallback.Fixture is not null)
+        if (!_queryCallback.Fixture.IsNull)
         {
             var frequencyHz = 5f;
             var dampingRatio = 0.7f;
@@ -524,27 +533,23 @@ internal class Test : IContactListener, IDisposable
 
     public void LaunchBomb(Vector2 position, Vector2 velocity)
     {
-        if (Bomb is not null)
+        if (!Bomb.IsNull)
         {
             World.DestroyBody(Bomb);
-            Bomb = null;
+            Bomb = default;
         }
 
-        using var bd = new BodyDef
-        {
-            Type = BodyType.Dynamic,
-            Position = position,
-            Bullet = true,
-        };
+        using var bd = BodyDef.Create();
+        bd.Type = BodyType.Dynamic;
+        bd.Position = position;
+        bd.Bullet = true;
         Bomb = World.CreateBody(bd);
         Bomb.LinearVelocity = velocity;
 
-        using var fd = new FixtureDef
-        {
-            Shape = _bombShape,
-            Density = 20f,
-            Restitution = 0f,
-        };
+        using var fd = FixtureDef.Create();
+        fd.Shape = _bombShape;
+        fd.Density = 20f;
+        fd.Restitution = 0f;
 
         Bomb.CreateFixture(fd);
     }

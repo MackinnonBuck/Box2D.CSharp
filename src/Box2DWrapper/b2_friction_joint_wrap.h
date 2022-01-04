@@ -19,6 +19,7 @@ extern "C"
     BOX2D_API void b2FrictionJointDef_set_maxForce(b2FrictionJointDef* obj, float value);
     BOX2D_API float b2FrictionJointDef_get_maxTorque(b2FrictionJointDef* obj);
     BOX2D_API void b2FrictionJointDef_set_maxTorque(b2FrictionJointDef* obj, float value);
+    BOX2D_API void b2FrictionJointDef_reset(b2FrictionJointDef* obj);
     BOX2D_API void b2FrictionJointDef_delete(b2FrictionJointDef* obj);
 
     /*

@@ -14,14 +14,14 @@ internal class BoxStack : Test
     private readonly Body[] _bodies = new Body[RowCount * ColumnCount];
     private readonly int[] _indices = new int[RowCount * ColumnCount];
 
-    private Body? _bullet;
+    private Body _bullet;
 
     public BoxStack()
     {
         {
             var ground = World.CreateBody();
 
-            using var shape = new EdgeShape();
+            using var shape = EdgeShape.Create();
             shape.SetTwoSided(new(-40f, 0f), new(40f, 0f));
             ground.CreateFixture(shape, 0f);
 
@@ -32,15 +32,13 @@ internal class BoxStack : Test
         {
             Span<float> xs = stackalloc float[] { 0f, -10f, -5f, 5f, 10f };
 
-            using var shape = new PolygonShape();
+            using var shape = PolygonShape.Create();
             shape.SetAsBox(0.5f, 0.5f);
 
-            using var fd = new FixtureDef
-            {
-                Shape = shape,
-                Density = 1f,
-                Friction = 0.3f,
-            };
+            using var fd = FixtureDef.Create();
+            fd.Shape = shape;
+            fd.Density = 1f;
+            fd.Friction = 0.3f;
 
             for (var j = 0; j < ColumnCount; j++)
             {
@@ -51,8 +49,11 @@ internal class BoxStack : Test
                     _indices[n] = n;
 
                     var x = 0f;
-                    var body = World.CreateBody(BodyType.Dynamic, new(xs[j] + x, 0.55f + 1.1f * i));
-                    body.UserData = n;
+                    using var bd = BodyDef.Create();
+                    bd.Type = BodyType.Dynamic;
+                    bd.Position = new(xs[j] + x, 0.55f + 1.1f * i);
+                    bd.UserData = n;
+                    var body = World.CreateBody(bd);
 
                     _bodies[n] = body;
                     body.CreateFixture(fd);
@@ -66,29 +67,25 @@ internal class BoxStack : Test
         switch (key)
         {
             case Key.Comma:
-                if (_bullet is not null)
+                if (!_bullet.IsNull)
                 {
                     World.DestroyBody(_bullet);
-                    _bullet = null;
+                    _bullet = default;
                 }
 
                 {
-                    using var shape = new CircleShape();
+                    using var shape = CircleShape.Create();
                     shape.Radius = 0.25f;
 
-                    using var fd = new FixtureDef
-                    {
-                        Shape = shape,
-                        Density = 20f,
-                        Restitution = 0.05f,
-                    };
+                    using var fd = FixtureDef.Create();
+                    fd.Shape = shape;
+                    fd.Density = 20f;
+                    fd.Restitution = 0.05f;
 
-                    using var bd = new BodyDef
-                    {
-                        Type = BodyType.Dynamic,
-                        Bullet = true,
-                        Position = new(-31f, 5f),
-                    };
+                    using var bd = BodyDef.Create();
+                    bd.Type = BodyType.Dynamic;
+                    bd.Bullet = true;
+                    bd.Position = new(-31f, 5f);
 
                     _bullet = World.CreateBody(bd);
                     _bullet.CreateFixture(fd);

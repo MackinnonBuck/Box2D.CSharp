@@ -34,7 +34,7 @@ internal sealed class InternalRayCastCallback : Box2DDisposableObject
     }
 
     private float ReportFixtureUnmanaged(IntPtr fixture, ref Vector2 point, ref Vector2 normal, float fraction)
-        => _userCallback!.ReportFixture(Fixture.FromIntPtr.Get(fixture)!, point, normal, fraction);
+        => _userCallback!.ReportFixture(new(fixture), point, normal, fraction);
 
     protected override void Dispose(bool disposing)
         => b2RayCastCallbackWrapper_delete(Native);

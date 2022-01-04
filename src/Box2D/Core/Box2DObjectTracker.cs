@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace Box2D.Core;
 
@@ -19,31 +20,49 @@ public sealed class Box2DObjectTracker
     public static Box2DObjectTracker? Instance { get; } = null;
 #endif
 
-    private readonly object _box2DObjectsLock = new();
-    private readonly HashSet<Box2DObject> _box2DObjects = new();
+    private readonly object _referenceLock = new();
+    private readonly Dictionary<IntPtr, WeakReference<Box2DObject>> _references = new();
+
+    private int _finalizerCallCount;
 
     /// <summary>
-    /// Gets the number of <see cref="Box2DObject"/> instances.
+    /// Gets the total number of finalizer calls. This can indicate how many objects
+    /// were not properly disposed.
     /// </summary>
-    public int ObjectCount
+    public int TotalFinalizerCallCount => _finalizerCallCount;
+
+    /// <summary>
+    /// Gets the total number of <see cref="Box2DObject"/> references, including invalid references.
+    /// </summary>
+    public int TotalReferenceCount
     {
         get
         {
-            lock (_box2DObjectsLock)
+            lock (_referenceLock)
             {
-                return _box2DObjects.Count;
+                return _references.Count;
             }
         }
     }
 
     /// <summary>
-    /// Gets a list of all <see cref="Box2DObject"/> instances.
+    /// Gets a list of all valid referenced <see cref="Box2DObject"/> instances.
     /// </summary>
-    public IList<Box2DObject> GetObjects()
+    public IList<Box2DObject> GetReferencedObjects()
     {
-        lock (_box2DObjectsLock)
+        lock (_referenceLock)
         {
-            return _box2DObjects.ToList();
+            var result = new List<Box2DObject>(_references.Count);
+
+            foreach (var value in _references.Values)
+            {
+                if (value.TryGetTarget(out var target))
+                {
+                    result.Add(target);
+                }
+            }
+
+            return result;
         }
     }
 
@@ -59,35 +78,44 @@ public sealed class Box2DObjectTracker
     internal static void Remove(Box2DObject box2DObject)
         => Instance!.RemoveRef(box2DObject);
 
-    private void AddRef(Box2DObject box2DObject)
+    [Conditional(BOX2D_OBJECT_TRACKING)]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static void IncrementFinalizerCallCount()
+        => Interlocked.Increment(ref Instance!._finalizerCallCount);
+
+    private void AddRef(Box2DObject obj)
     {
-        if (box2DObject is null)
+        if (obj is null)
         {
-            throw new ArgumentNullException(nameof(box2DObject));
+            throw new ArgumentNullException(nameof(obj));
         }
 
-        lock (_box2DObjectsLock)
+        lock (_referenceLock)
         {
-            if (!_box2DObjects.Add(box2DObject))
+            if (_references.ContainsKey(obj.Native))
             {
                 throw new InvalidOperationException("Attempted to add a reference to an object already being tracked.");
             }
+
+            _references.Add(obj.Native, new(obj));
         }
     }
 
-    private void RemoveRef(Box2DObject box2DObject)
+    private void RemoveRef(Box2DObject obj)
     {
-        if (box2DObject is null)
+        if (obj is null)
         {
-            throw new ArgumentNullException(nameof(box2DObject));
+            throw new ArgumentNullException(nameof(obj));
         }
 
-        lock (_box2DObjectsLock)
+        lock (_referenceLock)
         {
-            if (!_box2DObjects.Remove(box2DObject))
+            if (!_references.ContainsKey(obj.Native))
             {
-                throw new InvalidOperationException("Attempted to remove a reference to an object not being tracked.");
+                throw new InvalidOperationException("Attempted to add a reference to an object already being tracked.");
             }
+
+            _references.Remove(obj.Native);
         }
     }
 }

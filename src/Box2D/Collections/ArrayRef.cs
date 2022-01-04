@@ -21,10 +21,10 @@ public readonly ref struct ArrayRef<T> where T : struct
     public int Length { get; }
 
     /// <summary>
-    /// Gets whether the <see cref="ArrayRef{T}"/> points to a valid
+    /// Gets whether the <see cref="ArrayRef{T}"/> points to a null
     /// unmanaged array.
     /// </summary>
-    public bool IsValid => _native != IntPtr.Zero;
+    public bool IsNull => _native == IntPtr.Zero;
 
     /// <summary>
     /// Gets or sets the value of an item in the array.
@@ -53,7 +53,7 @@ public readonly ref struct ArrayRef<T> where T : struct
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void ThrowIfInvalidIndex(int index)
     {
-        Errors.ThrowIfInvalidAccess(_native);
+        Errors.ThrowIfNull(_native, nameof(ArrayRef<T>));
 
         if (index < 0 || index >= Length)
         {

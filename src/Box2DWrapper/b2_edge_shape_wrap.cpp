@@ -2,6 +2,8 @@
 #include "verify.h"
 #include "b2_edge_shape_wrap.h"
 
+#include <memory>
+
 /*
  * b2EdgeShape
  */
@@ -51,4 +53,11 @@ bool b2EdgeShape_get_m_oneSided(b2EdgeShape* obj)
 {
     VERIFY_INSTANCE;
     return obj->m_oneSided;
+}
+
+void b2EdgeShape_reset(b2EdgeShape* obj)
+{
+    VERIFY_INSTANCE;
+    obj->~b2EdgeShape();
+    new (obj) b2EdgeShape();
 }

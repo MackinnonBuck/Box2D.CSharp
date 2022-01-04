@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Box2D.Core.Allocation;
+using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
 
@@ -12,6 +13,8 @@ using static Interop.NativeMethods;
 /// </summary>
 public class PolygonShape : Shape
 {
+    private static readonly IAllocator<PolygonShape> _allocator = Allocator.Create<PolygonShape>(static () => new());
+
     /// <inheritdoc/>
     public override ShapeType Type => ShapeType.Polygon;
 
@@ -28,9 +31,12 @@ public class PolygonShape : Shape
     }
 
     /// <summary>
-    /// Constructs a new <see cref="PolygonShape"/>.
+    /// Creates a new <see cref="PolygonShape"/>.
     /// </summary>
-    public PolygonShape() : base(isUserOwned: true)
+    public static PolygonShape Create()
+        => _allocator.Allocate();
+
+    private PolygonShape() : base(isUserOwned: true)
     {
         var native = b2PolygonShape_new();
         Initialize(native);
@@ -74,4 +80,10 @@ public class PolygonShape : Shape
     /// <param name="angle">The rotation of the box in local coordinates.</param>
     public void SetAsBox(float hx, float hy, Vector2 center, float angle)
         => b2PolygonShape_SetAsBox2(Native, hx, hy, ref center, angle);
+
+    private protected override bool TryRecycle()
+        => _allocator.TryRecycle(this);
+
+    private protected override void Reset()
+        => b2PolygonShape_reset(Native);
 }
