@@ -42,7 +42,7 @@ internal sealed class InternalDestructionListener : Box2DDisposableObject
 
     private void SayGoodbyeFixtureUnmanaged(IntPtr fixtureNative)
     {
-        var fixture = Fixture.FromIntPtr.Get(fixtureNative)!;
+        var fixture = new Fixture(fixtureNative);
         _userListener?.SayGoodbye(fixture);
         fixture.Invalidate();
     }

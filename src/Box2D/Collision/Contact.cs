@@ -60,7 +60,7 @@ public readonly ref struct Contact
     /// <summary>
     /// Gets fixture A in this contact.
     /// </summary>
-    public Fixture FixtureA => Fixture.FromIntPtr.Get(b2Contact_GetFixtureA(Native))!;
+    public Fixture FixtureA => new(b2Contact_GetFixtureA(Native))!;
 
     /// <summary>
     /// Gets the child primitive index for fixture A.
@@ -70,7 +70,7 @@ public readonly ref struct Contact
     /// <summary>
     /// Gets fixture B in this contact.
     /// </summary>
-    public Fixture FixtureB => Fixture.FromIntPtr.Get(b2Contact_GetFixtureB(Native))!;
+    public Fixture FixtureB => new(b2Contact_GetFixtureB(Native))!;
 
     /// <summary>
     /// Gets the child primitive index for fixture B.

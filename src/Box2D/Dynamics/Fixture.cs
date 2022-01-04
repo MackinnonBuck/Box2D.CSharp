@@ -16,56 +16,65 @@ using static Interop.NativeMethods;
 /// <remarks>
 /// Warning: You cannot reuse fixtures.
 /// </remarks>
-public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
+public readonly struct Fixture : IEquatable<Fixture>, IBox2DList<Fixture>
 {
-    internal static FixtureFromIntPtr FromIntPtr { get; } = new();
-
-    internal class FixtureFromIntPtr : IGetFromIntPtr<Fixture>
+    internal readonly struct Reviver : IManagedHandleReviver
     {
-        public IntPtr GetManagedHandle(IntPtr obj)
-            => b2Fixture_GetUserData(obj);
+        public string FriendlyManagedTypeName => "fixture";
+
+        public IntPtr ReviveManagedHandle(IntPtr native)
+            => b2Fixture_GetUserData(native);
     }
 
-    bool IBox2DList<Fixture>.IsNull => false;
+    internal readonly struct Destroyer : INativeResourceDestroyer
+    {
+        private readonly IntPtr _bodyNative;
 
-    private Shape? _shape;
+        public Destroyer(IntPtr bodyNative)
+        {
+            _bodyNative = bodyNative;
+        }
+
+        public void Destroy(IntPtr native)
+        {
+            b2Body_DestroyFixture(_bodyNative, native);
+        }
+    }
+
+    private readonly NativeHandle<Reviver> _nativeHandle;
+
+    internal IntPtr Native => _nativeHandle.Ptr;
+
+    /// <summary>
+    /// Gets whether this fixture instance is null.
+    /// </summary>
+    /// <remarks>
+    /// This will not necessarily return <see langword="true"/> if the fixture has been implicitly destroyed.
+    /// You can manually nullify <see cref="Fixture"/> instances by assigning them to <see langword="default"/>.
+    /// </remarks>
+    public bool IsNull => _nativeHandle.IsNull;
+
+    /// <summary>
+    /// Gets the user data of the fixture. Use this to store your application-specific data.
+    /// </summary>
+    public object? UserData => _nativeHandle.GetUserData();
 
     /// <summary>
     /// Gets the type of the child shape. You can use this to down cast to the concrete shape.
     /// </summary>
-    public ShapeType Type { get; }
+    public ShapeType Type => b2Fixture_GetType(Native);
 
     /// <summary>
     /// Gets the parent body of this fixture. This is <c>null</c> if the fixture is not attached.
     /// </summary>
-    public Body Body { get; }
-
-    /// <summary>
-    /// Gets or sets the user data of the fixture. Use this to store your application-specific data.
-    /// </summary>
-    public object? UserData { get; set; }
+    public Body Body => new(b2Fixture_GetBody(Native));
 
     /// <summary>
     /// Gets or sets the child shape. You can modify the child shape, however you should not
     /// change the number of vertices because this will crash some collision caching mechanisms.
     /// Manipulating the shape may lead to non-physical behavior.
     /// </summary>
-    public Shape Shape
-    {
-        get
-        {
-            // We can't simply cache the shape instance provided by the FixtureDef
-            // because each fixture allocates its own copy of the specified shape.
-
-            if (_shape is null || !_shape.IsValid)
-            {
-                var shapeNative = b2Fixture_GetShape(Native);
-                _shape = Shape.FromIntPtr.Create(shapeNative, Type)!;
-            }
-
-            return _shape;
-        }
-    }
+    public Shape Shape => Shape.GetFromCacheOrCreate(b2Fixture_GetShape(Native), Type)!;
 
     /// <summary>
     /// Gets or sets if the fixture is a sensor.
@@ -79,7 +88,7 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
     /// <summary>
     /// Gets the next fixture in the parent body's fixture list.
     /// </summary>
-    public Fixture? Next => FromIntPtr.Get(b2Fixture_GetNext(Native));
+    public Fixture Next => new(b2Fixture_GetNext(Native));
 
     internal Fixture(Body body, in FixtureDef def)
     {
@@ -88,22 +97,41 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
             throw new InvalidOperationException($"Cannot create a {nameof(Fixture)} from a {nameof(FixtureDef)} without a {nameof(Shape)}.");
         }
 
-        Type = def.Shape.Type;
-        Body = body;
-        UserData = def.UserData;
-
-        var native = b2Body_CreateFixture(body.Native, def.Native, Handle);
-        Initialize(native);
+        var managedHandle = ManagedHandle.Create(def.UserData);
+        var native = b2Body_CreateFixture(body.Native, def.Native, managedHandle.Ptr);
+        _nativeHandle = new(native, managedHandle);
     }
 
     internal Fixture(Body body, Shape shape, float density)
     {
-        Type = shape.Type;
-        Body = body;
+        if (shape is null)
+        {
+            throw new InvalidOperationException($"Cannot create a {nameof(Fixture)} without a {nameof(Shape)}.");
+        }
 
-        var native = b2Body_CreateFixture2(body.Native, shape.Native, density, Handle);
-        Initialize(native);
+        var managedHandle = ManagedHandle.Create(null);
+        var native = b2Body_CreateFixture2(body.Native, shape.Native, density, managedHandle.Ptr);
+        _nativeHandle = new(native, managedHandle);
     }
+
+    internal Fixture(IntPtr native)
+    {
+        _nativeHandle = new(native);
+    }
+
+    internal void Invalidate()
+    {
+        // This will return null if the shape was never cached.
+        var shape = Shape.GetFromCache(b2Fixture_GetShape(Native));
+
+        // The shape is not user-owned, so disposing it is safe.
+        shape?.Dispose();
+
+        _nativeHandle.Invalidate();
+    }
+
+    internal void Destroy(IntPtr bodyNative)
+        => _nativeHandle.Destroy(new Destroyer(bodyNative));
 
     /// <summary>
     /// Test a point for containment in this fixture.
@@ -112,11 +140,21 @@ public sealed class Fixture : Box2DSubObject, IBox2DList<Fixture>
     public bool TestPoint(Vector2 p)
         => b2Fixture_TestPoint(Native, ref p);
 
-    internal override void Invalidate()
-    {
-        // This shape is not user-owned, so disposing it is safe.
-        _shape?.Dispose();
+    public static bool operator ==(Fixture a, Fixture b)
+        => a.Equals(b);
 
-        base.Invalidate();
-    }
+    public static bool operator !=(Fixture a, Fixture b)
+        => !a.Equals(b);
+
+    /// <inheritdoc/>
+    public bool Equals(Fixture other)
+        => _nativeHandle.Equals(other._nativeHandle);
+
+    /// <inheritdoc/>
+    public override bool Equals(object obj)
+        => obj is Fixture fixture && Equals(fixture);
+
+    /// <inheritdoc/>
+    public override int GetHashCode()
+        => _nativeHandle.GetHashCode();
 }

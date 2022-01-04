@@ -437,12 +437,16 @@ internal static class NativeMethods
      * b2Fixture
      */
     [DllImport(Dll, CallingConvention = Conv)]
+    public static extern ShapeType b2Fixture_GetType(IntPtr obj);
+    [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Fixture_GetShape(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     [return: MarshalAs(UnmanagedType.U1)]
     public static extern bool b2Fixture_IsSensor(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern void b2Fixture_SetSensor(IntPtr obj, [MarshalAs(UnmanagedType.U1)] bool sensor);
+    [DllImport(Dll, CallingConvention = Conv)]
+    public static extern IntPtr b2Fixture_GetBody(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]
     public static extern IntPtr b2Fixture_GetNext(IntPtr obj);
     [DllImport(Dll, CallingConvention = Conv)]

@@ -42,12 +42,12 @@ internal class TestQueryCallback : IQueryCallback
 {
     public Vector2 Point { get; private set; }
 
-    public Fixture? Fixture { get; private set; }
+    public Fixture Fixture { get; private set; }
 
     public void Reset(Vector2 point)
     {
         Point = point;
-        Fixture = null;
+        Fixture = default;
     }
 
     bool IQueryCallback.ReportFixture(Fixture fixture)
@@ -449,7 +449,7 @@ internal class Test : IContactListener, IDisposable
         _queryCallback.Reset(p);
         World.QueryAABB(_queryCallback, aabb);
 
-        if (_queryCallback.Fixture is not null)
+        if (!_queryCallback.Fixture.IsNull)
         {
             var frequencyHz = 5f;
             var dampingRatio = 0.7f;

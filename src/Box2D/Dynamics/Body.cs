@@ -165,7 +165,7 @@ public readonly struct Body : IBox2DList<Body>
     /// <summary>
     /// Gets the list of all fixtures attached to this body.
     /// </summary>
-    public Fixture? FixtureList => Fixture.FromIntPtr.Get(b2Body_GetFixtureList(Native));
+    public Fixture FixtureList => new(b2Body_GetFixtureList(Native));
 
     /// <summary>
     /// Gets the list of all joints attached to this body.
@@ -233,10 +233,7 @@ public readonly struct Body : IBox2DList<Body>
     /// </summary>
     /// <param name="fixture">The fixture to be removed.</param>
     public void DestroyFixture(Fixture fixture)
-    {
-        b2Body_DestroyFixture(Native, fixture.Native);
-        fixture.Invalidate();
-    }
+        => fixture.Destroy(Native);
 
     /// <summary>
     /// Get the body transform for the body's origin.

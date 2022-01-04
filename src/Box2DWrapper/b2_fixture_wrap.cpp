@@ -123,6 +123,12 @@ void b2FixtureDef_delete(b2FixtureDef* obj)
  * b2Fixture
  */
 
+b2Shape::Type b2Fixture_GetType(b2Fixture* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->GetType();
+}
+
 b2Shape* b2Fixture_GetShape(b2Fixture* obj)
 {
     VERIFY_INSTANCE;
@@ -139,6 +145,12 @@ void b2Fixture_SetSensor(b2Fixture* obj, bool sensor)
 {
     VERIFY_INSTANCE;
     obj->SetSensor(sensor);
+}
+
+b2Body* b2Fixture_GetBody(b2Fixture* obj)
+{
+    VERIFY_INSTANCE;
+    return obj->GetBody();
 }
 
 b2Fixture* b2Fixture_GetNext(b2Fixture* obj)

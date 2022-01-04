@@ -4,7 +4,7 @@ internal interface IBox2DList<T> where T : IBox2DList<T>
 {
     public bool IsNull { get; }
 
-    public T Next { get; }
+    public T? Next { get; }
 
     public struct Enumerator
     {

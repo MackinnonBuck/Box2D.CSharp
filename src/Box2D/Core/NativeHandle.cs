@@ -15,7 +15,7 @@ internal readonly struct EmptyNativeResourceDestroyer : INativeResourceDestroyer
     }
 }
 
-internal readonly partial struct NativeHandle<TReviver> where TReviver : struct, IManagedHandleReviver
+internal readonly partial struct NativeHandle<TReviver> : IEquatable<NativeHandle<TReviver>> where TReviver : struct, IManagedHandleReviver
 {
     public IntPtr Ptr
     {
@@ -30,6 +30,15 @@ internal readonly partial struct NativeHandle<TReviver> where TReviver : struct,
 
     public void Invalidate()
         => Destroy(default(EmptyNativeResourceDestroyer));
+
+    public bool Equals(NativeHandle<TReviver> other)
+        => _ptr.Equals(other._ptr);
+
+    public override bool Equals(object obj)
+        => obj is NativeHandle<TReviver> other && Equals(other);
+
+    public override int GetHashCode()
+        => _ptr.GetHashCode();
 }
 
 #if BOX2D_VALID_ACCESS_CHECKING
