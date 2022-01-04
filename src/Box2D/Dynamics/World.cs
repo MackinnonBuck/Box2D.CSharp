@@ -31,19 +31,20 @@ public sealed class World : Box2DDisposableObject
 
     /// <summary>
     /// Gets the world body list. With the returned body, use <see cref="Body.Next"/> to get
-    /// the next body in the world list. A <c>null</c> body indicates the end of the list.
+    /// the next body in the world list. A body whose <see cref="Body.IsNull"/> is <see langword="true"/>
+    /// indicates the end of the list.
     /// </summary>
     public Body BodyList => new(b2World_GetBodyList(Native));
 
     /// <summary>
     /// Gets the world joint list. With the returned joint, use <see cref="Joint.Next"/> to get
-    /// the next joint in the world list. A <c>null</c> joint indicates the end of the list.
+    /// the next joint in the world list. A <see langword="null"/> joint indicates the end of the list.
     /// </summary>
     public Joint? JointList => Joint.FromIntPtr(b2World_GetJointList(Native));
 
     /// <summary>
     /// Gets the world contact list. With the returned contact, use <see cref="Contact.Next"/> to get
-    /// the next contact in the world list. A contact whose <see cref="Contact.IsNull"/> is <c>true</c>
+    /// the next contact in the world list. A contact whose <see cref="Contact.IsNull"/> is <see langword="true"/>
     /// indicates the end of the list.
     /// </summary>
     public Contact ContactList => new(b2World_GetContactList(Native));

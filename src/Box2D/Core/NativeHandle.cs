@@ -7,7 +7,15 @@ namespace Box2D.Core;
 
 using static Config.Conditionals;
 
-internal readonly partial struct NativeHandle<TReviver> : IEquatable<NativeHandle<TReviver>> where TReviver : struct, IPersistentDataReviver
+// This type represents a handle to a native resource. The handle can be revived through
+// use of a pointer to persisted data, which requires the native resource to have a "user data"
+// field. The TReviver generic type parameter specifies how the persisted data pointer
+// is obtained.
+// When access validity checking is enabled, an object is allocated to track validity of the handle,
+// so all copies of the handle can determine if an invalid access occurs. When access validity checking
+// is disabled, no such object is allocated.
+internal readonly partial struct NativeHandle<TReviver> : IEquatable<NativeHandle<TReviver>>
+    where TReviver : struct, IPersistentDataReviver
 {
     // This destroyer is used during invalidation.
     private readonly struct EmptyNativeResourceDestroyer : INativeResourceDestroyer

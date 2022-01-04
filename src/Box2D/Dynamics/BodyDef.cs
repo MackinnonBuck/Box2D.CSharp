@@ -101,7 +101,7 @@ public sealed class BodyDef : Box2DDisposableObject, IBox2DRecyclableObject
 
     /// <summary>
     /// Gets or sets whether this body should fall asleep.
-    /// Defaults to <c>true</c>.
+    /// Defaults to <see langword="true"/>.
     /// </summary>
     public bool AllowSleep
     {

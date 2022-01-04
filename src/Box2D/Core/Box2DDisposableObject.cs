@@ -84,7 +84,7 @@ public abstract class Box2DDisposableObject : Box2DObject, IDisposable
     /// </summary>
     /// <param name="disposing">
     /// Indicates whether the method call comes from a <see cref="IDisposable.Dispose"/>
-    /// method (its value is <c>true</c>) or from a finalizer (its value is <c>false</c>).
+    /// method (its value is <see langword="true"/>) or from a finalizer (its value is <see langword="false"/>).
     /// </param>
     protected abstract void Dispose(bool disposing);
 }
