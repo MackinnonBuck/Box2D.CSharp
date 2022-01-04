@@ -15,9 +15,9 @@ public readonly ref struct ContactImpulse
     private readonly IntPtr _native;
 
     /// <summary>
-    /// Gets whether this <see cref="ContactImpulse"/> points to a valid unmanaged contact impulse.
+    /// Gets whether this <see cref="ContactImpulse"/> points to a null unmanaged contact impulse.
     /// </summary>
-    public bool IsValid => _native != IntPtr.Zero;
+    public bool IsNull => _native == IntPtr.Zero;
 
     /// <summary>
     /// Gets the normal impulses array.

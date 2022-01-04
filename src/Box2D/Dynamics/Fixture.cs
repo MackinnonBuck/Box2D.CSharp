@@ -16,13 +16,13 @@ using static Interop.NativeMethods;
 /// <remarks>
 /// Warning: You cannot reuse fixtures.
 /// </remarks>
-public readonly struct Fixture : IEquatable<Fixture>, IBox2DList<Fixture>
+public readonly struct Fixture : IEquatable<Fixture>
 {
-    internal readonly struct Reviver : IManagedHandleReviver
+    internal readonly struct Reviver : IPersistentDataReviver
     {
-        public string FriendlyManagedTypeName => "fixture";
+        public string RevivedObjectName => nameof(Fixture);
 
-        public IntPtr ReviveManagedHandle(IntPtr native)
+        public IntPtr GetPersistentDataPointer(IntPtr native)
             => b2Fixture_GetUserData(native);
     }
 
@@ -97,9 +97,9 @@ public readonly struct Fixture : IEquatable<Fixture>, IBox2DList<Fixture>
             throw new InvalidOperationException($"Cannot create a {nameof(Fixture)} from a {nameof(FixtureDef)} without a {nameof(Shape)}.");
         }
 
-        var managedHandle = ManagedHandle.Create(def.UserData);
-        var native = b2Body_CreateFixture(body.Native, def.Native, managedHandle.Ptr);
-        _nativeHandle = new(native, managedHandle);
+        var persistentDataHandle = PersistentDataHandle.Create(def.UserData);
+        var native = b2Body_CreateFixture(body.Native, def.Native, persistentDataHandle.Ptr);
+        _nativeHandle = new(native, persistentDataHandle);
     }
 
     internal Fixture(Body body, Shape shape, float density)
@@ -109,7 +109,7 @@ public readonly struct Fixture : IEquatable<Fixture>, IBox2DList<Fixture>
             throw new InvalidOperationException($"Cannot create a {nameof(Fixture)} without a {nameof(Shape)}.");
         }
 
-        var managedHandle = ManagedHandle.Create(null);
+        var managedHandle = PersistentDataHandle.Create(null);
         var native = b2Body_CreateFixture2(body.Native, shape.Native, density, managedHandle.Ptr);
         _nativeHandle = new(native, managedHandle);
     }

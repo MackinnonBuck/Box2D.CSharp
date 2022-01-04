@@ -11,13 +11,13 @@ using static Interop.NativeMethods;
 /// <summary>
 /// A rigid body. These are created via <see cref="World.CreateBody"/>.
 /// </summary>
-public readonly struct Body : IBox2DList<Body>
+public readonly struct Body : IEquatable<Body>
 {
-    internal readonly struct Reviver : IManagedHandleReviver
+    internal readonly struct Reviver : IPersistentDataReviver
     {
-        public string FriendlyManagedTypeName => "body";
+        public string RevivedObjectName => nameof(Body);
 
-        public IntPtr ReviveManagedHandle(IntPtr native)
+        public IntPtr GetPersistentDataPointer(IntPtr native)
             => b2Body_GetUserData(native);
     }
 
@@ -179,16 +179,16 @@ public readonly struct Body : IBox2DList<Body>
 
     internal Body(IntPtr world, BodyDef def)
     {
-        var managedHandle = ManagedHandle.Create(def.UserData);
-        var native = b2World_CreateBody(world, def.Native, managedHandle.Ptr);
-        _nativeHandle = new(native, managedHandle);
+        var persistentDataHandle = PersistentDataHandle.Create(def.UserData);
+        var native = b2World_CreateBody(world, def.Native, persistentDataHandle.Ptr);
+        _nativeHandle = new(native, persistentDataHandle);
     }
 
     internal Body(IntPtr world, BodyType type, ref Vector2 position, float angle, object? userData)
     {
-        var managedHandle = ManagedHandle.Create(userData);
-        var native = b2World_CreateBody2(world, type, ref position, angle, managedHandle.Ptr);
-        _nativeHandle = new(native, managedHandle);
+        var persistentDataHandle = PersistentDataHandle.Create(userData);
+        var native = b2World_CreateBody2(world, type, ref position, angle, persistentDataHandle.Ptr);
+        _nativeHandle = new(native, persistentDataHandle);
     }
 
     internal Body(IntPtr native)
@@ -374,4 +374,22 @@ public readonly struct Body : IBox2DList<Body>
         b2Body_GetLinearVelocityFromLocalPoint(Native, ref localPoint, out var value);
         return value;
     }
+
+    public static bool operator ==(Body a, Body b)
+        => a.Equals(b);
+
+    public static bool operator !=(Body a, Body b)
+        => !a.Equals(b);
+
+    /// <inheritdoc/>
+    public bool Equals(Body other)
+        => _nativeHandle.Equals(other._nativeHandle);
+
+    /// <inheritdoc/>
+    public override bool Equals(object obj)
+        => obj is Body body && Equals(body);
+
+    /// <inheritdoc/>
+    public override int GetHashCode()
+        => _nativeHandle.GetHashCode();
 }

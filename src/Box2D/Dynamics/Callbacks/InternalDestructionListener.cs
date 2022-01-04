@@ -35,7 +35,7 @@ internal sealed class InternalDestructionListener : Box2DDisposableObject
 
     private void SayGoodbyeJointUnmanaged(IntPtr jointNative)
     {
-        var joint = Joint.FromIntPtr.Get(jointNative)!;
+        var joint = Joint.FromIntPtr(jointNative)!;
         _userListener?.SayGoodbye(joint);
         joint.Invalidate();
     }

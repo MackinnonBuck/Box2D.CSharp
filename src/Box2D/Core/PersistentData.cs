@@ -1,12 +1,12 @@
 ﻿namespace Box2D.Core;
 
-internal class NativeHandleValidationToken
+internal class PersistentData
 {
     public bool IsValid { get; set; }
 
     public object? UserData { get; }
 
-    public NativeHandleValidationToken(object? userData)
+    public PersistentData(object? userData)
     {
         UserData = userData;
         IsValid = true;

@@ -7,16 +7,16 @@ namespace Box2D.Core;
 
 using static Config.Conditionals;
 
-// This destroyer is used during invalidation.
-internal readonly struct EmptyNativeResourceDestroyer : INativeResourceDestroyer
+internal readonly partial struct NativeHandle<TReviver> : IEquatable<NativeHandle<TReviver>> where TReviver : struct, IPersistentDataReviver
 {
-    public void Destroy(IntPtr native)
+    // This destroyer is used during invalidation.
+    private readonly struct EmptyNativeResourceDestroyer : INativeResourceDestroyer
     {
+        public void Destroy(IntPtr native)
+        {
+        }
     }
-}
 
-internal readonly partial struct NativeHandle<TReviver> : IEquatable<NativeHandle<TReviver>> where TReviver : struct, IManagedHandleReviver
-{
     public IntPtr Ptr
     {
         get
@@ -44,13 +44,13 @@ internal readonly partial struct NativeHandle<TReviver> : IEquatable<NativeHandl
 #if BOX2D_VALID_ACCESS_CHECKING
 partial struct NativeHandle<TReviver>
 {
-    private readonly NativeHandleValidationToken? _token;
+    private readonly PersistentData? _data;
     private readonly IntPtr _ptr;
 
-    public NativeHandle(IntPtr nativePtr, in ManagedHandle managedHandle)
+    public NativeHandle(IntPtr nativePtr, in PersistentDataHandle persistentDataHandle)
     {
         _ptr = nativePtr;
-        _token = managedHandle.ValidationToken;
+        _data = persistentDataHandle.Data;
     }
 
     public NativeHandle(IntPtr nativePtr)
@@ -59,23 +59,21 @@ partial struct NativeHandle<TReviver>
 
         if (_ptr == IntPtr.Zero)
         {
-            _token = null;
+            _data = null;
             return;
         }
 
-        var managedHandle = default(TReviver).ReviveManagedHandle(nativePtr);
+        var dataPointer = default(TReviver).GetPersistentDataPointer(nativePtr);
 
-        if (managedHandle == IntPtr.Zero)
+        Errors.ThrowIfNullManagedPointer(dataPointer, nameof(PersistentData));
+
+        if (GCHandle.FromIntPtr(dataPointer).Target is not PersistentData data)
         {
-            throw new InvalidOperationException("The handle to a managed object was null.");
-        }
-        
-        if (GCHandle.FromIntPtr(managedHandle).Target is not NativeHandleValidationToken token)
-        {
-            throw new InvalidOperationException("The handle to a managed object was not valid.");
+            Errors.ThrowInvalidManagedPointer(nameof(PersistentData));
+            throw null!; // Will not be reached since the previous method never returns.
         }
 
-        _token = token;
+        _data = data;
     }
 
     public void Destroy<TDestroyer>(in TDestroyer destroyer) where TDestroyer : struct, INativeResourceDestroyer
@@ -83,7 +81,7 @@ partial struct NativeHandle<TReviver>
         ThrowIfInvalid();
 
         // Get the managed handle before the resource is destroyed.
-        var managedHandle = default(TReviver).ReviveManagedHandle(_ptr);
+        var managedHandle = default(TReviver).GetPersistentDataPointer(_ptr);
 
         // Destroy the resource. This might involve unmanaged code invoking into
         // managed code, which is why we can't free the handle yet.
@@ -93,13 +91,13 @@ partial struct NativeHandle<TReviver>
         GCHandle.FromIntPtr(managedHandle).Free();
 
         // Mark this handle as invalid.
-        _token!.IsValid = false;
+        _data!.IsValid = false;
     }
 
     public object? GetUserData()
     {
         ThrowIfInvalid();
-        return _token!.UserData;
+        return _data!.UserData;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -107,12 +105,12 @@ partial struct NativeHandle<TReviver>
     {
         if (_ptr == IntPtr.Zero)
         {
-            throw new InvalidOperationException($"Attempted to access a null {default(TReviver).FriendlyManagedTypeName}.");
+            Errors.ThrowInvalidAccess(default(TReviver).RevivedObjectName, InvalidAccessReason.NullInstance);
         }
 
-        if (_token is null || !_token.IsValid)
+        if (_data is null || !_data.IsValid)
         {
-            throw new InvalidOperationException($"Attempted to access a destroyed {default(TReviver).FriendlyManagedTypeName}.");
+            Errors.ThrowInvalidAccess(default(TReviver).RevivedObjectName, InvalidAccessReason.ImplicitlyDestroyedInstance);
         }
     }
 }
@@ -121,7 +119,7 @@ partial struct NativeHandle<TReviver>
 {
     private readonly IntPtr _ptr;
 
-    public NativeHandle(IntPtr nativePtr, in ManagedHandle _) : this(nativePtr)
+    public NativeHandle(IntPtr nativePtr, in PersistentDataHandle _) : this(nativePtr)
     {
     }
 
@@ -132,16 +130,17 @@ partial struct NativeHandle<TReviver>
 
     public object? GetUserData()
     {
-        var managedHandle = default(TReviver).ReviveManagedHandle(Ptr);
-        
-        if (managedHandle == IntPtr.Zero)
+        var dataPointer = default(TReviver).GetPersistentDataPointer(Ptr);
+
+        if (dataPointer == IntPtr.Zero)
         {
             return null;
         }
 
-        if (GCHandle.FromIntPtr(managedHandle).Target is not { } userData)
+        if (GCHandle.FromIntPtr(dataPointer).Target is not { } userData)
         {
-            throw new InvalidOperationException($"A handle's target was not valid. It may have already been freed.");
+            Errors.ThrowInvalidManagedPointer(nameof(Object));
+            throw null!; // Will not be reached since the previous method never returns.
         }
 
         return userData;
@@ -150,16 +149,16 @@ partial struct NativeHandle<TReviver>
     public void Destroy<TDestroyer>(in TDestroyer destroyer) where TDestroyer : struct, INativeResourceDestroyer
     {
         // Get the managed handle before the resource is destroyed.
-        var managedHandle = default(TReviver).ReviveManagedHandle(Ptr);
+        var dataPointer = default(TReviver).GetPersistentDataPointer(Ptr);
 
         // Destroy the resource. This might involve unmanaged code invoking into
         // managed code, which is why we can't free the handle yet.
         destroyer.Destroy(_ptr);
 
         // Free the managed handle, if it exists.
-        if (managedHandle != IntPtr.Zero)
+        if (dataPointer != IntPtr.Zero)
         {
-            GCHandle.FromIntPtr(managedHandle).Free();
+            GCHandle.FromIntPtr(dataPointer).Free();
         }
     }
 

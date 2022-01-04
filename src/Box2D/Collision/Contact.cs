@@ -20,15 +20,15 @@ public readonly ref struct Contact
     {
         get
         {
-            Errors.ThrowIfInvalidAccess(_native);
+            Errors.ThrowIfNull(_native, nameof(Contact));
             return _native;
         }
     }
 
     /// <summary>
-    /// Gets whether this <see cref="Contact"/> points to a valid unmanaged contact.
+    /// Gets whether this <see cref="Contact"/> points to a null unmanaged contact.
     /// </summary>
-    public bool IsValid => _native != IntPtr.Zero;
+    public bool IsNull => _native == IntPtr.Zero;
 
     /// <summary>
     /// Gets the contact manifold. Do not modify the manifold unless you understand

@@ -5,7 +5,6 @@ namespace Box2D.Core;
 /// <summary>
 /// Represents a managed reference to an unmanaged Box2D resource.
 /// </summary>
-
 public abstract class Box2DObject
 {
     private IntPtr _native;
@@ -14,7 +13,7 @@ public abstract class Box2DObject
     {
         get
         {
-            Errors.ThrowIfInvalidAccess(this, _native);
+            Errors.ThrowIfNull(_native, this);
             return _native;
         }
     }

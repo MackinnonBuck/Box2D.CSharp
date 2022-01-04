@@ -5,35 +5,35 @@ using System.Text;
 
 namespace Box2D.Core;
 
-internal readonly partial struct ManagedHandle
+internal readonly partial struct PersistentDataHandle
 {
 }
 
 #if BOX2D_VALID_ACCESS_CHECKING
-partial struct ManagedHandle
+partial struct PersistentDataHandle
 {
     public IntPtr Ptr { get; private init; }
 
-    public NativeHandleValidationToken ValidationToken { get; private init; }
+    public PersistentData Data { get; private init; }
 
-    public static ManagedHandle Create(object? userData)
+    public static PersistentDataHandle Create(object? userData)
     {
-        var token = new NativeHandleValidationToken(userData);
-        var ptr = GCHandle.ToIntPtr(GCHandle.Alloc(token));
+        var data = new PersistentData(userData);
+        var ptr = GCHandle.ToIntPtr(GCHandle.Alloc(data));
 
         return new()
         {
-            ValidationToken = token,
+            Data = data,
             Ptr = ptr,
         };
     }
 }
 #else
-partial struct ManagedHandle
+partial struct PersistentDataHandle
 {
     public IntPtr Ptr { get; private init; }
 
-    public static ManagedHandle Create(object? userData)
+    public static PersistentDataHandle Create(object? userData)
     {
         var ptr = userData is null ? IntPtr.Zero : GCHandle.ToIntPtr(GCHandle.Alloc(userData));
 

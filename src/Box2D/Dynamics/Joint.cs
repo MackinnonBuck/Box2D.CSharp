@@ -2,6 +2,7 @@
 using Box2D.Dynamics.Joints;
 using System;
 using System.Numerics;
+using System.Runtime.InteropServices;
 
 namespace Box2D.Dynamics;
 
@@ -11,18 +12,8 @@ using static Interop.NativeMethods;
 /// The base joint class. Joints are used to constrain two bodies together in
 /// various fashions. Some joints also feature limits and motors.
 /// </summary>
-public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
+public abstract class Joint : Box2DSubObject
 {
-    internal static JointFromIntPtr FromIntPtr { get; } = new();
-
-    internal class JointFromIntPtr : IGetFromIntPtr<Joint>
-    {
-        public IntPtr GetManagedHandle(IntPtr obj)
-            => b2Joint_GetUserData(obj);
-    }
-
-    bool IBox2DList<Joint>.IsNull => false;
-
     /// <summary>
     /// Gets or sets the user data object.
     /// </summary>
@@ -70,7 +61,7 @@ public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
     /// <summary>
     /// Gets the next joint in the world joint list.
     /// </summary>
-    public Joint? Next => FromIntPtr.Get(b2Joint_GetNext(Native));
+    public Joint? Next => FromIntPtr(b2Joint_GetNext(Native));
 
     /// <summary>
     /// Gets whether either body is enabled.
@@ -85,6 +76,26 @@ public abstract class Joint : Box2DSubObject, IBox2DList<Joint>
     /// the flag is only checked when fixture AABBs begin to overlap.
     /// </remarks>
     public bool CollideConnected => b2Joint_GetCollideConnected(Native);
+
+    internal static Joint? FromIntPtr(IntPtr obj)
+    {
+        if (obj == IntPtr.Zero)
+        {
+            return null;
+        }
+
+        var userData = b2Joint_GetUserData(obj);
+
+        Errors.ThrowIfNullManagedPointer(userData, nameof(Joint));
+
+        if (GCHandle.FromIntPtr(userData).Target is not Joint instance)
+        {
+            Errors.ThrowInvalidManagedPointer(nameof(Joint));
+            throw null!; // Will not be reached since the previous method never returns.
+        }
+
+        return instance;
+    }
 
     internal static Joint Create(IntPtr worldNative, JointDef def)
     {

@@ -44,7 +44,7 @@ public class WorldTests
 
         world.Step(timeStep, velocityIterations, positionIterations);
 
-        Assert.False(world.ContactList.IsValid);
+        Assert.True(world.ContactList.IsNull);
         Assert.False(contactListener.DidBeginContact);
 
         bodyB.SetTransform(new Vector2(1f, 0f), 0f);
@@ -59,7 +59,7 @@ public class WorldTests
         Assert.Equal(2, draw.SolidCircleDrawCount); // 2 circle shapes
         Assert.Equal(2, draw.PolygonDrawCount); // 2 AABBs
 
-        Assert.True(world.ContactList.IsValid);
+        Assert.False(world.ContactList.IsNull);
         Assert.True(contactListener.DidBeginContact);
 
         Assert.Equal(0, destructionListener.SayGoodbyeJointCount);

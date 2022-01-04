@@ -24,16 +24,16 @@ public readonly ref struct JointEdge
     {
         get
         {
-            Errors.ThrowIfInvalidAccess(_native);
+            Errors.ThrowIfNull(_native, nameof(JointEdge));
             return _native;
         }
     }
 
     /// <summary>
-    /// Gets whether the <see cref="JointEdge"/> points to a valid
+    /// Gets whether the <see cref="JointEdge"/> points to a null
     /// unmanaged joint edge.
     /// </summary>
-    public bool IsValid => _native != IntPtr.Zero;
+    public bool IsNull => _native != IntPtr.Zero;
 
     /// <summary>
     /// Gets or sets the other attached body.
@@ -49,7 +49,7 @@ public readonly ref struct JointEdge
     /// </summary>
     public Joint? Joint
     {
-        get => Joint.FromIntPtr.Get(b2JointEdge_get_joint(Native));
+        get => Joint.FromIntPtr(b2JointEdge_get_joint(Native));
         set => b2JointEdge_set_joint(Native, value?.Native ?? IntPtr.Zero);
     }
 
@@ -93,7 +93,7 @@ public readonly ref struct JointEdge
         /// <summary>
         /// Gets the current element.
         /// </summary>
-        public Joint Current => Joint.FromIntPtr.Get(b2JointEdge_get_joint(_current))!;
+        public Joint Current => Joint.FromIntPtr(b2JointEdge_get_joint(_current))!;
 
         /// <summary>
         /// Constructs a new <see cref="Enumerator"/> instance.

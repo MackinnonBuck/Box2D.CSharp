@@ -38,15 +38,15 @@ public readonly ref struct Manifold
     {
         get
         {
-            Errors.ThrowIfInvalidAccess(_native);
+            Errors.ThrowIfNull(_native, nameof(Manifold));
             return _native;
         }
     }
 
     /// <summary>
-    /// Gets whether this <see cref="Manifold"/> points to a valid unmanaged manifold.
+    /// Gets whether this <see cref="Manifold"/> points to a null unmanaged manifold.
     /// </summary>
-    public bool IsValid => _native != IntPtr.Zero;
+    public bool IsNull => _native == IntPtr.Zero;
 
     /// <summary>
     /// Gets the points of contact.
