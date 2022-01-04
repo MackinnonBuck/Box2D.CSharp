@@ -7,11 +7,10 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
-    <DefineConstants>BOX2D_OBJECT_TRACKING;BOX2D_VALID_ACCESS_CHECKING;BOX2D_OBJECT_POOLING</DefineConstants>
+    <DefineConstants>BOX2D_OBJECT_TRACKING;BOX2D_VALID_ACCESS_CHECKING;BOX2D_NO_POOLING</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <DefineConstants>BOX2D_OBJECT_POOLING</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

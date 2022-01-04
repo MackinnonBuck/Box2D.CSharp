@@ -4,7 +4,7 @@ namespace Box2D.Core;
 
 internal interface IPersistentDataReviver
 {
-    public string RevivedObjectName { get; }
+    string RevivedObjectName { get; }
 
-    public IntPtr GetPersistentDataPointer(IntPtr native);
+    IntPtr GetPersistentDataPointer(IntPtr native);
 }
