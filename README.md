@@ -16,7 +16,7 @@ Speed is achieved by compiling Erin Catto's [Box2D](https://github.com/erincatto
 
 Reliability is partly inherited from the C++ Box2D implementation, but is also helped by toggleable access-checking mechanisms designed to catch invalid uses of the API and throw meaningful exceptions.
 
-Memory-efficiency comes from the use of `struct`s for small copies of unmanaged data types and `ref struct`s for temporary handles to unmanaged resources. This differs from C# reimplementations of Box2D that, for example, represent contact information using `class`es, which can create significant GC pressure during high contact frequency.
+Memory-efficiency comes from the use of `struct`s for both small copies of unmanaged data and handles to native resources whose lifetime is known but controlled by unmanaged code. Temporary handles to unmanaged resources with unknown lifetimes are represented using `ref struct`s. This differs from C# reimplementations of Box2D that, for example, represent bodies, fixtures, and contact information using `class`es, which can create significant GC pressure in complex simulations (e.g. those with a high contact frequency).
 
 ## Status
 

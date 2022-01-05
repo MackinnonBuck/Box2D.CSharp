@@ -8,11 +8,13 @@ Resource management patterns in Box2D.CSharp aligns closely with that of the off
 
 ### 1. Dispose objects that you own
 
-If you create a Box2D object instance with `new` and its type implements `IDisposable`, make sure you either:
+If you create a Box2D object instance and its type implements `IDisposable`, make sure you either:
   * call `Dispose()` when you're done using the object, or...
   * use a `using` statement to automatically dispose the object when it goes out of scope.
 
 For example, to destroy a `World` (including all its bodies, joints, etc.), call its `Dispose()` method.
+
+"Definition" objects (`BodyDef`, `FixtureDef`, and `JointDef`) should be disposed so the underlying pooling mechanism can reuse disposed instances rather than always allocating new instances.
 
 **NOTE:** `Shape` instances get copied when attached to `Fixture` instances. Remember to dispose any `Shape` instances you create, but don't feel obligated to dispose `Fixture.Shape`, since it will get implicitly destroyed when its parent `Fixture` is destroyed.
 
@@ -36,10 +38,8 @@ That said, there are patterns that users of Box2D.CSharp can follow to further m
 
 ```csharp
 // Create a BodyDef limited to the current scope.
-using var bodyDef = new BodyDef
-{
-    Type = Bodytype.Dynamic,
-};
+using var bodyDef = BodyDef.Create();
+bodyDef.Type = Bodytype.Dynamic,
 
 for (var i = 0; i < 1000; i++)
 {
@@ -58,7 +58,7 @@ Box2D.CSharp exposes `Span`-based APIs in a handful of places that can be used i
 
 ```csharp
 // Create the PolygonShape.
-using var shape = new PolygonShape();
+using var shape = PolygonShape.Create();
 
 // Allocate the shape's vertices on the stack.
 Span<Vector2> vertices = stackalloc Vector2[]
