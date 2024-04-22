@@ -3,7 +3,15 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <LangVersion>10.0</LangVersion>
+    <LangVersion>12.0</LangVersion>
+	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+	<PackageId>Box2D.CSharp</PackageId>
+    <Version>0.1.0-preview.1</Version>
+    <RepositoryUrl>https://github.com/MackinnonBuck/Box2D.CSharp.git</RepositoryUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
@@ -12,6 +20,14 @@
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
   </PropertyGroup>
+	
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<None Include="..\..\lib\$(PlatformTarget)\$(Configuration)\box2dwrapper.dll" Pack="true" PackagePath="runtimes/win-x64/native/" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />

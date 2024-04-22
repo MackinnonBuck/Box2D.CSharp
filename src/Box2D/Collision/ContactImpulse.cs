@@ -40,7 +40,7 @@ public readonly ref struct ContactImpulse
         return new(native, new(normalImpulses, count), new(tangentImpulses, count));
     }
 
-    private ContactImpulse(IntPtr native, in ArrayRef<float> normalImpulses, in ArrayRef<float> tangentImpulses)
+    private ContactImpulse(IntPtr native, scoped in ArrayRef<float> normalImpulses, scoped in ArrayRef<float> tangentImpulses)
     {
         _native = native;
         NormalImpulses = normalImpulses;

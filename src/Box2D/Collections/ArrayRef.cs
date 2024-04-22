@@ -83,7 +83,7 @@ public readonly ref struct ArrayRef<T> where T : struct
         /// <summary>
         /// Constructs a new <see cref="Enumerator"/> instance.
         /// </summary>
-        public Enumerator(in ArrayRef<T> source)
+        public Enumerator(scoped in ArrayRef<T> source)
         {
             _source = source;
         }

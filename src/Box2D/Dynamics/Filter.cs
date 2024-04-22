@@ -26,4 +26,11 @@ public struct Filter
     /// filtering always wins against the mask bits.
     /// </summary>
     public short GroupIndex { get; set; } = 0;
+
+    /// <summary>
+    /// Constructs a new <see cref="Filter"/>
+    /// </summary>
+    public Filter()
+    {
+    }
 }

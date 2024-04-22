@@ -123,7 +123,7 @@ public readonly ref struct Manifold
         b2GetPointStates_wrap(out state1.GetPinnableReference(), out state2.GetPinnableReference(), manifold1.Native, manifold2.Native);
     }
 
-    private Manifold(IntPtr native, in ArrayRef<ManifoldPoint> points)
+    private Manifold(IntPtr native, scoped in ArrayRef<ManifoldPoint> points)
     {
         _native = native;
         Points = points;

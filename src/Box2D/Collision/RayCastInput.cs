@@ -23,4 +23,9 @@ public readonly struct RayCastInput
     /// Gets the maximum fraction.
     /// </summary>
     public float MaxFraction { get; init; } = 1f;
+
+    /// <summary>
+    /// Constructs a new <see cref="RayCastInput"/>.
+    /// </summary>
+    public RayCastInput() { }
 }
